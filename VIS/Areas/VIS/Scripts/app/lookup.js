@@ -308,13 +308,15 @@
 
 
     //1.  MLookup wrapper class for lookup json Object 
-    function MLookup(lookupInfo, lookup) {
+    function MLookup(lookupInfo, lookup, AD_Window_ID, AD_Field_ID, AD_Tab_ID) {
         Lookup.call(this, lookupInfo, lookup);
         /** Save getDirect last return value */
         this.lookupDirect = {};
         /** Save last unsuccessful */
         this.directNullKey;
-
+        this.AD_Window_ID = AD_Window_ID;
+        this.AD_Field_ID = AD_Field_ID;
+        this.AD_Tab_ID = AD_Tab_ID;
         this.loading = false;
 
         this.nextRead = 0;
@@ -822,26 +824,26 @@
 
         var sql = this.info.query;
         var params = [];
-
+        var validation = "";
         // not validated
         if (!this.info.isValidated) {
-            var validation = VIS.Env.parseContext(VIS.context, this.getWindowNo(), this.getTabNo(), this.info.validationCode, false, true);
-            if (validation.length == 0 && this.info.validationCode.length > 0) {
-                this.log.fine(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
-                //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
-                return;
-            }
-            else {
-                var posFrom = sql.lastIndexOf(" FROM ");
-                var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
-                //
-                var posOrder = sql.lastIndexOf(" ORDER BY ");
-                if (posOrder != -1)
-                    sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + validation + sql.substring(posOrder);
-                else
-                    sql += (hasWhere ? " AND " : " WHERE ") + validation;
-                this.log.fine(this.info.keyColumn + ": Validation=" + validation);
-            }
+            validation = VIS.Env.parseContext2(VIS.context, this.getWindowNo(), this.getTabNo(), this.info.validationCode, false, true);
+            //if (validation.length == 0 && this.info.validationCode.length > 0) {
+            //    this.log.fine(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
+            //    //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
+            //    return;
+            //}
+            //else {
+            //    var posFrom = sql.lastIndexOf(" FROM ");
+            //    var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
+            //    //
+            //    var posOrder = sql.lastIndexOf(" ORDER BY ");
+            //    if (posOrder != -1)
+            //        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + validation + sql.substring(posOrder);
+            //    else
+            //        sql += (hasWhere ? " AND " : " WHERE ") + validation;
+            //    this.log.fine(this.info.keyColumn + ": Validation=" + validation);
+            //}
         }
 
         var isNumber = this.info.keyColumn.toUpperCase().endsWith("_ID");
@@ -857,22 +859,18 @@
             }
         }
 
+        //var validationValues = "";
+
+        //if (validation && Object.keys(validation).length > 0) {
+        //    validationValues = JSON.parse(validation);
+        //}
+        var pageSize = 1000;
+        var self = this;
         if (async) {
 
-            var self = this;
+           
             self.loading = true;
-            $.ajax({
-                url: VIS.contextUrl.Application + "Lookup/GetLookupData",
-                data: {
-                    windowNo:
-                        AD_Window_ID,
-                    AD_Tab_ID,
-                    AD_Field_ID,
-                    values,
-                    paging:false
-                }
 
-            });
             //executeDataReaderPaging(sql, 1, 1000, null, function (dr) {
             //    self.readData(dr, isNumber);
             //    if (checkCache) {
@@ -882,26 +880,57 @@
             //    self.loading = false;;
             //    self = null;
             //});
-            return 0;
+            //return 0;
+        }
+        else {
+            async = false;
+            pageSize = 0;
         }
 
-        try {
-            dr = executeDReader(sql, null);
-            this.readData(dr, isNumber);
-            if (checkCache) {
+        $.ajax({
+            url: VIS.Application.contextUrl + "Lookup/GetLookupData",
+            async: async,
+            data: {
+                WindowNo: self.getWindowNo(),
+                AD_Window_ID: self.AD_Window_ID,
+                AD_Tab_ID: self.AD_Tab_ID,
+                AD_Field_ID: self.AD_Field_ID,
+                Values: JSON.stringify(validation),
+                PageSize: pageSize,
+            },
+            success: function (data) {
+                var dr = new VIS.DB.DataReader().toJson(data);
+                self.readData(dr, isNumber);
+                if (checkCache) {
 
-                VIS.MLookupCache.loadEnd(this.info, this);
+                    VIS.MLookupCache.loadEnd(self.info, self);
+                }
+                self.loading = false;
+                self = null;
+            },
+            error: function (e) {
+                self.log.log(VIS.Logging.Level.SEVERE, self.info.keyColumn + ": Loader - " + sql, e);
             }
-        }
-        catch (e) {
-            this.log.log(VIS.Logging.Level.SEVERE, this.info.keyColumn + ": Loader - " + sql, e);
-        }
-        finally {
-            if (dr != null) {
-                dr.dispose();
-                dr = null;
-            }
-        }
+
+        });
+
+        //try {
+        //    dr = executeDReader(sql, null);
+        //    this.readData(dr, isNumber);
+        //    if (checkCache) {
+
+        //        VIS.MLookupCache.loadEnd(this.info, this);
+        //    }
+        //}
+        //catch (e) {
+        //    this.log.log(VIS.Logging.Level.SEVERE, this.info.keyColumn + ": Loader - " + sql, e);
+        //}
+        //finally {
+        //    if (dr != null) {
+        //        dr.dispose();
+        //        dr = null;
+        //    }
+        //}
 
         return 0;
     }; // run

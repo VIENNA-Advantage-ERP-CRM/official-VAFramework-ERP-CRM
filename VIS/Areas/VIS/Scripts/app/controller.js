@@ -5451,7 +5451,7 @@
             if (gField._vo.lookupInfo != null && VIS.DisplayType.IsLookup(gField._vo.displayType)) {
                 if (VIS.DisplayType.IsLookup(gField._vo.displayType)) {
 
-                    m_lookup = new VIS.MLookup(gField._vo.lookupInfo, gField._lookup);
+                    m_lookup = new VIS.MLookup(gField._vo.lookupInfo, gField._lookup, gField._vo.AD_Window_ID, gField._vo.AD_Field_ID, gField._vo.AD_Tab_ID);
                     if (this.vo.tabNo > 0)//&& !_vo._isThroughRoleCenter)  // defer load lookup data of tab ' control except first tab
                     {
                         m_lookup.initialize(true);

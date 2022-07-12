@@ -22,16 +22,16 @@ namespace VIS.Areas.VIS.Controllers
             return View();
         }
 
-        public ActionResult GetLookupData(int windowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string values, bool paging)
+        public ActionResult GetLookupData(int WindowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string Values, int PageSize)
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, AD_Window_ID, 0);
+            GridWindowVO vo = AEnv.GetMWindowVO(ctx, WindowNo, AD_Window_ID, 0);
 
             string lookupQuery = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault().GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo.query;
 
-            if (!string.IsNullOrEmpty(values))
+            if (!string.IsNullOrEmpty(Values))
             {
-                List<KeyValuePair<string, object>> data = JsonConvert.DeserializeObject<List<KeyValuePair<string, object>>>(values);
+                List<KeyValuePair<string, object>> data = JsonConvert.DeserializeObject<List<KeyValuePair<string, object>>>(Values);
 
                 if (data != null && data.Count > 0)
                 {
@@ -48,6 +48,10 @@ namespace VIS.Areas.VIS.Controllers
             {
                 sql = lookupQuery,
             };
+
+            if (PageSize > 0)
+                sqlIn.pageSize = PageSize;
+
             object result = h.ExecuteJDataSet(sqlIn);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }

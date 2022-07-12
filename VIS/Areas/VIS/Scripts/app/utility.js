@@ -579,6 +579,72 @@
             return outStr;
         };
 
+        function parseContext2(ctx, windowNo, tabNo, value, onlyWindow, ignoreUnparsable) {
+
+            if (typeof (tabNo) != "number") {
+                ignoreUnparsable = onlyWindow;
+                onlyWindow = value;
+                value = tabNo;
+                tabNo = 0;
+            }
+
+            var resultData = {};
+
+            if (value == null || value.length == 0)
+                return "";
+
+            var token = "";;
+            var outStr = new String("");
+
+            var i = value.indexOf('@');
+            // Check whether the @ is not the last in line (i.e. in EMailAdress or with wrong entries)
+            while (i != -1 && i != value.lastIndexOf("@")) {
+                var getValue = value.substring(0, i);
+                outStr += value.substring(0, i);			// up to @
+                value = value.substring(i + 1, value.length);	// from first @
+
+                var j = value.indexOf('@');						// next @
+                if (j < 0) {
+                    //_log.log(Level.SEVERE, "No second tag: " + inStr);
+                    return "";						//	no second tag
+                }
+
+                var ctxInfo = "";
+                var ctxInfo1 = "";
+
+                token = value.substring(0, j);
+
+                if (token.contains(".")) {
+                    token = token.substring(0, token.indexOf("."));
+                    //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
+                }
+
+                ctxInfo = ctx.getWindowContext(windowNo, tabNo, token, onlyWindow);	// get context
+
+                if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
+                    ctxInfo = ctx.getContext(token);	// get global context
+
+                resultData[token] = ctxInfo;
+
+                if (ctxInfo.length == 0) {
+                    //_log.config("No Context Win=" + WindowNo + " for: " + token);
+                    if (!ignoreUnparsable)
+                        return "";
+
+                    outStr += ' NULL ';
+                    //						//	token not found
+                }
+                else {
+                    outStr += ctxInfo;				// replace context with Context
+                }
+
+                value = value.substring(j + 1, value.length);	// from second @
+                i = value.indexOf('@');
+            }
+            outStr += value;						// add the rest of the string
+            return resultData;
+        };
+
         function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
@@ -846,6 +912,7 @@
             getWindowNo: getWindowNo,
             getCtx: getCtx,
             parseContext: parseContext,
+            parseContext2: parseContext2,
             getWINDOW_PAGE_SIZE: getWINDOW_PAGE_SIZE,
             setWINDOW_PAGE_SIZE: setWINDOW_PAGE_SIZE,
             setScreenHeight: setScreenHeight,
