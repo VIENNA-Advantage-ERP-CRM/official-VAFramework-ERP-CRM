@@ -83,7 +83,7 @@ namespace VIS.Models
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             if (whereClause.Length > 7)
             {
-                sql = @"SELECT mytable.* FROM (";
+                //sql = @"SELECT mytable.* FROM (";
             }
 
             string dmsCheck = string.Empty;
@@ -107,7 +107,7 @@ OR
             }
 
 
-            sql += @" SELECT a.*
+            sql += @"SELECT a.*
 " + dmsCheck + @" 
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
@@ -175,7 +175,7 @@ OR
             if (whereClause.Length > 7)
             {
                 // Applied Role access on workflow Activities
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
+                sql = "SELECT mytable.* FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + ") MyTable ";
 
                 sql += fromClause;
                 sql += whereClause;
@@ -189,7 +189,7 @@ OR
             }
             else
             {
-                sql += "  ORDER BY Priority DESC, Created DESC";
+                sql += " ORDER BY Priority DESC, Created DESC";
                 // Applied Role access on workflow Activities
                 sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true);
             }
@@ -255,13 +255,13 @@ OR
 
                 if (refresh)
                 {
-                    sql = "";
+                    //sql = "";
                     //if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
                     //if (whereClause.Length > 7)
                     //{
-                    sql = @"SELECT COUNT(*) FROM (";
+                    //sql = @"SELECT COUNT(*) FROM (";
                     //}
-                    sql += @" SELECT a.* 
+                    sql = @"SELECT a.* 
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
@@ -325,7 +325,7 @@ OR
                     if (whereClause.Length > 7)
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
+                        sql = "SELECT COUNT(*) FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + ") MyTable ";
 
                         sql += fromClause;
                         sql += whereClause;
@@ -339,7 +339,7 @@ OR
                     else
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
+                        sql = "SELECT COUNT(*) FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + ") MyTable ";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));

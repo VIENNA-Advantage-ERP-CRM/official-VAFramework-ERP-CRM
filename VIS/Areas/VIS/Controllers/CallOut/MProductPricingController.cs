@@ -11,7 +11,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MProductPricingController:Controller
+    public class MProductPricingController : Controller
     {
         public ActionResult Index()
         {
@@ -19,14 +19,14 @@ namespace VIS.Controllers
         }
         public JsonResult GetProductPricing(string fields)
         {
-            
+
             string retJSON = "";
             if (Session["ctx"] != null)
             {
-                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                Ctx ctx = Session["ctx"] as Ctx;
                 MProductPricingModel objProductPricing = new MProductPricingModel();
-                retJSON = JsonConvert.SerializeObject(objProductPricing.GetProductPricing(ctx,fields));
-            }          
+                retJSON = JsonConvert.SerializeObject(objProductPricing.GetProductPricing(ctx, fields));
+            }
             // return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
@@ -43,9 +43,27 @@ namespace VIS.Controllers
             string retJSON = "";
             if (Session["ctx"] != null)
             {
-                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                Ctx ctx = Session["ctx"] as Ctx;
                 MProductPricingModel objProductPricing = new MProductPricingModel();
                 retJSON = JsonConvert.SerializeObject(objProductPricing.GetProductdata(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// when we change QtyEntered, UOM or Attribute
+        /// </summary>
+        /// <param name="fields">List of Parameters</param>
+        /// <returns>Price Data</returns>
+        public JsonResult GetPricesOnChange(string fields)
+        {
+
+            String retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                Ctx ctx = Session["ctx"] as Ctx;
+                MProductPricingModel objProductPricing = new MProductPricingModel();
+                retJSON = JsonConvert.SerializeObject(objProductPricing.GetPricesOnChange(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

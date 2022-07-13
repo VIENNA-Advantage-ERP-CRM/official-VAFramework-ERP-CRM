@@ -17,7 +17,7 @@ namespace VIS.Models
         {
             try
             {
-                
+
 
                 //Change by mohit-to handle translation in general info.
                 //Added 2 new parametere- string ad_Language, bool isBaseLangage.
@@ -97,14 +97,14 @@ namespace VIS.Models
             }
         }
 
-        public List<InfoColumn> GetDisplayCol(int AD_Table_ID, string AD_Language, bool IsBaseLangage,string _tableName)
+        public List<InfoColumn> GetDisplayCol(int AD_Table_ID, string AD_Language, bool IsBaseLangage, string _tableName)
         {
             try
             {
                 bool _trlTableExist = false;
                 if (!IsBaseLangage)
                 {
-                    
+
                     VAdvantage.DataBase.VConnection con = new VAdvantage.DataBase.VConnection();
                     string owner = con.Db_uid;
                     if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT count(*) FROM ALL_OBJECTS WHERE OBJECT_TYPE = 'TABLE' AND OWNER =upper( '" + owner + "') AND OBJECT_NAME =upper( '" + _tableName + "_TRL')", null, null)) > 0)
@@ -126,7 +126,8 @@ namespace VIS.Models
                               f.IsDisplayed,
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
-                              C.IsTranslated
+                              C.IsTranslated,
+                              c.AD_Column_ID
                             FROM AD_Column c
                             INNER JOIN AD_Table t
                             ON (c.AD_Table_ID=t.AD_Table_ID)                            
@@ -150,7 +151,8 @@ namespace VIS.Models
                               f.IsDisplayed,
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
-                              C.IsTranslated
+                              C.IsTranslated,
+                              c.AD_Column_ID
                             FROM AD_Column c
                             INNER JOIN AD_Table t
                             ON (c.AD_Table_ID=t.AD_Table_ID)
@@ -213,6 +215,7 @@ namespace VIS.Models
                     }
 
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
+                    item.AD_Column_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Column_ID"]);
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
                     item.AD_Reference_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
                     item.IsKey = ds.Tables[0].Rows[i]["IsKey"].ToString() == "Y" ? true : false;
@@ -276,12 +279,225 @@ namespace VIS.Models
             }
         }
 
-
-        public InfoData GetData(string sql, string tableName, int pageNo, VAdvantage.Utility.Ctx ctx)
+        public InfoData GetData(string tableName, int AD_Table_ID, int pageNo, Ctx ctx, string keyCol, string selectedIDs,
+            bool requery, List<InfoSearchCol> srchCtrls, string validationCode)
         {
             InfoData _iData = new InfoData();
             try
             {
+
+                var sql = "SELECT ";
+                //var colName = null;
+                //var cname = null;
+                string tabname = null;
+                int displayType = 0;
+                //var count = $.makeArray(displayCols).length;
+
+                var isTrlColExist = false;
+
+                List<InfoColumn> displayCols = GetDisplayCol(AD_Table_ID, ctx.GetAD_Language(), Env.IsBaseLanguage(ctx, tableName), tableName);
+                int count = displayCols.Count;
+                //get Qry from InfoColumns
+                for (int item = 0; item < count; item++)
+                {
+
+
+                    displayType = displayCols[item].AD_Reference_ID;
+                    if (displayType == DisplayType.YesNo)
+                    {
+                        sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
+                    }
+                    else if (displayType == DisplayType.List)
+                    {
+
+                        var refList = displayCols[item].RefList;
+                        sql += (" CASE ");
+                        for (int refListItem = 0; refListItem < refList.Count; refListItem++)
+                        {
+                            sql += " WHEN " + tableName + "." + displayCols[item].ColumnName + "='" + refList[refListItem].Key + "' THEN '" + refList[refListItem].Value.Replace("'", "''") + "'";
+                        }
+                        sql += " END AS " + displayCols[item].ColumnName;
+
+                    }
+                    else
+                    {
+                        // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
+                        if (Env.IsBaseLanguage(ctx, tableName))
+                        {
+                            sql += tableName + "." + displayCols[item].ColumnName + " ";
+                        }
+                        else
+                        {
+                            if (displayCols[item].trlTableExist)
+                            {
+                                if (displayCols[item].IsTranslated)
+                                {
+                                    sql += "trlTable." + displayCols[item].ColumnName + " ";
+                                    isTrlColExist = true;
+                                }
+                                else
+                                {
+                                    sql += tableName + "." + displayCols[item].ColumnName + " ";
+                                }
+                            }
+                            else
+                            {
+                                sql += tableName + "." + displayCols[item].ColumnName + " ";
+                            }
+                        }
+
+                    }
+
+                    if (displayCols[item].IsKey)
+                    {
+                        keyCol = displayCols[item].ColumnName.ToUpper();
+                    }
+
+
+
+                    if (!((count - 1) == item))
+                    {
+                        sql += ", ";
+                    }
+
+                }
+
+                if (selectedIDs != null && selectedIDs.Length > 0)
+                {
+                    sql += ", 'N' AS ordcol";
+                }
+
+
+                sql += " FROM " + tableName + " " + tableName;
+                // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
+                if (isTrlColExist)
+                {
+                    sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.AD_Language='" + ctx.GetAD_Language() + "')";
+                }
+
+                if (requery == true)
+                {
+                    var whereClause = " ";
+                    string srchValue = null;
+                    bool appendAND = false;
+                    for (var i = 0; i < srchCtrls.Count; i++)
+                    {
+                        srchValue = Convert.ToString(srchCtrls[i].Value);
+                        if (srchValue == null || srchValue.Count() == 0 || srchValue == "0" || srchValue == "")
+                        {
+                            continue;
+                        }
+
+                        if (appendAND == true)
+                        {
+                            whereClause += " AND ";
+                        }
+
+                        if (!((srchValue).IndexOf("%") == 0))
+                        {
+                            srchValue = "●" + srchValue;
+                        }
+                        else
+                        {
+                            srchValue = (srchValue).Replace("%", "●");
+                        }
+                        if (!(((srchValue).LastIndexOf("●")) == ((srchValue).Length)))
+                        {
+                            srchValue = srchValue + "●";
+                        }
+                        // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
+                        if (Env.IsBaseLanguage(ctx, tableName))
+                        {
+                            whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.ToUpper() + "' ";
+                        }
+                        else
+                        {
+                            if (isTrlColExist)
+                            {
+                                if (srchCtrls[i].IsTranslated)
+                                {
+                                    whereClause += "  UPPER(trlTable." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.ToUpper() + "' ";
+                                    isTrlColExist = true;
+                                }
+                                else
+                                {
+                                    whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.ToUpper() + "' ";
+                                }
+                            }
+                            else
+                            {
+                                whereClause += "  UPPER(" + tableName + "." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.ToUpper() + "' ";
+                            }
+                        }
+                        appendAND = true;
+                    }
+
+
+
+
+                    if (whereClause.Length > 1)
+                    {
+                        sql += " WHERE " + whereClause;
+                        if (validationCode != null && validationCode.Length > 0)
+                        {
+                            sql += " AND " + validationCode;
+                        }
+                    }
+                    else if (validationCode != null && validationCode.Length > 0)
+                    {
+                        sql += " WHERE " + validationCode;
+                    }
+
+                    sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
+                    var sqlUnion = " UNION " + sql;
+                    sqlUnion = sqlUnion.Replace("'N' AS ordcol", "'Y' AS ordcol");
+
+                    if (selectedIDs != null && selectedIDs.Length > 0)
+                    {
+                        if (sql.ToUpper().IndexOf("WHERE") > -1)
+                        {
+                            sql += " AND " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
+                            sql += sqlUnion;
+                            sql += " AND " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                        }
+                        else
+                        {
+                            sql += " WHERE " + tableName + "." + keyCol + " IN(" + selectedIDs + ")";
+                            sql += sqlUnion;
+                            sql += " WHERE " + tableName + "." + keyCol + " NOT IN(" + selectedIDs + ")";
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (validationCode.Length > 0 && validationCode.Trim().ToUpper().StartsWith("WHERE"))
+                    {
+                        sql += " " + validationCode + " AND " + tableName + "_ID=-1";
+                    }
+                    else if (validationCode.Length > 0)
+                    {
+                        sql += " WHERE " + tableName + "." + tableName + "_ID=-1 AND " + validationCode;
+                    }
+                    else
+                    {
+                        sql += " WHERE " + tableName + "." + tableName + "_ID=-1";
+                    }
+                }
+
+                if (selectedIDs != null && selectedIDs.Length > 0)
+                {
+                    if (sql.ToUpper().IndexOf("ORDER BY") > -1)
+                    {
+                        sql = sql.ToUpper().Replace("ORDER BY", "ORDER BY ordcol ASC,");
+                    }
+                    else
+                    {
+                        sql += " ORDER BY ordcol ASC";
+                    }
+                }
+
+
                 sql = sql.Replace('●', '%');
                 sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
@@ -304,22 +520,22 @@ namespace VIS.Models
                 }
 
                 List<DataObject> dyndata = new List<DataObject>();
-                DataObject item = null;
+                DataObject items = null;
                 List<object> values = null;
                 for (int i = 0; i < data.Tables[0].Columns.Count; i++)  //columns
                 {
-                    item = new DataObject();
+                    items = new DataObject();
 
-                    item.ColumnName = data.Tables[0].Columns[i].ColumnName;
+                    items.ColumnName = data.Tables[0].Columns[i].ColumnName;
                     values = new List<object>();
                     for (int j = 0; j < data.Tables[0].Rows.Count; j++)  //rows
                     {
 
                         values.Add(data.Tables[0].Rows[j][data.Tables[0].Columns[i].ColumnName]);
                     }
-                    item.Values = values;
-                    item.RowCount = data.Tables[0].Rows.Count;
-                    dyndata.Add(item);
+                    items.Values = values;
+                    items.RowCount = data.Tables[0].Rows.Count;
+                    dyndata.Add(items);
                 }
                 _iData.data = dyndata;
                 return _iData;
@@ -387,6 +603,13 @@ namespace VIS.Models
             get;
             set;
         }
+
+        public int AD_Column_ID
+        {
+            get;
+            set;
+        }
+
         public int AD_Reference_ID
         {
             get;
