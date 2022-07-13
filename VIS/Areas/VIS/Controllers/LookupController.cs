@@ -31,7 +31,7 @@ namespace VIS.Areas.VIS.Controllers
 
             if (!string.IsNullOrEmpty(Values))
             {
-                List<KeyValuePair<string, object>> data = JsonConvert.DeserializeObject<List<KeyValuePair<string, object>>>(Values);
+                List<LookUpData> data = JsonConvert.DeserializeObject<List<LookUpData>>(Values);
 
                 if (data != null && data.Count > 0)
                 {
@@ -57,13 +57,10 @@ namespace VIS.Areas.VIS.Controllers
         }
     }
 
-    //public class LookUpData
-    //{
-    //    public string Col1 { get; set; }
-    //    public string Col2 { get; set; }
-    //    public string Col3 { get; set; }
-    //    public string Col4 { get; set; }
-    //    public string Col5 { get; set; }
-    //    public string Col6 { get; set; }
-    //}
+    public class LookUpData
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+       
+    }
 }

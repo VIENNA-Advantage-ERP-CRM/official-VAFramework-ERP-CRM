@@ -588,7 +588,7 @@
                 tabNo = 0;
             }
 
-            var resultData = {};
+            var resultData = [];
 
             if (value == null || value.length == 0)
                 return "";
@@ -624,7 +624,7 @@
                 if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
                     ctxInfo = ctx.getContext(token);	// get global context
 
-                resultData[token] = ctxInfo;
+                resultData.push({ 'Key': token, 'Value': ctxInfo });
 
                 if (ctxInfo.length == 0) {
                     //_log.config("No Context Win=" + WindowNo + " for: " + token);
