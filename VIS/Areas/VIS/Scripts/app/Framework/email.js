@@ -1419,7 +1419,7 @@
                     FileNames += invalidExtensions[item].toString() + ', ';
                 }
 
-                var resString = null;
+                var resString = "";
                 if (invalidExtensions.length == 1) {
                     resString += 'FilesInvalidExtension';
                 }
