@@ -27,19 +27,32 @@ namespace VIS.Areas.VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             GridWindowVO vo = AEnv.GetMWindowVO(ctx, WindowNo, AD_Window_ID, 0);
 
-            string lookupQuery = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault().GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo.query;
-
-            if (!string.IsNullOrEmpty(Values))
+            VLookUpInfo lInfo = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault().GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo;
+            string lookupQuery = lInfo.query;
+            string validation = lInfo.validationCode;
+            if (!string.IsNullOrEmpty(validation))
             {
-                List<LookUpData> data = JsonConvert.DeserializeObject<List<LookUpData>>(Values);
-
-                if (data != null && data.Count > 0)
+                if (!string.IsNullOrEmpty(Values))
                 {
-                    for (int i = 0; i < data.Count; i++)
+                    List<LookUpData> data = JsonConvert.DeserializeObject<List<LookUpData>>(Values);
+
+                    if (data != null && data.Count > 0)
                     {
-                        lookupQuery.Replace(data[i].Key, Convert.ToString(data[i].Value));
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            validation = validation.Replace("@" + data[i].Key + "@", Convert.ToString(data[i].Value));
+                        }
                     }
                 }
+
+                var posFrom = lookupQuery.LastIndexOf(" FROM ");
+                var hasWhere = lookupQuery.IndexOf(" WHERE ", posFrom) != -1;
+                //
+                var posOrder = lookupQuery.LastIndexOf(" ORDER BY ");
+                if (posOrder != -1)
+                    lookupQuery = lookupQuery.Substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + validation + lookupQuery.Substring(posOrder);
+                else
+                    lookupQuery += (hasWhere ? " AND " : " WHERE ") + validation;
             }
 
             //DataSet ds = DB.ExecuteDataset(lookupQuery);
@@ -61,6 +74,6 @@ namespace VIS.Areas.VIS.Controllers
     {
         public string Key { get; set; }
         public string Value { get; set; }
-       
+
     }
 }
