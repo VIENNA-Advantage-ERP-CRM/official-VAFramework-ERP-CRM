@@ -1626,8 +1626,6 @@
                     this.curGC = gc;
                     setCurrent = false;
                 }
-               
-
 
                 // Set first tab as current tab in case not marked aby tab as current tab.
                 if (i === 0 && !setCurrent) {
@@ -1639,7 +1637,6 @@
                     //}
                 //}
 
-
                 ////Set Title of Tab
                 //if (i === 0) {
                 //    this.curGC = gc;
@@ -1647,6 +1644,7 @@
 
                     if (gTab.getIsHeaderPanel()) {
                         gc.initHeaderPanel(this.getParentDetailPane());
+                        this.vHeaderPanel = gc.vHeaderPanel;
                         if (gTab.isHPanelNotShowInMultiRow && !gTab.getIsSingleRow()) {
                             gc.vHeaderPanel.hidePanel();
                             if (gc.vHeaderPanel.sizeChangedListner && gc.vHeaderPanel.sizeChangedListner.onSizeChanged)
@@ -2673,6 +2671,7 @@
         pi.setAD_Client_ID(ctx.getAD_Client_ID());
         pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
         pi.setIsBatch(batch);
+        pi.setUseCrystalReportViewer(ctx.getIsUseCrystalReportViewer());
         pi.setIsBackground(isbackground);
         //start process
 

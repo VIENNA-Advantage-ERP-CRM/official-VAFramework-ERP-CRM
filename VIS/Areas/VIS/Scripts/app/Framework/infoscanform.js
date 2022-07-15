@@ -323,7 +323,7 @@
                     }
                 }
             }
-            var query = "";
+           // var query = "";
             var whereClause = "";
             
             var M_Locator_ID = 0;
@@ -331,6 +331,7 @@
 
             var M_Warehouse_ID = 0;
             var M_WarehouseTo_ID = 0;
+            var C_BPartner_ID = 0;
 
             if (requery == true) {
                 //var name = "";
@@ -343,36 +344,40 @@
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
                     if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                        srchCtrls[i]["Value"] = "";
                         continue;
                     }
+                    srchCtrls[i]["Value"] = srchValue;
+                    srchCtrls[i]["CtrlColumnName"] = srchCtrls[i].Ctrl.colName;
 
-                    if (srchCtrls[i].Ctrl.colName == "Name") {
-                        query += " AND upper(VAICNT_ScanName) LIKE '%" + srchValue.toUpperCase() + "%' ";
-                    }
+                    //if (srchCtrls[i].Ctrl.colName == "Name") {
+                    //    query += " AND upper(VAICNT_ScanName) LIKE '%" + srchValue.toUpperCase() + "%' ";
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "Reference") {
-                        query += " AND upper(VAICNT_ReferenceNo) LIKE '%" + srchValue.toUpperCase() + "%' ";
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "Reference") {
+                    //    query += " AND upper(VAICNT_ReferenceNo) LIKE '%" + srchValue.toUpperCase() + "%' ";
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "TrxFromDate") {
-                        var date = VIS.DB.to_date(srchValue, true);
-                        query += " AND DateTrx >= " + date;
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "TrxFromDate") {
+                    //    var date = VIS.DB.to_date(srchValue, true);
+                    //    query += " AND DateTrx >= " + date;
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "TrxToDate") {
-                        var date = VIS.DB.to_date(srchValue, true);
-                        query += " AND DateTrx <= " + date;
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "TrxToDate") {
+                    //    var date = VIS.DB.to_date(srchValue, true);
+                    //    query += " AND DateTrx <= " + date;
+                    //}
                 }
-                if (showCart) {
-                    query += " AND VAICNT_TransactionType = 'OT' ";
-                }
-                else {
+                //if (showCart) {
+                //    query += " AND VAICNT_TransactionType = 'OT' ";
+                //}
+               /* else {*/
                     if (window_ID == 184) {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on M_inout and internal use move line respectively
-                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
+                       //query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
+                        C_BPartner_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID"));
                     }
                     else if (window_ID == 319 || window_ID == 170) {
-                        query += " AND VAICNT_TransactionType = 'IM' ";
+                       // query += " AND VAICNT_TransactionType = 'IM' ";
                         // extra parameters only for these windows
                         M_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Locator_ID", true))
                         M_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_LocatorTo_ID", true));
@@ -380,37 +385,48 @@
                         M_WarehouseTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
                     }
                     else if (window_ID == 168) {
-                        query += " AND VAICNT_TransactionType = 'PI' ";
+                        //query += " AND VAICNT_TransactionType = 'PI' ";
                         M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
                     }
                     else if (window_ID == 169) {
-                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO'))";
+                        //query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO'))";
+                        C_BPartner_ID= VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID");
                     }
                     else if (window_ID == 341) {
-                        query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";
+                        //query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";
+                        M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
                     }
-                    else {
-                        query += " AND VAICNT_TransactionType = 'OT' ";
-                    }
-                }
+                    //else {
+                    //   // query += " AND VAICNT_TransactionType = 'OT' ";
+                    //}
+               // }
             }
-            else {
-                query += " AND VAICNT_InventoryCount_ID = -1";
-            }
+            //else {
+            //    query += " AND VAICNT_InventoryCount_ID = -1";
+            //}
 
-            sql = "SELECT VAICNT_ScanName,VAICNT_ReferenceNo,DateTrx,VAICNT_InventoryCount_ID FROM VAICNT_InventoryCount WHERE IsActive='Y' AND AD_Client_ID = "
-                + VIS.Utility.Util.getValueOfInt(VIS.context.getAD_Client_ID()) + query;
+            //sql = "SELECT VAICNT_ScanName,VAICNT_ReferenceNo,DateTrx,VAICNT_InventoryCount_ID FROM VAICNT_InventoryCount WHERE IsActive='Y' AND AD_Client_ID = "
+            //    + VIS.Utility.Util.getValueOfInt(VIS.context.getAD_Client_ID()) + query;
             
-            var _sql = VIS.secureEngine.encrypt(sql);
+            //var _sql = VIS.secureEngine.encrypt(sql);
             if (!pNo) {
                 pNo = 1;
+            }
+
+            var srhCtrls = [];
+            if (srchCtrls && Object.keys(srchCtrls).length > 0) {
+                for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
+                    var vals = {};
+                    vals.CtrlColumnName = srchCtrls[x].CtrlColumnName;
+                    vals.Value = srchCtrls[x].Value;
+                    srhCtrls.push(vals);
+                }
             }
 
             $.ajax({
                 url: VIS.Application.contextUrl + "InfoProduct/GetCart",
                 dataType: "json",
                 data: {
-                    sql: _sql,
                     pageNo: pNo,
                     isCart: showCart,
                     windowID: window_ID,
@@ -418,6 +434,9 @@
                     WarehouseToID: M_WarehouseTo_ID,
                     LocatorID: M_Locator_ID,
                     LocatorToID: M_LocatorTo_ID,
+                    BPartnerID: C_BPartner_ID,
+                    srchCtrl: JSON.stringify(srhCtrls),
+                    requery: requery
                 },
                 error: function () {
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

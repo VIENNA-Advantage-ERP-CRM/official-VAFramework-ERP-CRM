@@ -29,6 +29,24 @@ namespace VIS.Controllers
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get Invoice Product Info
+        /// </summary>
+        /// <param name="fields">Parameters</param>
+        /// <returns>Product Info</returns>
+        public JsonResult GetInvoiceProductInfo(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MInvoiceModel objInvoice = new MInvoiceModel();
+                retJSON = JsonConvert.SerializeObject(objInvoice.GetInvoiceProductInfo(ctx, fields));
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetTax(string fields)
         {
 

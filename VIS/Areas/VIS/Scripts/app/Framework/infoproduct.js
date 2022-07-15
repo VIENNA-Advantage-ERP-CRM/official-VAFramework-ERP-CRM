@@ -573,14 +573,7 @@
             btnShowCart.hide();
         }
 
-        var s_productFrom =
-            "M_Product p"
-            + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
-            + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
-            + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
-            + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
-        //+ " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-
+       
         function bindEvent() {
             if (!VIS.Application.isMobile) {
                 inforoot.on('keyup', function (e) {
@@ -1273,7 +1266,7 @@
             }
             var grdRows = [];
             for (var j = 0; j < savedProduct.length; j++) {
-                var row = {};                
+                var row = {};
                 row["Product"] = savedProduct[j].Product;
                 row["Value"] = savedProduct[j].Value;
                 row["QtyEntered"] = savedProduct[j].QtyEntered;
@@ -2008,161 +2001,182 @@
                 }
             }
             disposeDataSec();
-            var sql = "SELECT ";
-            var sqlWhere = "";
+            //var sql = "SELECT ";
+            //var sqlWhere = "";
             //var cname = null;
             var displayType = 0;
-            var count = $.makeArray(displayCols).length;
+            //var count = $.makeArray(displayCols).length;
             //get Qry from InfoColumns
             for (var item in displayCols) {
                 displayType = displayCols[item].AD_Reference_ID;
-                if (displayType == VIS.DisplayType.YesNo) {
-                    sql += " ( CASE " + displayCols[item].ColumnSQL + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) " + displayCols[item].ColumnName;
-                }
-                else {
-                    sql += displayCols[item].ColumnSQL + " ";
-                }
+                //if (displayType == VIS.DisplayType.YesNo) {
+                //    sql += " ( CASE " + displayCols[item].ColumnSQL + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) " + displayCols[item].ColumnName;
+                //}
+                //else {
+                //    sql += displayCols[item].ColumnSQL + " ";
+                //}
 
                 if (displayType == VIS.DisplayType.ID && displayCols[item].ColumnName.toUpperCase() == "M_PRODUCT_ID") {
                     keyCol = displayCols[item].ColumnName.toUpperCase();
                 }
 
-                if (!((count - 1) == item)) {
-                    sql += ', ';
-                }
+                //if (!((count - 1) == item)) {
+                //    sql += ', ';
+                //}
             }
 
             if (requery == true) {
                 //var whereClause = " rownum <= " + (ismobile ? 50 : 100);
-                var whereClause = " w.AD_Client_ID = " + VIS.context.getAD_Client_ID();
+                //var whereClause = " w.AD_Client_ID = " + VIS.context.getAD_Client_ID();
                 var name = "";
                 var value = "";
                 var upc = "";
                 var sku = "";
                 var srchValue = null;
                 var upcSearch = false;
-                s_productFrom =
-                    "M_Product p"
-                    + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
-                    + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
-                    + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
-                    + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
+                //s_productFrom =
+                //    "M_Product p"
+                //    + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
+                //    + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
+                //    + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
+                //    + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
-                    if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
+                    if (srchValue == null || srchValue.length == 0 || srchValue == 0 || !srchValue) {
+                        srchCtrls[i]["Value"] = "";
                         continue;
                     }
+
+                    srchCtrls[i]["Value"] = srchValue;
+                    srchCtrls[i]["CtrlColumnName"] = srchCtrls[i].Ctrl.colName;
                     //if (whereClause.length > 0) {
                     //    whereClause += " AND ";
                     //}
 
                     if (srchCtrls[i].Ctrl.displayType == 10) {
-                        if (!(String(srchValue).indexOf("%") == 0)) {
-                            srchValue = "●" + srchValue;
-                        }
-                        else {
-                            srchValue = String(srchValue).replace("%", "●");
-                        }
-                        if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
-                            srchValue = srchValue + "●";
-                        }
+                        //if (!(String(srchValue).indexOf("%") == 0)) {
+                        //    srchValue = "●" + srchValue;
+                        //}
+                        //else {
+                        //    srchValue = String(srchValue).replace("%", "●");
+                        //}
+                        //if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
+                        //    srchValue = srchValue + "●";
+                        //}
                         srchValue = VIS.DB.to_string(srchValue);
                     }
 
-                    if (srchCtrls[i].Ctrl.colName == "Value") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
-                    }
+                    //if (srchCtrls[i].Ctrl.colName == "Value") {
+                    //    whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "Name") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "Name") {
+                    //    whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "UPC") {
-                        upcSearch = true;
-                        //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-                        whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase()
-                            + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "UPC") {
+                    //    upcSearch = true;
+                    //    //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+                    //    //whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase()
+                    //    //    + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "SKU") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "SKU") {
+                    //    whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
+                    //}
 
-                    else if (srchCtrls[i].Ctrl.colName == "M_Warehouse_ID") {
-                        if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND w.M_Warehouse_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
-                        }
-                    }
-                    else if (srchCtrls[i].Ctrl.colName == "M_PriceList_Version_ID") {
-                        if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND pr.M_PriceList_Version_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
-                        }
-                    }
-                    else if (srchCtrls[i].Ctrl.colName == "M_AttributeSet_ID") {
-                        if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND p.M_AttributeSet_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
-                        }
-                    }
-                    else if (srchCtrls[i].Ctrl.colName == "AttributeCode") {
-                        whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '" + srchValue.toUpperCase() + "')";
-                    }
+                    //else if (srchCtrls[i].Ctrl.colName == "M_Warehouse_ID") {
+                    //    if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
+                    //        whereClause += " AND w.M_Warehouse_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                    //    }
+                    //}
+                    //else if (srchCtrls[i].Ctrl.colName == "M_PriceList_Version_ID") {
+                    //    if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
+                    //        whereClause += " AND pr.M_PriceList_Version_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                    //    }
+                    //}
+                    //else if (srchCtrls[i].Ctrl.colName == "M_AttributeSet_ID") {
+                    //    if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
+                    //        whereClause += " AND p.M_AttributeSet_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                    //    }
+                    //}
+                    //else if (srchCtrls[i].Ctrl.colName == "AttributeCode") {
+                    //    whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '" + srchValue.toUpperCase() + "')";
+                    //}
                 }
 
-                if (upcSearch) {
-                    s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)" +
-                        " LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID=uc.M_Product_ID)";
-                }
+                //if (upcSearch) {
+                //    s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)" +
+                //        " LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID=uc.M_Product_ID)";
+                //}
 
-                sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+                //sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
 
-                if (window_ID == 181) {
-                    if (validation != null && validation.length > 0) {
-                        validation += " AND (p.Discontinued = 'N' OR p.DiscontinuedBy > sysdate )";
-                    }
-                }
+                //if (window_ID == 181) {
+                //    if (validation != null && validation.length > 0) {
+                //        validation += " AND (p.Discontinued = 'N' OR p.DiscontinuedBy > sysdate )";
+                //    }
+                //}
 
-                if (whereClause.length > 1) {
-                    sqlWhere += " WHERE " + whereClause;
-                    if (validation != null && validation.length > 0) {
-                        sqlWhere += " AND " + validation.replace(/M_Product\./g, "p.");
-                        //sql += " AND " + validationCode;
-                    }
-                }
-                else if (validation != null && validation.length > 0) {
-                    sqlWhere += " WHERE " + validation.replace(/M_Product\./g, "p.");
-                }
+                //if (whereClause.length > 1) {
+                //    sqlWhere += " WHERE " + whereClause;
+                //    if (validation != null && validation.length > 0) {
+                //        sqlWhere += " AND " + validation.replace(/M_Product\./g, "p.");
+                //        //sql += " AND " + validationCode;
+                //    }
+                //}
+                //else if (validation != null && validation.length > 0) {
+                //    sqlWhere += " WHERE " + validation.replace(/M_Product\./g, "p.");
+                //}
 
             }
-            else {
-                sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+            //else {
+            //sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
 
-                if (validation != null && validation.length > 0 && validation.trim().toUpperCase().startsWith('WHERE')) {
-                    sqlWhere += " " + validation.replace(/M_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
-                }
-                else if (validation != null && validation.length > 0) {
-                    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/M_Product\./g, "p.");
-                }
-                else {
-                    sqlWhere += " WHERE p." + tableName + "_ID=-1";
-                }
-            }
+            //if (validation != null && validation.length > 0 && validation.trim().toUpperCase().startsWith('WHERE')) {
+            //    sqlWhere += " " + validation.replace(/M_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
+            //}
+            //else if (validation != null && validation.length > 0) {
+            //    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/M_Product\./g, "p.");
+            //}
+            //else {
+            //    sqlWhere += " WHERE p." + tableName + "_ID=-1";
+            //}
+            //}
 
             if (!pNo) {
                 pNo = 1;
             }
-            var _sql = VIS.secureEngine.encrypt(sql);
-            var _sqlWhere = VIS.secureEngine.encrypt(sqlWhere);
+
+            var srhCtrls = [];
+            if (srchCtrls && Object.keys(srchCtrls).length > 0) {
+                for (var x = 0; x < Object.keys(srchCtrls).length; x++) {
+                    var vals = {};
+                    vals.CtrlColumnName = srchCtrls[x].CtrlColumnName;
+                    vals.ColumnName = srchCtrls[x].ColumnName;
+                    vals.Value = srchCtrls[x].Value;
+                    srhCtrls.push(vals);
+                }
+            }
+
+
+            //var _sql = VIS.secureEngine.encrypt(sql);
+            //var _sqlWhere = VIS.secureEngine.encrypt(sqlWhere);
             $.ajax({
                 url: VIS.Application.contextUrl + "InfoProduct/GetData",
                 dataType: "json",
                 type: "POST",
                 //async: false,
                 data: {
-                    sql: _sql,
-                    where: _sqlWhere,
+                    //sql: _sql,
+                    //where: _sqlWhere,
                     tableName: tableName,
                     pageNo: pNo,
-                    ForMobile: ismobile
+                    ForMobile: ismobile,
+                    Requery: requery,
+                    SrchCtrl: JSON.stringify(srhCtrls),
+                    Validation: validation,
+                    Window_ID: window_ID
                 },
                 error: function () {
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));

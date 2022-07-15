@@ -36,7 +36,7 @@ namespace VAdvantage.Process
         {
             log.Info("Cache Reset Executed");
             Env.Reset(false);	// not final            
-            return "";
+            return "Cache Reset";
 
         }
     }

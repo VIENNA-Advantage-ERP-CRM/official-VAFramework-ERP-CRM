@@ -294,7 +294,7 @@ namespace VAdvantage.Process
                                             AND m_product_id = VAMFG_M_WrkOdrTransaction.m_product_id) > 0 THEN 'Y' END AS issotrx ,
                                 '' AS isreturntrx  , '' AS IsInternalUse,  'VAMFG_M_WrkOdrTransaction'  AS TableName,
                                 docstatus, vamfg_dateacct AS DateAcct , iscostcalculated ,  isreversedcostcalculated 
-                         FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR' , 'AR' , 'AI') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
+                         FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR' , 'AR' , 'AI', 'PM') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
                               AND isactive  = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED  = 'N' AND VAMFG_description LIKE '%{->%')) ");
                     }
@@ -4662,7 +4662,8 @@ namespace VAdvantage.Process
                 (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
                 || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_ComponentReturnFromWorkOrder) ||
                 (countGOM01 <= 0 && (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
-                || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)))))
+                || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)))
+                || woTrxType.Equals("PM")))
             {
                 sql.Append("SELECT * FROM VAMFG_M_WrkOdrTrnsctionLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
                             " AND VAMFG_M_WrkOdrTransaction_ID = " + VAMFG_M_WrkOdrTransaction_ID);
@@ -4679,7 +4680,8 @@ namespace VAdvantage.Process
             else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
                 || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_ComponentReturnFromWorkOrder)
                 || (countGOM01 <= 0 && (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
-                || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))))
+                || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)))
+                || woTrxType.Equals("PM"))
             {
                 sql.Append("SELECT * FROM VAMFG_M_WrkOdrTrnsctionLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
                              " AND VAMFG_M_WrkOdrTransaction_ID = " + VAMFG_M_WrkOdrTransaction_ID);
@@ -4735,7 +4737,9 @@ namespace VAdvantage.Process
                                 continue;
                             }
 
-                            currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")), Get_Trx());
+                            currentCostPrice = GetCostForProductionFinishedGood(Util.GetValueOfInt(po_WrkOdrTransaction.Get_Value("VAMFG_M_WorkOrder_ID")),
+                                Util.GetValueOfString(po_WrkOdrTransaction.Get_Value("VAMFG_ProductionExecList")),
+                                Util.GetValueOfDecimal(po_WrkOdrTransaction.Get_Value("VAMFG_QtyEntered")), Get_Trx());
 
                             // if currentCostPrice is ZERO, then not to calculate cost of finished Good
                             if (currentCostPrice == 0)
@@ -4750,7 +4754,8 @@ namespace VAdvantage.Process
                         #endregion
 
                         if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
-                            || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
+                            || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)
+                            || woTrxType.Equals("PM"))
                         {
                             #region 1_Component Issue to Work Order (CI)  / Assembly Return from Inventory(AR)
                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("AD_Client_ID")),
@@ -4992,7 +4997,7 @@ namespace VAdvantage.Process
         /// <param name="VAMFG_M_WorkOrder_ID">production Order</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost of finished good</returns>
-        private Decimal GetCostForProductionFinishedGood(int VAMFG_M_WorkOrder_ID, Trx trxName)
+        private Decimal GetCostForProductionFinishedGood(int VAMFG_M_WorkOrder_ID, String VAMFG_M_WrkOdrTransaction_Ids, Decimal AssembledQty, Trx trxName)
         {
             decimal currentcostprice = 0;
 
@@ -5002,16 +5007,27 @@ namespace VAdvantage.Process
                              INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
                              INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
                            WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
-                             @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND NVL(wotl.currentcostprice , 0) = 0 AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
+                             @" AND wot.VAMFG_WorkOrderTxnType IN ( 'CI', 'PM') AND NVL(wotl.currentcostprice , 0) = 0 AND wot.DocStatus IN ('CO'  , 'CL')  ";
+            if (!String.IsNullOrEmpty(VAMFG_M_WrkOdrTransaction_Ids))
+            {
+                sql += " AND wot.VAMFG_M_WrkOdrTransaction_ID IN (" + VAMFG_M_WrkOdrTransaction_Ids + ")";
+            }
+            //sql += " GROUP BY wot.VAMFG_QtyEntered";
             if (VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName)) == 0)
             {
                 // sum of all component whose available on "Component Issue To Work Order" transaction
-                sql = @"SELECT ROUND((SUM(wotl.VAMFG_QtyEntered * wotl.CurrentCostPrice) / wot.VAMFG_QtyEntered) , 10) as Currenctcost
+                sql = @"SELECT ROUND((SUM(CASE WHEN  Wot.Vamfg_Workordertxntype IN ( 'CI', 'PM') THEN
+                                wotl.VAMFG_QtyEntered else -1 * wotl.VAMFG_QtyEntered END * wotl.CurrentCostPrice) / " + AssembledQty + @") , 10) as Currenctcost
                              FROM VAMFG_M_WrkOdrTransaction wot
                              INNER JOIN VAMFG_M_WorkOrder wo ON wo.VAMFG_M_WorkOrder_ID = wot.VAMFG_M_WorkOrder_ID
                              INNER JOIN VAMFG_M_WrkOdrTrnsctionLine wotl ON wot.VAMFG_M_WrkOdrTransaction_ID = wotl.VAMFG_M_WrkOdrTransaction_ID
                            WHERE wotl.IsActive = 'Y' AND wot.VAMFG_M_WorkOrder_ID = " + VAMFG_M_WorkOrder_ID +
-                                 @" AND wot.VAMFG_WorkOrderTxnType = 'CI' AND wot.DocStatus IN ('CO'  , 'CL') GROUP BY wot.VAMFG_QtyEntered ";
+                                 @" AND wot.VAMFG_WorkOrderTxnType IN( 'CI', 'PM', 'CR') AND wot.DocStatus IN ('CO'  , 'CL') ";
+                if (!String.IsNullOrEmpty(VAMFG_M_WrkOdrTransaction_Ids))
+                {
+                    sql += " AND wot.VAMFG_M_WrkOdrTransaction_ID IN (" + VAMFG_M_WrkOdrTransaction_Ids + ")";
+                }
+                //sql += " GROUP BY wot.VAMFG_QtyEntered ";
                 currentcostprice = VAdvantage.Utility.Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
             }
             return currentcostprice;
