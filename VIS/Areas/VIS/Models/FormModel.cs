@@ -663,6 +663,20 @@ namespace VIS.Models
 
         public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
+            if (colName == "1")
+            {
+                colName = "Value, LocatorCombination, M_Warehouse_ID, (SELECT Name FROM M_Warehouse WHERE M_Warehouse_ID = M_Locator.M_Warehouse_ID) AS Warehouse";
+            }
+            //else if (colName == "2")
+            //{
+
+            //}
+            //else if (colName == "3")
+            //{ 
+            
+            //}
+
+
             string sql = "SELECT M_Locator_ID," + colName + " FROM M_Locator WHERE IsActive='Y'";
             //JID_0932 In validation of locator need to consider organization  
             if (orgId != 0)

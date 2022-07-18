@@ -17,10 +17,12 @@ namespace VIS.Classes
                  String columnName, int AD_Reference_Value_ID,
                 bool IsParent, String ValidationCode)
         {
-            return VLookUpFactory.Get(ctx, windowNo, Column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, IsParent, ValidationCode);
+            if (QueryValidator.IsValid(ValidationCode))
+                return VLookUpFactory.Get(ctx, windowNo, Column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, IsParent, ValidationCode);
+            return null;
         }
 
-        public static string [] GetKeyColumns(int AD_Table_ID,Ctx ctx)
+        public static string[] GetKeyColumns(int AD_Table_ID, Ctx ctx)
         {
             //return new MTable(ctx, AD_Table_ID, null).GetKeyColumns();
             return MTable.Get(ctx, AD_Table_ID).GetKeyColumns();

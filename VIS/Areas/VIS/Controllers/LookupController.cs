@@ -68,6 +68,69 @@ namespace VIS.Areas.VIS.Controllers
             object result = h.ExecuteJDataSet(sqlIn);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult GetLookupAll(int WindowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string Values, int PageSize)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            GridWindowVO vo = AEnv.GetMWindowVO(ctx, WindowNo, AD_Window_ID, 0);
+
+            VLookUpInfo lInfo = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault().GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo;
+            string lookupQuery = lInfo.queryAll;
+            string validation = lInfo.validationCode;
+
+            SqlHelper h = new SqlHelper();
+            SqlParamsIn sqlIn = new SqlParamsIn()
+            {
+                sql = lookupQuery,
+            };
+
+            if (PageSize > 0)
+                sqlIn.pageSize = PageSize;
+
+            object result = h.ExecuteJDataSet(sqlIn);
+            return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetLookupDirect(int WindowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, object Key, bool IsNumber)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            GridWindowVO vo = AEnv.GetMWindowVO(ctx, WindowNo, AD_Window_ID, 0);
+
+            VLookUpInfo lInfo = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault().GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo;
+            string lookupQuery = lInfo.queryDirect;
+
+
+            List<SqlParams> listParam = new List<SqlParams>();
+            string key = "";
+            if (Key != null)
+                key = ((string[])Key)[0];
+
+
+            SqlParams parm = new SqlParams();
+            
+                parm.name = "@key";
+            if (IsNumber)
+            {
+                parm.value = Convert.ToInt32(key);
+            }
+            else {
+                parm.value = Convert.ToString(key);
+            }
+            listParam.Add(parm);
+
+            SqlHelper h = new SqlHelper();
+            SqlParamsIn sqlIn = new SqlParamsIn()
+            {
+                sql = lookupQuery,
+                param= listParam
+            };
+
+            object result = h.ExecuteJDataSet(sqlIn);
+            return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
+        }
+
     }
 
     public class LookUpData

@@ -147,15 +147,16 @@ namespace VIS.Controllers
         /// <param name="sql"></param>
         /// <param name="cardID"></param>
         /// <returns></returns>
-        public int GetRecordCountWithCard(string sql, int cardID) {
+        public int GetRecordCountWithCard(string sql, int cardID)
+        {
             int count = 0;
             using (var w = new WindowHelper())
             {
                 Ctx ctx = Session["ctx"] as Ctx;
                 sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
-                count= w.GetRecordCountWithCard(sql, cardID);
+                count = w.GetRecordCountWithCard(sql, cardID);
             }
-                return count;
+            return count;
         }
 
         protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
@@ -765,6 +766,10 @@ namespace VIS.Controllers
         {
             Ctx _ctx = new Ctx(ctx);
             //Ctx _ctx = null;//(ctx) as Ctx;
+
+            validationCode = SecureEngineBridge.DecryptByClientKey(validationCode, _ctx.GetSecureKey());
+
+
             Lookup res = LookupHelper.GetLookup(_ctx, windowNo, column_ID, AD_Reference_ID, columnName,
                 AD_Reference_Value_ID, isParent, validationCode);
             return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
@@ -992,9 +997,9 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID,int AD_CardView_ID,string SQL)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, int AD_CardView_ID, string SQL)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID,SQL)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx, AD_CardView_ID, SQL)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
@@ -1142,7 +1147,7 @@ namespace VIS.Controllers
 
 
         #region Toaster notification
-       [Obsolete]
+        [Obsolete]
         [NonAction]
         public static void AddMessageForToastr(string key, string value)
         {
@@ -1192,12 +1197,12 @@ namespace VIS.Controllers
                 var newDic = ModelLibrary.PushNotif.SSEManager.Get().GetMessages(ctx.GetAD_Session_ID());
                 if (newDic != null && newDic.Count() > 0)
                 {
-                   /// for (int i = 0; i < newDic.Count();)
-                   // {
+                    /// for (int i = 0; i < newDic.Count();)
+                    // {
                     //    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
                     //    toastrMessage.Remove(keyVal.Key);
-                        serializedObject = ser.Serialize(newDic);
-                        return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+                    serializedObject = ser.Serialize(newDic);
+                    return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
                     //}
                 }
             }
