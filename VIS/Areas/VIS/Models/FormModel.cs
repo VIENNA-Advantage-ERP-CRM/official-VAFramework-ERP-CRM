@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
 using VAdvantage.Classes;
+using VAdvantage.Controller;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VIS.Areas.VIS.Controllers;
 using VIS.DataContracts;
 using VIS.Helpers;
 
@@ -163,7 +166,7 @@ namespace VIS.Models
             // while (s.IndexOf("=") != -1)
             string[] varibles = s.Split(' ');
 
-            for(int o=0;o< varibles.Length;o++)
+            for (int o = 0; o < varibles.Length; o++)
             {
                 s = varibles[o];
                 if (s.IndexOf("=") == -1)
@@ -191,9 +194,9 @@ namespace VIS.Models
                         break;
                     }
                 }
-               
+
                 beginIndex = 0;
-                
+
 
                 beginIndex = s.IndexOf('=') + 1;
                 endIndex = s.Length - beginIndex;
@@ -428,7 +431,7 @@ namespace VIS.Models
                                 // Use first window found. Ideally there should be just one matching
 
                                 //this break is remove by karan on 18 jan 2021, to show a record which can exist in more than one window.
-                               //break;
+                                //break;
                             }
                         }
                     }
@@ -574,17 +577,98 @@ namespace VIS.Models
         /// <param name="sql"></param>
         /// <returns>DataSet</returns>
         /// Mandeep Singh(VIS0028) 13-sep-2021
-        public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text,string sql)
+        public DataSet GetAccessSqlAutoComplete(Ctx ctx, string _columnName, string text, int WindowNo,
+            int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string values)
         {
-            sql = VIS.Classes.SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
+
+            GridWindowVO vo = AEnv.GetMWindowVO(ctx, WindowNo, AD_Window_ID, 0);
+
+            VLookUpInfo lInfo = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault()
+                .GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo;
+            string sql = lInfo.query;
+
+
+            var keyColumn = lInfo.keyColumn;
+            var displayColumn = lInfo.displayColSubQ;
+            sql = sql.Replace(displayColumn, "");
+
+            var posFrom = sql.IndexOf(" FROM ");
+            var hasWhere = sql.IndexOf(" WHERE ", posFrom) != -1;
+            var posOrder = sql.LastIndexOf(" ORDER BY ");
+            var validation = lInfo.validationCode;
+            if (!lInfo.isValidated)
+            {
+                //validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
+                //if (validation.length == 0 && self.lookup.info.validationCode.length > 0)
+                //{
+                //    return;
+                //}
+                if (!string.IsNullOrEmpty(values))
+                {
+                    List<LookUpData> data = JsonConvert.DeserializeObject<List<LookUpData>>(values);
+
+                    if (data != null && data.Count > 0)
+                    {
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            lInfo.validationCode = lInfo.validationCode.Replace("@" + data[i].Key + "@", Convert.ToString(data[i].Value));
+                        }
+                    }
+                }
+
+                validation = " AND " + lInfo.validationCode;
+            }
+            if (validation != null && validation.Length > 0)
+            {
+                if (posOrder != -1)
+                {
+                    var orderByIdx = validation.ToUpper().LastIndexOf(" ORDER BY ");
+                    if (orderByIdx == -1)
+                    {
+                        validation = validation + sql.Substring(posOrder);
+                    }
+                    sql = sql.Substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + lInfo.tableName + ".isActive='Y' ";
+                    if (validation.Trim().StartsWith("AND"))
+                    {
+                        sql = sql + validation;
+                    }
+                    else
+                    {
+                        sql = sql + " AND " + validation;
+                    }
+                }
+                else
+                {
+                    sql += (hasWhere ? " AND " : " WHERE ") + lInfo.tableName + ".isActive='Y'";
+                    if (validation.Trim().StartsWith("AND"))
+                    {
+                        sql = sql + validation;
+                    }
+                    else
+                    {
+                        sql = sql + " AND " + validation;
+                    }
+                }
+            }
+
+            // string lastPart = sql.Substring(sql.IndexOf("FROM"), sql.Length);
+            string lastPart = sql.Substring(sql.IndexOf("FROM"));
+            sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
+
+            text = text.ToUpper();
+            text = "%" + text + "%";
+
+
+
             int idx = sql.IndexOf("finalValue");
-            string lastPart = "";
-            if (idx != -1) {
+            lastPart = "";
+            if (idx != -1)
+            {
                 lastPart = sql.Substring(idx, sql.Length - idx);
                 int newIndex = lastPart.IndexOf("WHERE");
                 newIndex = newIndex + 5;
                 lastPart = lastPart.Substring(newIndex, lastPart.Length - newIndex);
-                sql = sql.Replace(lastPart,"");
+                sql = sql.Replace(lastPart, "");
 
             }
             bool isColumnMatch = false;
@@ -644,10 +728,12 @@ namespace VIS.Models
                 sql += DB.TO_STRING(text);
                 sql += " AND ";
             }
-            if (isColumnMatch) {
+            if (isColumnMatch)
+            {
                 sql += lastPart;
             }
-            else {
+            else
+            {
                 sql += lastPart;
                 sql = DBFunctionCollection.convertToSubQuery(sql, "*") + "WHERE UPPER(finalvalue) LIKE " + DB.TO_STRING(text);
             }
@@ -673,7 +759,7 @@ namespace VIS.Models
             //}
             //else if (colName == "3")
             //{ 
-            
+
             //}
 
 

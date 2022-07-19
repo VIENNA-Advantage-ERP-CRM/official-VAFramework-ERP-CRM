@@ -138,11 +138,13 @@ namespace VIS.Controllers
         /// <param name="text"></param>
         /// <returns></returns>
         ///  Mandeep Singh(VIS0028) 13-sep-2021
-        public ActionResult GetAccessSqlAutoComplete(string sql, string columnName, string text)
+        public ActionResult GetAccessSqlAutoComplete(string columnName, string text, int windowNo,
+            int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID,string Validation)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetAccessSqlAutoComplete(ctx,columnName, text, sql)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetAccessSqlAutoComplete(ctx,columnName, text, windowNo,
+                AD_Window_ID,AD_Tab_ID,AD_Field_ID, Validation)), JsonRequestBehavior.AllowGet);
         }
 
 

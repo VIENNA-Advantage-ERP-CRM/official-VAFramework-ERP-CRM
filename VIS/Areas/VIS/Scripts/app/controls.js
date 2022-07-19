@@ -2533,43 +2533,51 @@
             addItem = $("<div><center>" + VIS.Msg.getMsg("NoDataFoundSugg") + "</center></div>").append($("<center></center>").append(addBtn));
             $ctrl.vaautocomplete({
                 source: function (term, response) {
-                    var sql = self.lookup.info.query;
-                    var keyColumn = self.lookup.info.keyColumn;
-                    var displayColumn = self.lookup.info.displayColSubQ;
-                    sql = sql.replace(displayColumn, '');
+                    //var sql = self.lookup.info.query;
+                    //var keyColumn = self.lookup.info.keyColumn;
+                    //var displayColumn = self.lookup.info.displayColSubQ;
+                    //sql = sql.replace(displayColumn, '');
 
-                    var posFrom = sql.indexOf(" FROM ");
-                    var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
-                    var posOrder = sql.lastIndexOf(" ORDER BY ");
+                    //var posFrom = sql.indexOf(" FROM ");
+                    //var hasWhere = sql.indexOf(" WHERE ", posFrom) != -1;
+                    //var posOrder = sql.lastIndexOf(" ORDER BY ");
                     var validation = "";
-                    if (!self.lookup.info.isValidated) {
-                        validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
-                        if (validation.length == 0 && self.lookup.info.validationCode.length > 0) {
-                            return;
-                        }
-                        validation = " AND " + validation;
-                    }
+                    //if (!self.lookup.info.isValidated) {
+                    //    validation = VIS.Env.parseContext(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
+                    //    if (validation.length == 0 && self.lookup.info.validationCode.length > 0) {
+                    //        return;
+                    //    }
+                    //    validation = " AND " + validation;
+                    //}
 
-                    if (posOrder != -1) {
-                        var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
-                        if (orderByIdx == -1) {
-                            validation = validation + sql.substring(posOrder);
-                        }
-                        sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
-                    }
-                    else {
-                        sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
-                    }
+                    //if (posOrder != -1) {
+                    //    var orderByIdx = validation.toUpper().lastIndexOf(" ORDER BY ");
+                    //    if (orderByIdx == -1) {
+                    //        validation = validation + sql.substring(posOrder);
+                    //    }
+                    //    sql = sql.substring(0, posOrder) + (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    //}
+                    //else {
+                    //    sql += (hasWhere ? " AND " : " WHERE ") + self.lookup.info.tableName + ".isActive='Y' " + validation;
+                    //}
 
-                    var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
-                    sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
+                    //var lastPart = sql.substr(sql.indexOf('FROM'), sql.length);
+                    //sql = "SELECT " + keyColumn + " AS ID,NULL," + displayColumn + " AS finalValue " + lastPart;
 
-                    term = term.toUpper();
-                    term = "%" + term + "%";
+                    //term = term.toUpper();
+                    //term = "%" + term + "%";
+                    validation = VIS.Env.parseContext2(VIS.context, self.lookup.windowNo, self.lookup.tabNo, self.lookup.info.validationCode, false, true);
                     $.ajax({
                         type: 'Post',
                         url: VIS.Application.contextUrl + "Form/GetAccessSqlAutoComplete",
-                        data: { sql: VIS.secureEngine.encrypt(sql), columnName: columnName, text: term },
+                        data: {
+                            columnName: columnName, text: term, WindowNo: self.lookup.getWindowNo(),
+                            AD_Window_ID: self.lookup.AD_Window_ID,
+                            AD_Tab_ID: self.lookup.AD_Tab_ID,
+                            AD_Field_ID: self.lookup.AD_Field_ID,
+                            Term: term,
+                            Validation: JSON.stringify(validation)
+                            },
                         success: function (data) {
                             var res = [];
                             if (JSON.parse(data) != null) {
