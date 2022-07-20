@@ -19,6 +19,9 @@ namespace VIS.Models
     public class FormModel
     {
         Ctx _ctx = new Ctx();
+
+        private const int WINDOW_INFO = 1113;
+        private const int TAB_INFO = 1113;
         public FormModel(Ctx ctx)
         {
             _ctx = ctx;
@@ -746,6 +749,322 @@ namespace VIS.Models
 
         }
 
+        public List<string> GetTextButtonQueryResult(Ctx ctx, string Text, int windowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string _columnName,
+            string ValidationCode)
+        {
+            List<JTable> ds = new List<JTable>();
+            GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, AD_Window_ID, 0);
+
+            VLookUpInfo _lookup = vo.GetTabs().Where(a => a.AD_Tab_ID == AD_Tab_ID).FirstOrDefault()
+                .GetFields().Where(x => x.AD_Field_ID == AD_Field_ID).FirstOrDefault().lookupInfo;
+            string sql = _lookup.query;
+
+            List<string> retVal = new List<string>();
+            var _tableName = _columnName.Substring(0, _columnName.Length - 3);
+            var _keyColumnName = _columnName;
+            string retValue = "";
+            //
+            if (_columnName.Equals("M_Product_ID"))
+            {
+                //	Reset
+                ctx.SetContext(WINDOW_INFO, TAB_INFO, "M_Product_ID", "0");
+                ctx.SetContext(WINDOW_INFO, TAB_INFO, "M_AttributeSetInstance_ID", "0");
+                ctx.SetContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
+            }
+            else if (_columnName.Equals("SalesRep_ID"))
+            {
+                _tableName = "AD_User";
+                _keyColumnName = "AD_User_ID";
+            }
+
+            sql = GetAccessSql(_columnName, Text);
+
+            //	Predefined
+            if (sql.Length > 0)
+            {
+                var wc = GetWhereClause(ctx, _columnName, _lookup, ValidationCode);
+                if (_columnName.Equals("M_Product_ID"))
+                {
+                    if (wc != null && wc.Length > 0)
+                        sql += " AND " + wc.Replace("M_Product.", "p.") + " AND p.IsActive='Y'";
+                }
+                else
+                {
+                    if (wc != null && wc.Length > 0)
+                        sql += " AND " + wc + " AND IsActive='Y'";
+                }
+                //	***
+                // //log.finest(_columnName + " (predefined) " + sql.toString());
+
+                retVal.Add(MRole.GetDefault(ctx).AddAccessSQL(sql, _tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO));
+                retVal.Add(_tableName);
+                retVal.Add(_keyColumnName);
+                return retVal;
+
+            }
+
+            //	Check if it is a Table Reference
+            IDataReader dr = null;
+            string _wc = "";
+            if (_lookup != null)
+            {
+                var AD_Reference_ID = _lookup.AD_Reference_Value_ID;
+                if (AD_Reference_ID != 0)
+                {
+
+                    // Commented 10 Aug 2015 For : not searching based on the identifiers
+                    var tblQuery = "SELECT Columnname, tbl.TableName FROM AD_Column clm INNER JOIN AD_Table tbl ON (tbl.AD_Table_ID = clm.AD_Table_ID) WHERE AD_Column_ID = "
+                      + " (SELECT Column_Key_ID FROM AD_Ref_Table WHERE AD_Reference_ID = " + AD_Reference_ID + ")";
+
+                    try
+                    {
+                        //var param = [];
+                        //param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                        //dr = executeReader(tblQuery, param);
+
+                        dr = DB.ExecuteReader(tblQuery);
+
+                        while (dr.Read())
+                        {
+                            _columnName = dr.GetString(0);
+                            _keyColumnName = dr.GetString(0);
+                            _tableName = dr.GetString(1);
+                            break;
+                        }
+
+                        dr.Close();
+                        dr = null;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (dr != null)
+                        {
+                            dr.Close();
+                            dr = null;
+                        }
+                        // this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+                    }
+                    finally
+                    {
+                        if (dr != null)
+                        {
+                            dr.Close();
+                            dr = null;
+                        }
+                    }
+
+
+                    var query = "SELECT  tbl.tablename, clm.Columnname FROM ( "
+                        + " SELECT kc.ColumnName, dc.ColumnName as ColName1, t.TableName,  t.AD_Table_ID "
+                        + " FROM AD_Ref_Table rt"
+                        + " INNER JOIN AD_Column kc ON (rt.Column_Key_ID=kc.AD_Column_ID)"
+                        + " INNER JOIN AD_Column dc ON (rt.Column_Display_ID=dc.AD_Column_ID)"
+                        + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID) "
+                        + "WHERE rt.AD_Reference_ID=" + AD_Reference_ID + " ) rr "
+                    + " INNER JOIN AD_Table tbl "
+                    + " ON (tbl.AD_Table_ID = rr.AD_Table_ID) "
+                    + " INNER JOIN AD_Column clm "
+                    + " ON (clm.AD_Table_ID      = tbl.AD_Table_ID) "
+                    + " WHERE (clm.ColumnName   IN ('DocumentNo', 'Value', 'Name') "
+                    + " OR clm.IsIdentifier      ='Y') "
+                    + " AND clm.AD_Reference_ID IN (10,14) "
+                    + " AND EXISTS "
+                      + " (SELECT *  FROM AD_Column cc WHERE cc.AD_Table_ID=tbl.AD_Table_ID  AND cc.IsKey ='Y' AND cc.ColumnName = " + _columnName + ")";
+
+                    string displayColumnName = null;
+
+                    _keyColumnName = _columnName;
+
+                    sql = "(";
+
+
+
+                    try
+                    {
+                        dr = DB.ExecuteReader(tblQuery);
+
+                        while (dr.Read())
+                        {
+                            if (sql.Length > 1)
+                                sql += " OR ";
+                            _tableName = dr.GetString(0);
+                            sql += "UPPER(" + dr.GetString(1) + ") LIKE " + DB.TO_STRING(Text);
+                        }
+                        sql += ")";
+                        dr.Close();
+                        dr = null;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        if (dr != null)
+                        {
+                            dr.Close();
+                            dr = null;
+                        }
+                        //this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+                    }
+                    finally
+                    {
+                        if (dr != null)
+                        {
+                            dr.Close();
+                            dr = null;
+                        }
+                    }
+
+                    if (sql.Length == 0)
+                    {
+                        // this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+                        retVal.Add("");
+                        retVal.Add(_tableName);
+                        retVal.Add(_keyColumnName);
+                        return retVal;
+                        //return new String[] { "", _tableName, _keyColumnName };
+                    }
+                    //
+                    retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
+                    _wc = GetWhereClause(ctx, _columnName, _lookup, ValidationCode);
+                    if (_wc != null && _wc.Length > 0)
+                        retValue += " AND " + _wc;
+                    //	***
+                    ////log.finest(_columnName + " (TableDir) " + sql.toString());
+                    retVal.Add(MRole.GetDefault(ctx).AddAccessSQL(retValue, _tableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO));
+                    retVal.Add(_tableName);
+                    retVal.Add(_keyColumnName);
+                    return retVal;
+                }	//	Table Reference
+            }	//	MLookup
+
+            /** Check Well Known Columns of Table - assumes TableDir	**/
+            var squery = "SELECT t.TableName, c.ColumnName "
+                + "FROM AD_Column c "
+                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID AND t.IsView='N') "
+                + "WHERE (c.ColumnName IN ('DocumentNo', 'Value', 'Name') OR c.IsIdentifier='Y')"
+                + " AND c.AD_Reference_ID IN (10,14)"
+                + " AND EXISTS (SELECT * FROM AD_Column cc WHERE cc.AD_Table_ID=t.AD_Table_ID"
+                    + " AND cc.IsKey='Y' AND cc.ColumnName=" + _keyColumnName + ")";
+            _keyColumnName = _columnName;
+            sql = "(";
+
+            //IDataReader dr = null;
+            try
+            {
+                dr = DB.ExecuteReader(squery);
+
+                while (dr.Read())
+                {
+                    if (sql.Length > 1)
+                        sql += " OR ";
+                    _tableName = dr.GetString(0);
+                    sql += "UPPER(" + dr.GetString(1) + ") LIKE " + DB.TO_STRING(Text);
+                }
+                sql += ")";
+                dr.Close();
+                dr = null;
+
+            }
+            catch (Exception ex)
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+                //this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+                //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+            }
+            finally
+            {
+                if (dr != null)
+                {
+                    dr.Close();
+                    dr = null;
+                }
+            }
+
+
+            if (sql.Length == 0)
+            {
+                //this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+                //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+                retVal.Add("");
+                retVal.Add(_tableName);
+                retVal.Add(_keyColumnName);
+                return retVal;
+                //return new String[] { "", _tableName, _keyColumnName };
+            }
+            //
+            retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
+            _wc = GetWhereClause(ctx, _columnName, _lookup, ValidationCode);
+            if (_wc != null && _wc.Length > 0)
+                retValue += " AND " + _wc;
+            //	***
+            ////log.finest(_columnName + " (TableDir) " + sql.toString());
+            retVal.Add(MRole.GetDefault(ctx).AddAccessSQL(retValue, _tableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO));
+            retVal.Add(_tableName);
+            retVal.Add(_keyColumnName);
+            return retVal;
+
+        }
+
+
+        private string GetWhereClause(Ctx ctx, string _ColumnName, VLookUpInfo _Lookup, string ValidationCode)
+        {
+            //_Lookup = (MLookup)_Lookup;
+            var WhereClause = "";
+            try
+            {
+
+                if ((_Lookup) == null)
+                    return "";
+                if (_Lookup.zoomQuery != null)
+                    WhereClause = _Lookup.zoomQuery.GetWhereClause();
+                var validation = _Lookup.validationCode;
+                if (validation == null)
+                    validation = "";
+                if (WhereClause.Length == 0)
+                    WhereClause = validation;
+                else if (validation.Length > 0)
+                    WhereClause += " AND " + validation;
+                //	//log.finest("ZoomQuery=" + (_lookup.getZoomQuery()==null ? "" : _lookup.getZoomQuery().getWhereClause())
+                //		+ ", Validation=" + _lookup.getValidation());
+                if (WhereClause.IndexOf('@') != -1)
+                {
+                    //  var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), _Lookup.getTabNo(), WhereClause, false, true);
+                    string validated = WhereClause;
+
+                    List<LookUpData> data = JsonConvert.DeserializeObject<List<LookUpData>>(ValidationCode);
+
+                    if (data != null && data.Count > 0)
+                    {
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            validated = validated.Replace("@" + data[i].Key + "@", Convert.ToString(data[i].Value));
+                        }
+                    }
+
+
+                    if (validated.Length == 0)
+                    {
+                        ////log.severe(_columnName + " - Cannot Parse=" + whereClause);
+                    }
+                    else
+                    {
+                        ////log.fine(_columnName + " - Parsed: " + validated);
+                        return validated;
+                    }
+                }
+            }
+            catch (Exception eee)
+            {
+            }
+            return WhereClause;
+        }
+
 
         public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
@@ -1405,6 +1724,29 @@ namespace VIS.Models
             return translations;
         }
         #endregion
+
+        public string GetKeyText(List<LookUpData> data, int AD_HeaderItem_ID)
+        {
+            if (AD_HeaderItem_ID > 0)
+            {
+                string colSQL = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnSql FROM AD_Gridlayoutitems WHERE AD_Gridlayoutitems_ID=" + AD_HeaderItem_ID));
+                if (!string.IsNullOrEmpty(colSQL))
+                {
+                    if (data != null)
+                    {
+                        if (data != null && data.Count > 0)
+                        {
+                            for (int i = 0; i < data.Count; i++)
+                            {
+                                colSQL = colSQL.Replace("@" + data[i].Key + "@", Convert.ToString(data[i].Value));
+                            }
+                        }
+                    }
+                    return Convert.ToString(DB.ExecuteScalar(colSQL));
+                }
+            }
+            return "";
+        }
 
     }
 }

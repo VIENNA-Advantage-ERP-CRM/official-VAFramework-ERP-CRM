@@ -236,7 +236,7 @@
                         var controls = {};
                         $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
                         iControl = new VIS.Controls.VKeyText(headerItem.ColSql, $self.gTab.getWindowNo(),
-                            $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute);
+                            $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute,null,headerItem.AD_GridLayoutItems_ID);
 
                         if (iControl == null) {
                             continue;
@@ -273,7 +273,7 @@
 
                             if (headerItem.ColSql.length > 0) {
                                 iControl = new VIS.Controls.VKeyText(headerItem.ColSql, $self.gTab.getWindowNo(),
-                                    $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute, mField);
+                                    $self.gTab.getWindowNo() + "_" + headerSeqNo, headerItem.IsAlwaysExecute, mField, headerItem.AD_GridLayoutItems_ID);
                             } else {
                                 iControl = VIS.VControlFactory.getReadOnlyControl(this.curTab, mField, false, false, false);
                             }

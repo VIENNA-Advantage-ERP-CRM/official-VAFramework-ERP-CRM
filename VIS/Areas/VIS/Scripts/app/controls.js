@@ -32,28 +32,6 @@
         return dr;
     };
 
-    //executeDataSet
-    var executeDataSet = function (sql, param, callback) {
-        var async = callback ? true : false;
-
-        var dataIn = { sql: sql, page: 1, pageSize: 0 };
-        if (param) {
-            dataIn.param = param;
-        }
-
-        var dataSet = null;
-
-        getDataSetJString(dataIn, async, function (jString) {
-            dataSet = new VIS.DB.DataSet().toJson(jString);
-            if (callback) {
-                callback(dataSet);
-            }
-        });
-
-        return dataSet;
-    };
-
-
     var executeScalar = function (sql, params, callback) {
         var async = callback ? true : false;
         var dataIn = { sql: sql, page: 1, pageSize: 0 }
@@ -80,30 +58,6 @@
 
         return value;
     };
-
-    var executeQueries = function (sqls, params, callback) {
-        var async = callback ? true : false;
-        var ret = null;
-        var dataIn = { sql: sqls.join("/"), param: params };
-
-        //   dataIn.sql = VIS.secureEngine.encrypt(dataIn.sql);
-        $.ajax({
-            url: nonQueryUrl + 'iesWithCode',
-            type: "POST",
-            datatype: "json",
-            contentType: "application/json; charset=utf-8",
-            async: async,
-            data: JSON.stringify(dataIn)
-        }).done(function (json) {
-            ret = json;
-            if (callback) {
-                callback(json);
-            }
-        });
-
-        return ret;
-    };
-
     //DataSet String
     function getDataSetJString(data, async, callback) {
         var result = null;
@@ -545,7 +499,7 @@
             var isMandatory = mField.getIsMandatory(false);
             var windowNo = mField.getWindowNo();//  no context check  
             var displayType = mField.getOrginalDisplayType();
-           
+
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
 
@@ -2577,7 +2531,7 @@
                             AD_Field_ID: self.lookup.AD_Field_ID,
                             Term: term,
                             Validation: JSON.stringify(validation)
-                            },
+                        },
                         success: function (data) {
                             var res = [];
                             if (JSON.parse(data) != null) {
@@ -2682,118 +2636,130 @@
                 self.openSearchForm();
                 return true;
             }
-            text = text.toUpper();
+            // text = text.toUpper();
 
-            var id = -3;
-            var keyId = null;
-            var dr = null;
-
-
-            var finalSql = VIS.Msg.parseTranslation(VIS.context, self.getDirectAccessSQL(text));
-            try {
-                // dr = executeReader(finalSql);
-
-                var dr = null;
-                $.ajax({
-                    type: 'Post',
-                    async: false,
-                    url: VIS.Application.contextUrl + "Form/GetTextButtonQueryResult",
-                    data: { sql: VIS.secureEngine.encrypt(finalSql) },
-                    success: function (data) {
-                        dr = new VIS.DB.DataReader().toJson(data)
-                    },
-                });
+            // var id = -3;
+            // var keyId = null;
+            // var dr = null;
 
 
-                if (dr.read()) {
-                    try {
-                        keyId = parseInt(dr.get(0));	//	first
-                    }
-                    catch (ex) {
-                        keyId = dr.get(0);
-                    }
-                    id = 1;
-                    if (dr.read()) {
-                        id = -1;			//	only if unique
-                        keyId = null;
-                    }
-                }
-                dr.close();
-                dr = null;
-            }
-            catch (ee) {
-                if (dr != null)
-                    dr.close();
-                dr = null;
-                this.log.log(VIS.Logging.Level.SEVERE, e);
+            //// var finalSql = VIS.Msg.parseTranslation(VIS.context, self.getDirectAccessSQL(text));
+            // var wc = self.getWhereClause(VIS.context, "", self.lookup);
+            // try {
+            //     // dr = executeReader(finalSql);
+            //     sel
 
-                id = -2;
-            }
-
-            //	Try like
-            if (id == -3 && !text.endsWith("%")) {
-                text += "%";
-                finalSql = VIS.Msg.parseTranslation(VIS.context, self.getDirectAccessSQL(text));
-                try {
-                    // dr = executeReader(finalSql);
+            //     var dr = null;
+            //     $.ajax({
+            //         type: 'Post',
+            //         async: false,
+            //         url: VIS.Application.contextUrl + "Form/GetTextButtonQueryResult",
+            //         data: {
+            //             Text: text, WindowNo: self.lookup.getWindowNo(),
+            //             AD_Window_ID: self.lookup.AD_Window_ID,
+            //             AD_Tab_ID: self.lookup.AD_Tab_ID,
+            //             AD_Field_ID: self.lookup.AD_Field_ID,
+            //             ColumnName: columnName,
+            //             ValidationCode:JSON.stringify(wc)
+            //         },
+            //         success: function (data) {
+            //             data = JSON.parse(data);
+            //             dr = new VIS.DB.DataReader().toJson(data[0]);
+            //             _TableName = data[1];
+            //             _KeyColumnName = data[2];
+            //         },
+            //     });
 
 
-                    var dr = null;
-                    $.ajax({
-                        type: 'Get',
-                        async: false,
-                        url: VIS.Application.contextUrl + "Form/GetTextButtonQueryResult",
-                        data: { sql: VIS.secureEngine.encrypt(finalSql) },
-                        success: function (data) {
-                            dr = new VIS.DB.DataReader().toJson(data)
-                        },
-                    });
+            //     if (dr.read()) {
+            //         try {
+            //             keyId = parseInt(dr.get(0));	//	first
+            //         }
+            //         catch (ex) {
+            //             keyId = dr.get(0);
+            //         }
+            //         id = 1;
+            //         if (dr.read()) {
+            //             id = -1;			//	only if unique
+            //             keyId = null;
+            //         }
+            //     }
+            //     dr.close();
+            //     dr = null;
+            // }
+            // catch (ee) {
+            //     if (dr != null)
+            //         dr.close();
+            //     dr = null;
+            //     this.log.log(VIS.Logging.Level.SEVERE, e);
 
-                    if (dr.read()) {
-                        //id = rs.getInt(1);		//	first
-                        try {
-                            keyId = parseInt(dr.get(0));	//	first
-                        }
-                        catch (es) {
-                            keyId = dr.get(0);
-                        }
-                        id = 1;
-                        if (dr.read()) {
-                            keyId = null;
-                            id = -1;			//	only if unique
-                        }
-                    }
-                    dr.close();
-                }
-                catch (ewe) {
-                    if (dr != null)
-                        dr.close();
-                    dr = null;
-                    this.log.log(VIS.Logging.Level.SEVERE, e);
+            //     id = -2;
+            // }
 
-                    id = -2;
-                }
-            }
+            // //	Try like
+            // if (id == -3 && !text.endsWith("%")) {
+            //     text += "%";
+            //     finalSql = VIS.Msg.parseTranslation(VIS.context, self.getDirectAccessSQL(text));
+            //     try {
+            //         // dr = executeReader(finalSql);
 
 
-            //	No (unique) result
-            if (id < 0 && keyId == null) {
-                //if (id == -3)
-                // this.log.log(VIS.Logging.Level.INFO, _columnName + " - Not Found - " + finalSql);
-                //else
-                //  this.log.log(VIS.Logging.Level.INFO, _columnName + " - Not Unique - " + finalSql);
-                _value = {};	// force re-display
-                self.openSearchForm();
-                return true;
-            }
+            //         var dr = null;
+            //         $.ajax({
+            //             type: 'Get',
+            //             async: false,
+            //             url: VIS.Application.contextUrl + "Form/GetTextButtonQueryResult",
+            //             data: { sql: VIS.secureEngine.encrypt(finalSql) },
+            //             success: function (data) {
+            //                 dr = new VIS.DB.DataReader().toJson(data)
+            //             },
+            //         });
 
-            //if (this.oldValue == keyId) {
-            //    return false;
-            //}
+            //         if (dr.read()) {
+            //             //id = rs.getInt(1);		//	first
+            //             try {
+            //                 keyId = parseInt(dr.get(0));	//	first
+            //             }
+            //             catch (es) {
+            //                 keyId = dr.get(0);
+            //             }
+            //             id = 1;
+            //             if (dr.read()) {
+            //                 keyId = null;
+            //                 id = -1;			//	only if unique
+            //             }
+            //         }
+            //         dr.close();
+            //     }
+            //     catch (ewe) {
+            //         if (dr != null)
+            //             dr.close();
+            //         dr = null;
+            //         this.log.log(VIS.Logging.Level.SEVERE, e);
 
-            text = "";
+            //         id = -2;
+            //     }
+            // }
 
-            self.setValue(keyId, true, true); //bind value and text
+
+            // //	No (unique) result
+            // if (id < 0 && keyId == null) {
+            //     //if (id == -3)
+            //     // this.log.log(VIS.Logging.Level.INFO, _columnName + " - Not Found - " + finalSql);
+            //     //else
+            //     //  this.log.log(VIS.Logging.Level.INFO, _columnName + " - Not Unique - " + finalSql);
+            //     _value = {};	// force re-display
+            //     self.openSearchForm();
+            //     return true;
+            // }
+
+            // //if (this.oldValue == keyId) {
+            // //    return false;
+            // //}
+
+            // text = "";
+
+            // self.setValue(keyId, true, true); //bind value and text
             return false;
 
 
@@ -2826,246 +2792,246 @@
         /// <param name="text">uppercase text for LIKE comparison</param>
         /// <returns>An array of 3 Strings; 0=SQL, 1=_tableName, 2=_keyColumnName</returns>
         this.getDirectAccessSQL1 = function (ctx, _columnName, _lookup, text) {
-            var sql = "";
+            //var sql = "";
             var retVal = [];
-            var _tableName = _columnName.substring(0, _columnName.length - 3);
-            var _keyColumnName = _columnName;
+            //var _tableName = _columnName.substring(0, _columnName.length - 3);
+            //var _keyColumnName = _columnName;
             //
-            if (_columnName.equals("M_Product_ID")) {
-                //	Reset
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Product_ID", "0");
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_AttributeSetInstance_ID", "0");
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
-            }
-            else if (_columnName.equals("SalesRep_ID")) {
-                _tableName = "AD_User";
-                _keyColumnName = "AD_User_ID";
-            }
+            //if (_columnName.equals("M_Product_ID")) {
+            //    //	Reset
+            //    ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Product_ID", "0");
+            //    ctx.setContext(WINDOW_INFO, TAB_INFO, "M_AttributeSetInstance_ID", "0");
+            //    ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
+            //}
+            //else if (_columnName.equals("SalesRep_ID")) {
+            //    _tableName = "AD_User";
+            //    _keyColumnName = "AD_User_ID";
+            //}
 
-            $.ajax({
-                url: VIS.Application.contextUrl + "Form/GetAccessSql",
-                dataType: "json",
-                async: false,
-                data: {
-                    columnName: _columnName,
-                    text: text
-                },
-                success: function (data) {
-                    sql = data;
-                }
-            });
-
-
-            //	Predefined
-            if (sql.length > 0) {
-                var wc = self.getWhereClause(ctx, _columnName, _lookup);
-                if (_columnName.equals("M_Product_ID")) {
-                    if (wc != null && wc.length > 0)
-                        sql += " AND " + wc.replace(/M_Product\./g, "p.") + " AND p.IsActive='Y'";
-                }
-                else {
-                    if (wc != null && wc.length > 0)
-                        sql += " AND " + wc + " AND IsActive='Y'";
-                }
-                //	***
-                // //log.finest(_columnName + " (predefined) " + sql.toString());
-
-                retVal.push(VIS.MRole.getDefault().addAccessSQL(sql, _tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO));
-                retVal.push(_tableName);
-                retVal.push(_keyColumnName);
-                return retVal;
-
-            }
-
-            //	Check if it is a Table Reference
-            var dr = null;
-            if (_lookup != null && _lookup instanceof VIS.MLookup) {
-                var AD_Reference_ID = _lookup.getAD_Reference_Value_ID();
-                if (AD_Reference_ID != 0) {
-
-                    // Commented 10 Aug 2015 For : not searching based on the identifiers
-                    var tblQuery = "VIS_84";
-
-                    try {
-                        var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
-                        dr = executeReader(tblQuery, param);
-
-                        while (dr.read()) {
-                            _columnName = dr.get(0);
-                            _keyColumnName = dr.get(0);
-                            _tableName = dr.get(1);
-                            break;
-                        }
-
-                        dr.close();
-                        dr = null;
-                    }
-                    catch (e) {
-                        if (dr != null) {
-                            dr.close();
-                            dr = null;
-                        }
-                        this.log.log(VIS.Logging.Level.SEVERE, squery, e);
-                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
-                    }
+            //$.ajax({
+            //    url: VIS.Application.contextUrl + "Form/GetAccessSql",
+            //    dataType: "json",
+            //    async: false,
+            //    data: {
+            //        columnName: _columnName,
+            //        text: text
+            //    },
+            //    success: function (data) {
+            //        sql = data;
+            //    }
+            //});
 
 
-                    var query = "VIS_85";
+            ////	Predefined
+            //if (sql.length > 0) {
+            //    var wc = self.getWhereClause(ctx, _columnName, _lookup);
+            //    if (_columnName.equals("M_Product_ID")) {
+            //        if (wc != null && wc.length > 0)
+            //            sql += " AND " + wc.replace(/M_Product\./g, "p.") + " AND p.IsActive='Y'";
+            //    }
+            //    else {
+            //        if (wc != null && wc.length > 0)
+            //            sql += " AND " + wc + " AND IsActive='Y'";
+            //    }
+            //    //	***
+            //    // //log.finest(_columnName + " (predefined) " + sql.toString());
 
-                    var displayColumnName = null;
+            //    retVal.push(VIS.MRole.getDefault().addAccessSQL(sql, _tableName, VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO));
+            //    retVal.push(_tableName);
+            //    retVal.push(_keyColumnName);
+            //    return retVal;
 
-                    _keyColumnName = _columnName;
+            //}
 
-                    sql = "(";
+            ////	Check if it is a Table Reference
+            //var dr = null;
+            //if (_lookup != null && _lookup instanceof VIS.MLookup) {
+            //    var AD_Reference_ID = _lookup.getAD_Reference_Value_ID();
+            //    if (AD_Reference_ID != 0) {
 
-                    try {
-                        var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
-                        param[1] = new VIS.DB.SqlParam("@colname", _columnName);
-                        dr = executeReader(query, param);
+            //        // Commented 10 Aug 2015 For : not searching based on the identifiers
+            //        var tblQuery = "VIS_84";
 
-                        while (dr.read()) {
-                            if (sql.length > 1)
-                                sql += " OR ";
-                            _tableName = dr.get(0);
-                            sql += "UPPER(" + dr.get(1) + ") LIKE " + VIS.DB.to_string(text);
-                        }
-                        sql += ")";
-                        dr.close();
-                        dr = null;
+            //        try {
+            //            var param = [];
+            //            param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+            //            dr = executeReader(tblQuery, param);
 
-                    }
-                    catch (e) {
-                        if (dr != null) {
-                            dr.close();
-                            dr = null;
-                        }
-                        this.log.log(VIS.Logging.Level.SEVERE, squery, e);
-                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
-                    }
+            //            while (dr.read()) {
+            //                _columnName = dr.get(0);
+            //                _keyColumnName = dr.get(0);
+            //                _tableName = dr.get(1);
+            //                break;
+            //            }
 
-                    if (sql.length == 0) {
-                        this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
-                        //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
-                        retVal.push("");
-                        retVal.push(_tableName);
-                        retVal.push(_keyColumnName);
-                        return retVal;
-                        //return new String[] { "", _tableName, _keyColumnName };
-                    }
-                    //
-                    var retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
-                    var _wc = self.getWhereClause(ctx, _columnName, _lookup);
-                    if (_wc != null && _wc.length > 0)
-                        retValue += " AND " + _wc;
-                    //	***
-                    ////log.finest(_columnName + " (TableDir) " + sql.toString());
-                    retVal.push(VIS.MRole.getDefault().addAccessSQL(retValue, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
-                    retVal.push(_tableName);
-                    retVal.push(_keyColumnName);
-                    return retVal;
-
-                    // Commented 10 Aug 2015 For : not searching based on the identifiers
-                    //var query = "SELECT kc.ColumnName, dc.ColumnName, t.TableName "
-                    //    + "FROM AD_Ref_Table rt"
-                    //    + " INNER JOIN AD_Column kc ON (rt.Column_Key_ID=kc.AD_Column_ID)"
-                    //    + " INNER JOIN AD_Column dc ON (rt.Column_Display_ID=dc.AD_Column_ID)"
-                    //    + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID) "
-                    //    + "WHERE rt.AD_Reference_ID=@refid";
-                    //var displayColumnName = null;
-
-                    //try {
-                    //    var param = [];
-                    //    param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
-                    //    dr = VIS.DB.executeReader(query, param);
-                    //    while (dr.read()) {
-                    //        _keyColumnName = dr.get(0);
-                    //        displayColumnName = dr.get(1);
-                    //        _tableName = dr.get(2);
-                    //    }
-                    //    dr.close();
-                    //    dr = null;
-
-                    //}
-                    //catch (e) {
-                    //    if (dr != null) {
-                    //        dr.close();
-                    //        dr = null;
-                    //    }
-                    //    this.log.log(VIS.Logging.Level.SEVERE, query, e);
-                    //}
-
-                    //if (displayColumnName != null) {
-                    //    sql = "";
-                    //    sql += "SELECT " + _keyColumnName + " FROM " + _tableName + " WHERE UPPER(" + displayColumnName + ") LIKE ";
-                    //    sql += VIS.DB.to_string(text) + " AND IsActive='Y'";
-                    //    var wc = self.getWhereClause(ctx, _columnName, _lookup);
-                    //    if (wc != null && wc.length > 0)
-                    //        sql += " AND " + wc;
-                    //    //	***
-                    //    //log.finest(_columnName + " (Table) " + sql.toString());
-
-                    //    retVal.push(VIS.MRole.getDefault().addAccessSQL(sql, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
-                    //    retVal.push(_tableName);
-                    //    retVal.push(_keyColumnName);
-                    //    return retVal;
-
-                    //}
-                }	//	Table Reference
-            }	//	MLookup
-
-            /** Check Well Known Columns of Table - assumes TableDir	**/
-            var squery = "VIS_86";
-            _keyColumnName = _columnName;
-            sql = "(";
-
-            //IDataReader dr = null;
-            try {
-                var param = [];
-                param[0] = new VIS.DB.SqlParam("@colname", _keyColumnName);
-                dr = executeReader(squery, param);
-
-                while (dr.read()) {
-                    if (sql.length > 1)
-                        sql += " OR ";
-                    _tableName = dr.get(0);
-                    sql += "UPPER(" + dr.get(1) + ") LIKE " + VIS.DB.to_string(text);
-                }
-                sql += ")";
-                dr.close();
-                dr = null;
-
-            }
-            catch (e) {
-                if (dr != null) {
-                    dr.close();
-                    dr = null;
-                }
-                this.log.log(VIS.Logging.Level.SEVERE, squery, e);
-                //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
-            }
+            //            dr.close();
+            //            dr = null;
+            //        }
+            //        catch (e) {
+            //            if (dr != null) {
+            //                dr.close();
+            //                dr = null;
+            //            }
+            //            this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+            //            //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+            //        }
 
 
-            if (sql.length == 0) {
-                this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
-                //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
-                retVal.push("");
-                retVal.push(_tableName);
-                retVal.push(_keyColumnName);
-                return retVal;
-                //return new String[] { "", _tableName, _keyColumnName };
-            }
-            //
-            var retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
-            var _wc = self.getWhereClause(ctx, _columnName, _lookup);
-            if (_wc != null && _wc.length > 0)
-                retValue += " AND " + _wc;
-            //	***
-            ////log.finest(_columnName + " (TableDir) " + sql.toString());
-            retVal.push(VIS.MRole.getDefault().addAccessSQL(retValue, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
-            retVal.push(_tableName);
-            retVal.push(_keyColumnName);
+            //        var query = "VIS_85";
+
+            //        var displayColumnName = null;
+
+            //        _keyColumnName = _columnName;
+
+            //        sql = "(";
+
+            //        try {
+            //            var param = [];
+            //            param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+            //            param[1] = new VIS.DB.SqlParam("@colname", _columnName);
+            //            dr = executeReader(query, param);
+
+            //            while (dr.read()) {
+            //                if (sql.length > 1)
+            //                    sql += " OR ";
+            //                _tableName = dr.get(0);
+            //                sql += "UPPER(" + dr.get(1) + ") LIKE " + VIS.DB.to_string(text);
+            //            }
+            //            sql += ")";
+            //            dr.close();
+            //            dr = null;
+
+            //        }
+            //        catch (e) {
+            //            if (dr != null) {
+            //                dr.close();
+            //                dr = null;
+            //            }
+            //            this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+            //            //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+            //        }
+
+            //        if (sql.length == 0) {
+            //            this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+            //            //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+            //            retVal.push("");
+            //            retVal.push(_tableName);
+            //            retVal.push(_keyColumnName);
+            //            return retVal;
+            //            //return new String[] { "", _tableName, _keyColumnName };
+            //        }
+            //        //
+            //        var retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
+            //        var _wc = self.getWhereClause(ctx, _columnName, _lookup);
+            //        if (_wc != null && _wc.length > 0)
+            //            retValue += " AND " + _wc;
+            //        //	***
+            //        ////log.finest(_columnName + " (TableDir) " + sql.toString());
+            //        retVal.push(VIS.MRole.getDefault().addAccessSQL(retValue, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
+            //        retVal.push(_tableName);
+            //        retVal.push(_keyColumnName);
+            //        return retVal;
+
+            ////        // Commented 10 Aug 2015 For : not searching based on the identifiers
+            ////        //var query = "SELECT kc.ColumnName, dc.ColumnName, t.TableName "
+            ////        //    + "FROM AD_Ref_Table rt"
+            ////        //    + " INNER JOIN AD_Column kc ON (rt.Column_Key_ID=kc.AD_Column_ID)"
+            ////        //    + " INNER JOIN AD_Column dc ON (rt.Column_Display_ID=dc.AD_Column_ID)"
+            ////        //    + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID) "
+            ////        //    + "WHERE rt.AD_Reference_ID=@refid";
+            ////        //var displayColumnName = null;
+
+            ////        //try {
+            ////        //    var param = [];
+            ////        //    param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+            ////        //    dr = VIS.DB.executeReader(query, param);
+            ////        //    while (dr.read()) {
+            ////        //        _keyColumnName = dr.get(0);
+            ////        //        displayColumnName = dr.get(1);
+            ////        //        _tableName = dr.get(2);
+            ////        //    }
+            ////        //    dr.close();
+            ////        //    dr = null;
+
+            ////        //}
+            ////        //catch (e) {
+            ////        //    if (dr != null) {
+            ////        //        dr.close();
+            ////        //        dr = null;
+            ////        //    }
+            ////        //    this.log.log(VIS.Logging.Level.SEVERE, query, e);
+            ////        //}
+
+            ////        //if (displayColumnName != null) {
+            ////        //    sql = "";
+            ////        //    sql += "SELECT " + _keyColumnName + " FROM " + _tableName + " WHERE UPPER(" + displayColumnName + ") LIKE ";
+            ////        //    sql += VIS.DB.to_string(text) + " AND IsActive='Y'";
+            ////        //    var wc = self.getWhereClause(ctx, _columnName, _lookup);
+            ////        //    if (wc != null && wc.length > 0)
+            ////        //        sql += " AND " + wc;
+            ////        //    //	***
+            ////        //    //log.finest(_columnName + " (Table) " + sql.toString());
+
+            ////        //    retVal.push(VIS.MRole.getDefault().addAccessSQL(sql, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
+            ////        //    retVal.push(_tableName);
+            ////        //    retVal.push(_keyColumnName);
+            ////        //    return retVal;
+
+            ////        //}
+            //    }	//	Table Reference
+            //}	//	MLookup
+
+            /////** Check Well Known Columns of Table - assumes TableDir	**/
+            //var squery = "VIS_86";
+            //_keyColumnName = _columnName;
+            //sql = "(";
+
+            ////IDataReader dr = null;
+            //try {
+            //    var param = [];
+            //    param[0] = new VIS.DB.SqlParam("@colname", _keyColumnName);
+            //    dr = executeReader(squery, param);
+
+            //    while (dr.read()) {
+            //        if (sql.length > 1)
+            //            sql += " OR ";
+            //        _tableName = dr.get(0);
+            //        sql += "UPPER(" + dr.get(1) + ") LIKE " + VIS.DB.to_string(text);
+            //    }
+            //    sql += ")";
+            //    dr.close();
+            //    dr = null;
+
+            //}
+            //catch (e) {
+            //    if (dr != null) {
+            //        dr.close();
+            //        dr = null;
+            //    }
+            //    this.log.log(VIS.Logging.Level.SEVERE, squery, e);
+            //    //Logging.VLogger.Get().Log(Logging.Level.SEVERE, sql.ToString(), ex);
+            //}
+
+
+            //if (sql.length == 0) {
+            //    this.log.log(VIS.Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+            //    //Logging.VLogger.Get().Log(Logging.Level.SEVERE, _columnName + " (TableDir) - no standard/identifier columns");
+            //    retVal.push("");
+            //    retVal.push(_tableName);
+            //    retVal.push(_keyColumnName);
+            //    return retVal;
+            //    //return new String[] { "", _tableName, _keyColumnName };
+            //}
+            ////
+            //var retValue = "SELECT " + _columnName + " FROM " + _tableName + " WHERE " + sql + " AND IsActive='Y'";
+            //var _wc = self.getWhereClause(ctx, _columnName, _lookup);
+            //if (_wc != null && _wc.length > 0)
+            //    retValue += " AND " + _wc;
+            ////	***
+            //////log.finest(_columnName + " (TableDir) " + sql.toString());
+            //retVal.push(VIS.MRole.getDefault().addAccessSQL(retValue, _tableName, VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO));
+            //retVal.push(_tableName);
+            //retVal.push(_keyColumnName);
             return retVal;
 
         };	//	getDirectAccessSQL
@@ -3100,7 +3066,7 @@
                 //	//log.finest("ZoomQuery=" + (_lookup.getZoomQuery()==null ? "" : _lookup.getZoomQuery().getWhereClause())
                 //		+ ", Validation=" + _lookup.getValidation());
                 if (WhereClause.indexOf('@') != -1) {
-                    var validated = VIS.Env.parseContext(ctx, _Lookup.getWindowNo(), _Lookup.getTabNo(), WhereClause, false, true);
+                    var validated = VIS.Env.parseContext2(ctx, _Lookup.getWindowNo(), _Lookup.getTabNo(), WhereClause, false, true);
                     if (validated.length == 0) {
                         ////log.severe(_columnName + " - Cannot Parse=" + whereClause);
                     }
@@ -3112,7 +3078,7 @@
             }
             catch (eee) {
             }
-            return WhereClause;
+            return "";
         };
 
         //	ReadWrite
@@ -3390,7 +3356,7 @@
                     else {
                         self.setValue(sb, false, true);
                     }
-                  
+
                 }
                 else {
 
@@ -6467,18 +6433,19 @@
      *  @param value  The text to be displayed by the VSpan.
      *  @param name  name of control to bind VSpan with
      */
-    function VKeyText(colSql, windowNo, name, isExe,mField) {
+    function VKeyText(colSql, windowNo, name, isExe, mField,headerItemID) {
         this.colSql = colSql;
         this.windowNo = windowNo;
         this.cache = {};
         this.isExe = isExe;
+        this.headerItemID = headerItemID;
         // this.col = '';
         this.needtoParse = false;
         this.frmat = null;
         if (mField && VIS.DisplayType.IsNumeric(mField.getDisplayType())) {
             this.frmat = VIS.DisplayType.GetNumberFormat(mField.getDisplayType());
         }
-        
+
 
         if (colSql.contains('@')) {
             this.needtoParse = true;
@@ -6508,7 +6475,9 @@
 
     VKeyText.prototype.setValue = function (newValue, isHTML) {
         var validation = null;
+        var validationData = [];
         if (this.needtoParse) {
+            validationData = VIS.Env.parseContext2(VIS.context, this.windowNo, 0, this.colSql, false, true);
             validation = VIS.Env.parseContext(VIS.context, this.windowNo, 0, this.colSql, false, true);
         }
         else {
@@ -6519,9 +6488,10 @@
             //console.log(this.info.keyColumn + ": Loader NOT Validated: " + this.info.validationCode);
             return;
 
+        var where = '-1';
 
         var wIndex = validation.toUpperCase().lastIndexOf('WHERE');
-        var where = '-1';
+
         if (wIndex > -1) {
             where = validation.substring(wIndex);
         }
@@ -6542,18 +6512,43 @@
             }
 
             var self = this;
-            executeScalarEn(validation, null, function (val) {
-                if (val || val == 0) {
-                    if (self.frmat)
-                        val = self.frmat.GetFormatAmount(self.frmat.GetFormatedValue(val), "init", VIS.Env.isDecimalPoint());
-                    self.ctrl.text(val);
-                }
-                else
-                    self.ctrl.text("");
-                if (!self.isExe) {
-                    self.cache[where] = val;
+
+            $.ajax({
+                type: 'Post',
+                url: VIS.Application.contextUrl + "Form/GetKeyText",
+                data: {
+                    Validation: JSON.stringify(validationData),
+                    AD_HeaderItem_ID: self.headerItemID
+                },
+                success: function (data) {
+
+                    var val = JSON.parse(data);
+                    if (val || val == 0) {
+                        if (self.frmat)
+                            val = self.frmat.GetFormatAmount(self.frmat.GetFormatedValue(val), "init", VIS.Env.isDecimalPoint());
+                        self.ctrl.text(val);
+                    }
+                    else
+                        self.ctrl.text("");
+                    if (!self.isExe) {
+                        self.cache[where] = val;
+                    }
+
                 }
             });
+
+            //executeScalarEn(validation, null, function (val) {
+            //    if (val || val == 0) {
+            //        if (self.frmat)
+            //            val = self.frmat.GetFormatAmount(self.frmat.GetFormatedValue(val), "init", VIS.Env.isDecimalPoint());
+            //        self.ctrl.text(val);
+            //    }
+            //    else
+            //        self.ctrl.text("");
+            //    if (!self.isExe) {
+            //        self.cache[where] = val;
+            //    }
+            //});
         }
     };
 

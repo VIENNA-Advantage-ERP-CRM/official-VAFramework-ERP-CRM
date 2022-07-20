@@ -1193,7 +1193,7 @@
                     var controls = {};
                     $divLabel = $('<div class="vis-w-p-header-Label-f"></div>');
                     iControl = new VIS.Controls.VKeyText(headerItem.ColSql, this.windowNo,
-                        this.windowNo + "_" + headerSeqNo);
+                        this.windowNo + "_" + headerSeqNo, false, null, headerItem.AD_GridLayoutItems_ID);
 
                     if (iControl == null) {
                         continue;

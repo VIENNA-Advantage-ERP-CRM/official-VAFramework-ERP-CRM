@@ -761,6 +761,7 @@
     <Compile Include="Areas\VIS\Classes\GmailConfig.cs" />
     <Compile Include="Areas\VIS\Classes\LookupHelper.cs" />
     <Compile Include="Areas\VIS\Classes\QueryCollection.cs" />
+    <Compile Include="Areas\VIS\Classes\QueryValidator.cs" />
     <Compile Include="Areas\VIS\Classes\SecureEngineBridge.cs" />
     <Compile Include="Areas\VIS\Classes\VChargeModelClass.cs" />
     <Compile Include="Areas\VIS\Controllers\AccountController.cs" />

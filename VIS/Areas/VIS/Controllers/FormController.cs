@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.SessionState;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VIS.Areas.VIS.Controllers;
 using VIS.Classes;
 using VIS.DataContracts;
 using VIS.Filters;
@@ -32,8 +33,18 @@ namespace VIS.Controllers
             h.SetContext(ctx);
             sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
             sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
-           object data = h.ExecuteJDataSet(sqlIn);
+            object data = h.ExecuteJDataSet(sqlIn);
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetKeyText(string Validation, int AD_HeaderItem_ID)
+        {
+            Ctx ctx = Session["ctx"] as Ctx;
+            FormModel model = new FormModel(ctx);
+            List<LookUpData> data = new List<LookUpData>();
+            if (!string.IsNullOrEmpty(Validation))
+                data = JsonConvert.DeserializeObject<List<LookUpData>>(Validation);
+            return Json(JsonConvert.SerializeObject(model.GetKeyText(data, AD_HeaderItem_ID)), JsonRequestBehavior.AllowGet);
         }
 
         #endregion
@@ -139,23 +150,31 @@ namespace VIS.Controllers
         /// <returns></returns>
         ///  Mandeep Singh(VIS0028) 13-sep-2021
         public ActionResult GetAccessSqlAutoComplete(string columnName, string text, int windowNo,
-            int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID,string Validation)
+            int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string Validation)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetAccessSqlAutoComplete(ctx,columnName, text, windowNo,
-                AD_Window_ID,AD_Tab_ID,AD_Field_ID, Validation)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetAccessSqlAutoComplete(ctx, columnName, text, windowNo,
+                AD_Window_ID, AD_Tab_ID, AD_Field_ID, Validation)), JsonRequestBehavior.AllowGet);
         }
 
 
-        public ActionResult GetTextButtonQueryResult(string sql)
+        public ActionResult GetTextButtonQueryResult(string Text, int windowNo, int AD_Window_ID, int AD_Tab_ID, int AD_Field_ID, string ColumnName,
+           string ValidationCode)
         {
             Ctx ctx = Session["ctx"] as Ctx;
+            FormModel mode = new FormModel(ctx);
+            SqlHelper help = new SqlHelper();
             SqlParamsIn sqlP = new SqlParamsIn();
-            sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
-            sqlP.sql = sql;
-            VIS.Helpers.SqlHelper help = new Helpers.SqlHelper();
-            return Json(JsonConvert.SerializeObject(help.ExecuteJDataSet(sqlP)), JsonRequestBehavior.AllowGet);
+
+            List<string> result = mode.GetTextButtonQueryResult(ctx, Text, windowNo, AD_Window_ID, AD_Tab_ID, AD_Field_ID, ColumnName, ValidationCode);
+            sqlP.sql = Msg.ParseTranslation(ctx, result[0]);
+            List<JTable> ds = help.ExecuteJDataSet(sqlP);
+            List<object> finalResult = new List<object>();
+            finalResult.Add(ds);
+            finalResult.Add(result[1]);
+            finalResult.Add(result[2]);
+            return Json(JsonConvert.SerializeObject(finalResult), JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -258,7 +277,7 @@ namespace VIS.Controllers
         #endregion
 
         #region windowFrame
-         [HttpPost]
+        [HttpPost]
         public ContentResult SetFieldsSorting(string values, string noYes, string tableName, string keyColumnName, string columnSortName, string columnYesNoName, string oldValues)
         {
             Ctx ctx = Session["ctx"] as Ctx;
