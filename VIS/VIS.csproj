@@ -199,6 +199,7 @@
     <Content Include="Areas\VIS\Content\ReportStyle.css" />
     <Content Include="Areas\VIS\Content\Site.css" />
     <Content Include="Areas\VIS\Content\Style.css" />
+    <Content Include="Areas\VIS\Content\SurveyTabPanel.css" />
     <Content Include="Areas\VIS\Content\VIS.rtl.css" />
     <Content Include="Areas\VIS\Content\VIS.all.min.css" />
     <Content Include="Areas\VIS\Content\VISAD.css" />
@@ -748,6 +749,7 @@
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\HistoryDetailsTabPanel.js" />
+    <Content Include="Areas\VIS\Scripts\tabpanels\surveyPanel.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
     <Content Include="Areas\VIS\Scripts\VIS.all.min.js" />
@@ -852,6 +854,7 @@
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TabPanel\BiPanelController.cs" />
     <Compile Include="Areas\VIS\Controllers\TabPanel\HistoryDetailsDataController.cs" />
+    <Compile Include="Areas\VIS\Controllers\TabPanel\SurveyPanelController.cs" />
     <Compile Include="Areas\VIS\Controllers\ThemeController.cs" />
     <Compile Include="Areas\VIS\Controllers\TreeMaintenanceController.cs" />
     <Compile Include="Areas\VIS\Controllers\UserPreferenceController.cs" />
@@ -968,6 +971,7 @@
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
     <Compile Include="Areas\VIS\Models\TabPanels\BiPanelModel.cs" />
     <Compile Include="Areas\VIS\Models\TabPanels\HistoryDetailsDataModel.cs" />
+    <Compile Include="Areas\VIS\Models\TabPanels\SurveyPanelModel.cs" />
     <Compile Include="Areas\VIS\Models\ThemeModel.cs" />
     <Compile Include="Areas\VIS\Models\TreeMaintenanceModel.cs" />
     <Compile Include="Areas\VIS\Models\UserPreferenceModel.cs" />
