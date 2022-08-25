@@ -1348,31 +1348,52 @@ namespace VAdvantage.Model
                 Set_Value("ZoomWindow_ID", ZoomWindow_ID);
         }/** Get Zoom Window.
         @return Zoom Window */
-        public int GetZoomWindow_ID() 
-        { 
-            Object ii = Get_Value("ZoomWindow_ID"); 
-            if (ii == null) 
-                return 0; 
-            return Convert.ToInt32(ii); 
+        public int GetZoomWindow_ID()
+        {
+            Object ii = Get_Value("ZoomWindow_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
         }
         /** Set Message/Label.
         @param AD_Message_ID System Message */
         public void SetAD_Message_ID(int AD_Message_ID)
         {
-            if (AD_Message_ID <= 0) 
+            if (AD_Message_ID <= 0)
                 Set_Value("AD_Message_ID", null);
             else
                 Set_Value("AD_Message_ID", AD_Message_ID);
         }
         /** Get Message/Label.
         @return System Message */
-        public int GetAD_Message_ID() 
+        public int GetAD_Message_ID()
         {
             Object ii = Get_Value("AD_Message_ID");
-            if (ii == null) 
+            if (ii == null)
                 return 0;
-            return Convert.ToInt32(ii); 
+            return Convert.ToInt32(ii);
         }
+
+        /** Set Survey Response Required.
+        @param SurveyResponseRequired Survey Response Required*/
+        public void SetSurveyResponseRequired(Boolean SurveyResponseRequired)
+        {
+            Set_Value("SurveyResponseRequired", SurveyResponseRequired);
+        }
+        /** Get Survey Response Required.
+         @return Survey Response Required */
+        public Boolean IsSurveyResponseRequired()
+        {
+            Object oo = Get_Value("SurveyResponseRequired");
+            if (oo != null)
+            {
+                if (oo.GetType() == typeof(bool))
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
+        }
+
     }
 
 }

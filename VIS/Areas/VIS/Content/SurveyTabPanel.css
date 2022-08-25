@@ -3,7 +3,7 @@
     width: 100%;
     height: 100%;
     flex-direction: column;
-    padding: 1rem 0 1rem 1rem;
+    padding: 1rem;
 }
 
 .vis-tp-listItem p {
@@ -47,8 +47,8 @@
         }
 
 .vis-tp-orderListWrap {
-    padding-left: 1rem;
-    padding-right: 1rem;
+   /* padding-left: 1rem;
+    padding-right: 1rem;*/
     overflow: auto;
 }
 
@@ -93,10 +93,30 @@
     font-size: .75rem;
 }
 
-.vis-tp-btnWrap .btn {
+.vis-survey {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+.vis-tp-orderListWrap li {
+    list-style:none;
+}
+    .vis-tp-orderListWrap li ml {
+        margin-left: -1rem;
+    }
+
+.vis-tp-listWrap{
+    padding:0;
+}
+
+.vis-survey .btn {
     background: rgba(var(--v-c-primary), 1);
     border-radius: 0;
-    color: rgba(var(--v-c-on-primary), 1);
-    min-width: 150px;
-    padding: .6rem;
+    color: rgba(var(--v-c-on-primary), 1) !important;
+    cursor:pointer;
+}
+.hideQuestion{
+    display:none !important;
+}
+.vis-tp-listWrap {
+    margin-left: 1rem;
 }

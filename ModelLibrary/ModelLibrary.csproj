@@ -1006,6 +1006,8 @@
     <Compile Include="Model\MStorage.cs" />
     <Compile Include="Model\MStorageDetail.cs" />
     <Compile Include="Model\MStore.cs" />
+    <Compile Include="Model\MSurveyResponse.cs" />
+    <Compile Include="Model\MSurveyResponseLine.cs" />
     <Compile Include="Model\MTargetList.cs" />
     <Compile Include="ModelAD\MTaskLine.cs" />
     <Compile Include="Model\MTax.cs" />
@@ -1050,6 +1052,8 @@
     <Compile Include="Model\X_AD_ModuleMenuFolder.cs" />
     <Compile Include="Model\X_AD_ModuleRole.cs" />
     <Compile Include="Model\X_AD_Org_Trl.cs" />
+    <Compile Include="Model\X_AD_SurveyResponse.cs" />
+    <Compile Include="Model\X_AD_SurveyResponseLine.cs" />
     <Compile Include="Model\X_AD_WeatherInfo.cs" />
     <Compile Include="Model\X_AppointmentCategory.cs" />
     <Compile Include="Model\X_A_Asset.cs" />
