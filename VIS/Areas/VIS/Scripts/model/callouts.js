@@ -22642,4 +22642,28 @@
     VIS.Model.CalloutAzureBlob = CalloutAzureBlob;
     //VIS264**************CalloutAzureBlob End*************
 
+    //*********** Callout check DocAction in table  Start ****
+    function CalloutCheckDocAction() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutCheckDocAction");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutCheckDocAction, VIS.CalloutEngine); //inherit prototype
+
+    CalloutCheckDocAction.prototype.CheckDocActionInTable = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+        var isExist = VIS.dataContext.getJSONRecord("VIS/SurveyPanel/CheckDocActionInTable", Util.getValueOfInt(value));
+        if (isExist) {
+            mTab.setValue("IsDocAction", 'Y');
+        } else {
+            mTab.setValue("IsDocAction", 'N');
+        }
+
+        this.setCalloutActive(false);
+        return "";
+    }
+    VIS.Model.CalloutCheckDocAction = CalloutCheckDocAction;
+     //**************Callout check DocAction in table End*************
+
 })(VIS, jQuery);

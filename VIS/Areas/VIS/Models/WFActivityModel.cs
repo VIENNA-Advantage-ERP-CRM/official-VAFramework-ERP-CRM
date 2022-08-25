@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using VAdvantage.Classes;
+using VAdvantage.Common;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Model;
@@ -738,6 +739,17 @@ OR
                         int dt = column.GetAD_Reference_ID();
                         String value = null;
                         value = answer != null ? answer.ToString() : null;
+
+                        // check survey required
+                        if (node.IsSurveyResponseRequired())
+                        {
+                            // check any survey response exist
+                            if (!CheckSurveyResponseExist(ctx,AD_Window_ID, activity.GetRecord_ID()))
+                            {   
+                                return "SurveyChecklistRequired";
+                            }
+                        }
+
                         //if (dt == DisplayType.YesNo || dt == DisplayType.List || dt == DisplayType.TableDir)
                         if (!node.IsMultiApproval() &&
                             (dt == DisplayType.YesNo || dt == DisplayType.List || dt == DisplayType.TableDir))
@@ -746,13 +758,13 @@ OR
                             {
                                 return "FillMandatory";
                             }
-                            //
                             string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
                             if (res != "OK")
                             {
                                 return res;
                             }
                         }
+
                         //Genral Attribute Instance
                         //else if (column.GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
                         //{
@@ -1112,6 +1124,22 @@ OR
                 }
             }
             return list;
+        }
+
+
+        public bool CheckSurveyResponseExist(Ctx ctx,int AD_Window_ID,int Record_ID)
+        {          
+
+            string sql = "SELECT count(AD_SurveyResponse_id) FROM AD_SurveyResponse WHERE ad_window_id=" + AD_Window_ID + " AND record_ID=" + Record_ID + " AND IsActive='Y'";
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+            if (count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

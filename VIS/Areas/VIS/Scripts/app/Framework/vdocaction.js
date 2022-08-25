@@ -415,11 +415,64 @@
                 return false;
             }
 
+
+            var windowID = tabObj.getAD_Window_ID();
+            var tabID = tabObj.getAD_Tab_ID();
+            var docAction = _values[selectedindex];
+
+            //Check any tab panel exist
+            if (tabObj.getHasPanel()) {
+                var panels = tabObj.getTabPanels();
+                var isSurveyPanel = false;
+                for (var i = 0; i < panels.length; i++) {
+                    if (panels[i].getClassName() == 'VIS.SurveyPanel') {
+                        isSurveyPanel = true;
+                        i = panels.length;
+                    }
+                }
+
+                if (isSurveyPanel) {
+                    $.ajax({
+                        type: "POST",
+                        url: VIS.Application.contextUrl + "VIS/SurveyPanel/CheckDocActionCheckListResponse",
+                        dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            "AD_Window_ID": windowID,
+                            "AD_Tab_ID": tabID,
+                            "Record_ID": recordId,
+                            "DocAction": docAction,
+                            "AD_Table_ID": tabObj.getAD_Table_ID()
+                        }),
+                        success: function (data) {
+                            if (data == 'false') {
+                                VIS.ADialog.error("FillMandatory", true, "CheckList");
+                                return false;
+                            } else {
+                                tabObj.setValue("DocAction", docAction);
+                                return true;
+                            }
+                        },
+                        error: function (e) {
+                        }
+                    });
+                } else {
+                    tabObj.setValue("DocAction", docAction);
+                    return true;
+                }
+            } else {
+                tabObj.setValue("DocAction", docAction);
+                return true;
+            }
+
             //	Save Selection
             // thi.log.Config("DocAction=" + _values[selectedindex]);
-            tabObj.setValue("DocAction", _values[selectedindex]);
-            return true;
+           
         };
+
+        function validateSurveyCheckList(selectedindex) {
+            
+        }
 
         this.dispose = function () {
             ch.close();
