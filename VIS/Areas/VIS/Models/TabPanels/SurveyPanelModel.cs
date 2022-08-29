@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using VAdvantage.Common;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
@@ -27,7 +28,7 @@ namespace VIS.Models
                 {
                     if (Util.GetValueOfString(dt["AD_ShowEverytime"])=="N")
                     {
-                        bool isvalidate = checkConditions(ctx, AD_Window_ID, AD_Tab_ID, AD_Table_ID, AD_Record_ID);
+                        bool isvalidate = Common.checkConditions(ctx, AD_Window_ID, AD_Table_ID, AD_Record_ID);
                         if (!isvalidate)
                         {
                             break;
@@ -53,141 +54,6 @@ namespace VIS.Models
                 }
             }
             return LsDetails;
-        }
-        /// <summary>
-        /// check any condition apply for show survey List
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="AD_Window_ID"></param>
-        /// <param name="AD_Tab_ID"></param>
-        /// <param name="AD_Table_ID"></param>
-        /// <param name="AD_Record_ID"></param>
-        /// <returns></returns>
-        public bool checkConditions(Ctx ctx, int AD_Window_ID, int AD_Tab_ID, int AD_Table_ID, int AD_Record_ID)
-        {
-            bool isExist = true;
-            string sql = @"SELECT AD_Field.AD_column_ID,
-                            ad_surveyshowcondition.seqno,AD_Column.ColumnName,ad_surveyshowcondition.operation,ad_surveyshowcondition.ad_equalto,ad_surveyshowcondition.Value2,
-                            ad_surveyshowcondition.andor,AD_Column.AD_Reference_ID
-                            FROM AD_Field INNER JOIN AD_Column
-                            ON AD_Field.AD_Column_ID=AD_Column.AD_Column_ID
-                            INNER JOIN ad_surveyshowcondition ON AD_Field.AD_column_ID=ad_surveyshowcondition.AD_column_ID
-                            WHERE AD_Field.AD_Tab_ID=" + AD_Tab_ID + " AND AD_Column.AD_Table_ID=" + AD_Table_ID + @"
-                            ORDER BY ad_surveyshowcondition.seqno";
-            DataSet _dsDetails = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(sql, "ad_surveyshowcondition", true, false), null);
-
-            //prepare where condition for filter
-            if (_dsDetails != null && _dsDetails.Tables[0].Rows.Count > 0)
-            {
-                string WhereCondition = "";
-
-                foreach (DataRow dt in _dsDetails.Tables[0].Rows)
-                {
-                    string type = "";
-                    string value = Util.GetValueOfString(dt["ad_equalto"]);
-                    string columnName = Util.GetValueOfString(dt["ColumnName"]);
-                    int displayType = Util.GetValueOfInt(dt["AD_Reference_ID"]);
-
-                    //Checking data type of column
-                    if (columnName.Equals("AD_Language") || columnName.Equals("EntityType") || columnName.Equals("DocBaseType"))
-                    {
-                        type = typeof(System.String).Name;
-                    }
-                    else if (columnName.Equals("Posted") || columnName.Equals("Processed") || columnName.Equals("Processing"))
-                    {
-                        type = typeof(System.Boolean).Name;
-                    }
-                    else if (columnName.Equals("Record_ID"))
-                    {
-
-                        type = typeof(System.Int32).Name;
-                    }
-                    else
-                    {
-                        type = VAdvantage.Classes.DisplayType.GetClass(displayType, true).Name;
-                    }
-
-                    //Rearange operater
-                    string oprtr = Util.GetValueOfString(dt["operation"]);
-                    if (oprtr == "==")
-                    {
-                        oprtr = "=";
-                    }
-                    else if (oprtr == "<<")
-                    {
-                        oprtr = "<";
-                    }
-                    else if (oprtr == ">>")
-                    {
-                        oprtr = ">";
-                    }
-                    else if (oprtr == "~~")
-                    {
-                        oprtr = " BETWEEN ";
-                        value = "%" + value + "%";
-                    }
-                    else if (oprtr == "AB")
-                    {
-                        oprtr = ">";
-                    }
-
-                    if (Util.GetValueOfInt(dt["seqno"]) == 10)
-                    {
-                        WhereCondition += columnName + " " + oprtr;
-                    }
-                    else
-                    {
-                        string andOR = " AND ";
-                        if (Util.GetValueOfString(dt["operation"]) == "O")
-                        {
-                            andOR = " OR ";
-                        }
-                        WhereCondition += andOR;
-                        WhereCondition += columnName + " " + oprtr;
-                    }
-
-                    if (type == "Int32" || type == "Decimal" || type == "Boolean")
-                    {
-                        WhereCondition += value;
-                        if (Util.GetValueOfString(dt["operation"]) == "AB")
-                        {
-                            WhereCondition += " AND " + columnName + " <" + Util.GetValueOfString(dt["Value2"]);
-                        }
-                    }
-                    else if (type == "String")
-                    {
-                        WhereCondition += "'" + value + "'";
-                        if (Util.GetValueOfString(dt["operation"]) == "AB")
-                        {
-                            WhereCondition += " AND " + columnName + " <'" + Util.GetValueOfString(dt["Value2"]) + "'";
-                        }
-                    }
-                    else if (type == "DateTime")
-                    {
-                        WhereCondition += "TO_DATE(" + value + ")";
-                        if (Util.GetValueOfString(dt["operation"]) == "AB")
-                        {
-                            WhereCondition += " AND " + columnName + " < TO_DATE(" + Util.GetValueOfString(dt["Value2"]) + ")";
-                        }
-                    }
-                }
-
-                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID));
-
-                sql = "SELECT COUNT(" + tableName + "_ID) FROM " + tableName + " WHERE " + tableName + "_ID=" + AD_Record_ID + " AND " + WhereCondition;
-                int count = Util.GetValueOfInt(DB.ExecuteScalar(MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false)));
-                if (count > 0)
-                {
-                    isExist = true;
-                }
-                else
-                {
-                    isExist = false;
-                }
-            }
-            return isExist;
-
-
         }
 
         public bool checkDocActionColumn(int AD_Tab_ID)
@@ -315,7 +181,7 @@ namespace VIS.Models
             string ShowEverytime = Util.GetValueOfString(DB.ExecuteScalar(sql));
             if (ShowEverytime=="N")
             {
-                bool isvalidate = checkConditions(ctx, AD_Window_ID, AD_Tab_ID,  AD_Table_ID, Record_ID);
+                bool isvalidate = Common.checkConditions(ctx, AD_Window_ID,  AD_Table_ID, Record_ID);
                 if (!isvalidate) {
                     return true;
                 }

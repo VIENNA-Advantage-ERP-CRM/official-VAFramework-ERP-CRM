@@ -744,7 +744,7 @@ OR
                         if (node.IsSurveyResponseRequired())
                         {
                             // check any survey response exist
-                            if (!CheckSurveyResponseExist(ctx,AD_Window_ID, activity.GetRecord_ID()))
+                            if (!CheckSurveyResponseExist(ctx,AD_Window_ID, activity.GetRecord_ID(),activity.GetRecord_ID()))
                             {   
                                 return "SurveyChecklistRequired";
                             }
@@ -1127,10 +1127,22 @@ OR
         }
 
 
-        public bool CheckSurveyResponseExist(Ctx ctx,int AD_Window_ID,int Record_ID)
-        {          
+        public bool CheckSurveyResponseExist(Ctx ctx,int AD_Window_ID,int Record_ID, int AD_Table_ID)
+        {
 
-            string sql = "SELECT count(AD_SurveyResponse_id) FROM AD_SurveyResponse WHERE ad_window_id=" + AD_Window_ID + " AND record_ID=" + Record_ID + " AND IsActive='Y'";
+            string sql = "SELECT AD_ShowEverytime FROM  ad_surveyassignment WHERE IsActive='Y' AND ad_table_id=" + AD_Table_ID + " AND ad_window_id= " + AD_Window_ID;
+
+            string ShowEverytime = Util.GetValueOfString(DB.ExecuteScalar(sql));
+            if (ShowEverytime == "N")
+            {
+                bool isvalidate =Common.checkConditions(ctx, AD_Window_ID, AD_Table_ID, Record_ID);
+                if (!isvalidate)
+                {
+                    return true;
+                }
+            }
+
+            sql = "SELECT count(AD_SurveyResponse_id) FROM AD_SurveyResponse WHERE ad_window_id=" + AD_Window_ID + " AND record_ID=" + Record_ID + " AND IsActive='Y'";
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             if (count > 0)
             {
