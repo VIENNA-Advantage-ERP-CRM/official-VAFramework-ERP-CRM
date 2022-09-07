@@ -53,12 +53,13 @@ namespace VAdvantage.Model
             MRequestType retValue = null;
             int AD_Client_ID = ctx.GetAD_Client_ID();
             String sql = "SELECT * FROM R_RequestType "
-                + "WHERE AD_Client_ID IN (0,11) AND IsActive='Y'"
-                + "ORDER BY IsDefault DESC, AD_Client_ID DESC, R_Request_ID DESC";
+                + " AND IsActive='Y' ORDER BY IsDefault DESC, AD_Client_ID DESC, R_RequestType_ID DESC";
+           
             DataSet ds;
             try
             {
                 ds = new DataSet();
+                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "R_RequestType", true, true);
                 ds = DataBase.DB.ExecuteDataset(sql, null, null);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
