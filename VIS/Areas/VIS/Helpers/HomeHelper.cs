@@ -1092,7 +1092,7 @@ namespace VIS.Helpers
                         LEFT OUTER JOIN R_Status rs
                         ON (rs.R_Status_ID=R_request.R_Status_ID)
                         LEFT OUTER JOIN ad_ref_list adl
-                        ON (dl.Value=R_Request.Priority)
+                        ON (adl.Value=R_Request.Priority)
                         JOIN AD_reference adr
                         ON (adr.AD_Reference_ID=adl.AD_Reference_ID) ";
 
