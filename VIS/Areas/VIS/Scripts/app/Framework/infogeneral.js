@@ -706,7 +706,7 @@
                 recordHeight: 40,
                 show: {
 
-                    toolbar: true,  // indicates if toolbar is v isible
+                    toolbar: false,  // indicates if toolbar is v isible
                     columnHeaders: true,   // indicates if columns is visible
                     lineNumbers: false,  // indicates if line numbers column is visible
                     selectColumn: true,  // indicates if select column is visible
