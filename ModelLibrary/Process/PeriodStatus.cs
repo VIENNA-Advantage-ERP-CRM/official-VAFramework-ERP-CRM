@@ -135,7 +135,7 @@ namespace VAdvantage.Process
             //                    no = DB.ExecuteQuery(sqlUpd, null, Get_TrxName());
             //                    if (Get_Trx().Commit())
             //                    {
-                                    VAdvantage.Report.FinBalance.UpdateBalance(GetCtx(), C_AcctSchema_ID, period.GetStartDate().Value.AddDays(-1), Get_TrxName(), 0, this);
+                                    //VAdvantage.Report.FinBalance.UpdateBalance(GetCtx(), C_AcctSchema_ID, period.GetStartDate().Value.AddDays(-1), Get_TrxName(), 0, this);
             //                    }
             //                }
             //            }
