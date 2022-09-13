@@ -1154,6 +1154,7 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void prepareNotificMsg(List<String> list)
         {
+            MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
             if (mailText_ID == 0)
             {
                 message = new StringBuilder();
@@ -1161,15 +1162,18 @@ namespace VAdvantage.Model
                 int UpdatedBy = GetCtx().GetAD_User_ID();
                 MUser from = MUser.Get(GetCtx(), UpdatedBy);
                 if (from != null)
-                    message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
+                    message.Append(Msg.Translate(GetCtx(), "CreatedBy")).Append(": ")
+                        .Append(_req.GetCreatedByName());
+                message.Append("\n");
+                message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
                         .Append(from.GetName());
                 //		LastAction/Created: ...	
                 if (GetDateLastAction() != null)
                     message.Append("\n").Append(Msg.Translate(GetCtx(), "DateLastAction"))
-                        .Append(": ").Append(GetDateLastAction());
+                        .Append(": ").Append(GetDateLastAction()+" UTC");
                 else
                     message.Append("\n").Append(Msg.Translate(GetCtx(), "Created"))
-                        .Append(": ").Append(GetCreated());
+                        .Append(": ").Append(GetCreated() + " UTC");
 
                 if (list != null)
                 {
@@ -1185,7 +1189,7 @@ namespace VAdvantage.Model
                 //	NextAction
                 if (GetDateNextAction() != null)
                     message.Append("\n").Append(Msg.Translate(GetCtx(), "DateNextAction"))
-                        .Append(": ").Append(GetDateNextAction());
+                        .Append(": ").Append(GetDateNextAction() + " UTC");
                 message.Append(SEPARATOR)
                     .Append(GetSummary());
                 if (GetResult() != null)
@@ -1196,7 +1200,7 @@ namespace VAdvantage.Model
             {
                 message = new StringBuilder();
                 subject = string.Empty; // in case of Mail Template is selected subject was coming 2 times that's why we make it empty.
-                MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
+                //MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
                 subject += GetDocumentNo() + ": " + text.GetMailHeader();
@@ -1395,12 +1399,13 @@ namespace VAdvantage.Model
                 //    ra.Save();
 
                 //	Current Info
-                MRequestUpdate update = new MRequestUpdate(this);
-                if (update.IsNewInfo())
-                    update.Save();
-                else
-                    update = null;
+                MRequestUpdate update = null; //new MRequestUpdate(this);
+                //if (update.IsNewInfo())
+                //    update.Save();
+                //else
+                //    update = null;
                 //
+
                 if (mailText_ID == 0)
                 {
                     _emailTo = new StringBuilder();

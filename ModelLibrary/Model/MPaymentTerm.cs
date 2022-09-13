@@ -606,7 +606,8 @@ namespace VAdvantage.Model
                     int uIndex = 0; //paymnet line index id , used at time of paymnet line binding with scheule id
                     // For Card Amount
                     var cardAmount = order.GetVAPOS_PayAmt();
-                    if (cardAmount > 0)
+                    // VIS0008 POS Check for return types for card
+                    if (cardAmount != 0)
                     {
                         var pCur = order.GetVA205_PaymentCurrency();
                         string[] pCon = order.GetVA205_CurrencyConversions().Split(',');
@@ -662,7 +663,8 @@ namespace VAdvantage.Model
                     //TPP Amt
 
                     var tppAmount = order.GetVAPOS_TPPAmt();
-                    if (tppAmount > 0)
+                    // VIS0008 POS Check for return types for card
+                    if (tppAmount != 0)
                     {
 
                         int tppid = baseTypeIds[X_C_Order.PAYMENTRULE_ThirdPartyPayment];
@@ -700,7 +702,8 @@ namespace VAdvantage.Model
 
             if (runForBaseCurrency) //handle case in case error in multi cur 
             {
-                if (order.GetVAPOS_CashPaid() > 0)
+                // VIS0008 POS Change for Return type order
+                if (order.GetVAPOS_CashPaid() != 0)
                 {
                     var cAmount = order.GetVAPOS_CashPaid(); //cash
                     if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_Cash], cAmount, invoice.GetC_Currency_ID()))
@@ -711,7 +714,8 @@ namespace VAdvantage.Model
                 }
                 int uIndex = 0; // index of payment line
 
-                if (order.GetVAPOS_PayAmt() > 0)//card
+                // VIS0008 POS Change for Return type order
+                if (order.GetVAPOS_PayAmt() != 0)//card
                 {
                     var pAmount = order.GetVAPOS_PayAmt();//card
 
@@ -759,8 +763,8 @@ namespace VAdvantage.Model
                     }
                 }
 
-                //TPP Amount
-                if (order.GetVAPOS_TPPAmt() > 0)//card
+                // VIS0008 POS Check for return types for card
+                if (order.GetVAPOS_TPPAmt() != 0)//card
                 {
                     var tppAmount = order.GetVAPOS_TPPAmt();//card
 
@@ -862,9 +866,13 @@ namespace VAdvantage.Model
                 decimal dueAmt = MConversionRate.Convert(GetCtx(), payAmt ?? payAmt.Value, payCur, order.GetC_Currency_ID(),
                                                                     order.GetDateAcct(), order.GetC_ConversionType_ID(), order.GetAD_Client_ID(), order.GetAD_Org_ID());
 
-                if (invoice.GetGrandTotal() < 0)
+                // VIS0008 POS Change for return Invoices
+                if (order.GetVAPOS_POSTerminal_ID() <= 0)
                 {
-                    dueAmt = 0 - dueAmt;
+                    if (invoice.GetGrandTotal() < 0)
+                    {
+                        dueAmt = 0 - dueAmt;
+                    }
                 }
 
                 schedule.SetDueAmt(dueAmt);
@@ -900,6 +908,7 @@ namespace VAdvantage.Model
 
             schedule.SetC_Currency_ID(invoice.GetC_Currency_ID());
             schedule.SetVA009_OpnAmntInvce(schedule.GetDueAmt());
+            schedule.SetVA009_OpenAmnt(schedule.GetDueAmt());
             schedule.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             //end
 

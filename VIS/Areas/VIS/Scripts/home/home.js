@@ -1338,14 +1338,18 @@
                                 dbdate = Globalize.format(cd_, "F", Globalize.cultureSelector);
                             }
 
-                            var divtitle_ = "";
+                            var divtitle_ = "";                          
+
+                            var title = VIS.Utility.encodeText(data[s].Title);
+                            title = noticeTimeConversion(title);
+                            data[s].Description = noticeTimeConversion(data[s].Description);
                             var title_ = data[s].Description;
                             if (title_.length <= 100) {
-                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></pre>";
+                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + title + "</strong></pre>";
                             }
                             else {
                                 divtitle_ = "<pre>"
-                                    + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
+                                    + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + title + "...</strong>"
                                     + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
                                     + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:rgba(var(--v-c-primary), 1); float:right;height:20px'>" + VIS.Msg.getMsg("more") + "</span>"
                                     + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:rgba(var(--v-c-primary), 1); float:right;height:20pxvis-feedTitleBar'>" + VIS.Msg.getMsg("less") + "</span>"
@@ -1841,6 +1845,27 @@
             if (WelcomeTabDatacontainers.children().length > 0)
                 WelcomeTabDatacontainers.children().remove();
             WelcomeTabDatacontainers.empty();
+        }
+
+        /**
+         * UTC Time conversion for Notice
+         * @param {any} title
+         */
+        function noticeTimeConversion(title) {
+            if (title.lastIndexOf('UTC') > 0) {
+                var splitTitle = title.split('UTC');
+                title = title.replaceAll('UTC', '');
+                if (splitTitle.length > 0) {
+                    for (var i = 0; i < splitTitle.length; i++) {
+                        dt = splitTitle[i].substring(splitTitle[i].lastIndexOf(': ') + 1, splitTitle[i].length);
+                        if (dt.lastIndexOf('AM') > 0 || dt.lastIndexOf('PM') > 0) {
+                            var dte = new Date(dt + 'UTC');
+                            title = title.replace(dt, " " + dte.toLocaleString());
+                        }
+                    }
+                }
+            }
+            return title;
         }
 
         return {
