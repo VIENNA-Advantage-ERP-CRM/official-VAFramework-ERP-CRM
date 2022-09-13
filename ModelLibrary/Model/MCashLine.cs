@@ -152,6 +152,29 @@ namespace VAdvantage.Model
                 SetVSS_PAYMENTTYPE("R");
             }
             SetAmount(amt);
+
+            /// VIS0008 POS Set Converted Amount
+            if (invoice.GetC_Order_ID() > 0 && Env.IsModuleInstalled("VAPOS_"))
+            {
+                bool isTerminalOrder = Util.GetValueOfBool(Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = " + invoice.GetC_Order_ID())) > 0);
+                if (isTerminalOrder)
+                {
+                    SetConvertedAmt(amt.ToString());
+                    // check invoice pay schedule id
+                    // set schedule id on cash line
+                    if (Env.IsModuleInstalled("VA009_"))
+                    {
+                        int invPaySchId = DB.GetSQLValue
+                            (null, "SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE VA009_TransCurrency= " + invoice.GetC_Currency_ID()
+                              + " AND  C_Invoice_ID = " + GetC_Invoice_ID() + " AND  VA009_PaymentMethod_ID IN "
+                              + " (SELECT p.VA009_PaymentMethod_ID FROM VA009_PaymentMethod p WHERE p.VA009_PaymentBaseType = "
+                                             + " '" + X_C_Order.PAYMENTRULE_Cash + "' AND p.C_Currency_ID IS NULL AND p.IsActive = 'Y' AND p.AD_Client_ID = " + GetAD_Client_ID() + ") ");
+                        //Currency Id Null
+                        SetC_InvoicePaySchedule_ID(invPaySchId);
+                        //string sql= "SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = "++" AND VA009_PaymentMethod_ID=" X_C_Invoice. +;
+                    }
+                }
+            }
             //
             SetDiscountAmt(Env.ZERO);
             SetWriteOffAmt(Env.ZERO);
@@ -964,6 +987,29 @@ namespace VAdvantage.Model
                 || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
                 amt = Decimal.Negate(amt);
             SetAmount(amt);
+
+            /// VIS0008 POS Set Converted Amount
+            if (invoice.GetC_Order_ID() > 0 && Env.IsModuleInstalled("VAPOS_"))
+            {
+                bool isTerminalOrder = Util.GetValueOfBool(Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAPOS_POSTerminal_ID FROM C_Order WHERE C_Order_ID = " + invoice.GetC_Order_ID())) > 0);
+                if (isTerminalOrder)
+                {
+                    SetConvertedAmt(amt.ToString());
+                    // check invoice pay schedule id
+                    // set schedule id on cash line
+                    if (Env.IsModuleInstalled("VA009_"))
+                    {
+                        int invPaySchId = DB.GetSQLValue
+                            (null, "SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE VA009_TransCurrency= " + invoice.GetC_Currency_ID()
+                              + " AND  C_Invoice_ID = " + GetC_Invoice_ID() + " AND  VA009_PaymentMethod_ID IN "
+                              + " (SELECT p.VA009_PaymentMethod_ID FROM VA009_PaymentMethod p WHERE p.VA009_PaymentBaseType = "
+                                             + " '" + X_C_Order.PAYMENTRULE_Cash + "' AND p.C_Currency_ID IS NULL AND p.IsActive = 'Y' AND p.AD_Client_ID = " + GetAD_Client_ID() + ") ");
+                        //Currency Id Null
+                        SetC_InvoicePaySchedule_ID(invPaySchId);
+                        //string sql= "SELECT C_InvoicePaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = "++" AND VA009_PaymentMethod_ID=" X_C_Invoice. +;
+                    }
+                }
+            }
             //
             SetDiscountAmt(Env.ZERO);
             SetWriteOffAmt(Env.ZERO);
