@@ -7079,6 +7079,8 @@ namespace VAdvantage.Model
             {
                 cl.SetVSS_PAYMENTTYPE("P");
             }
+            /// VIS0008 POS Set Converted Amount
+            cl.SetConvertedAmt(amtVal.ToString());
             cl.SetC_ConversionType_ID(order.GetC_ConversionType_ID());
 
             // check invoice pay schedule id 
