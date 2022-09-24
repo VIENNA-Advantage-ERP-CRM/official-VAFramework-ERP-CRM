@@ -19,13 +19,18 @@ namespace VIS.Models
             List<SurveyAssignmentsDetails> LsDetails = new List<SurveyAssignmentsDetails>();
             StringBuilder sql = new StringBuilder(@"SELECT sa.AD_Window_ID, sa.AD_Survey_ID, sa.C_DocType_ID, sa.SurveyListFor,
                                                   sa.DocAction, sa.ShowAllQuestions, sa.AD_SurveyAssignment_ID, s.surveytype,sa.AD_ShowEverytime,
-                                                  s.ismandatory, s.name,sa.QuestionsPerPage FROM ad_surveyassignment sa INNER JOIN AD_Survey s ON 
-                                                  s.ad_survey_ID= sa.ad_survey_id WHERE sa.IsActive='Y' AND sa.ad_tab_id=" + AD_Tab_ID + " AND sa.ad_window_id= " + AD_Window_ID );
+                                                  s.ismandatory, s.name,sa.QuestionsPerPage,NVL(RS.Limit,0) AS Limit,RS.isSelfshow,
+                                                  (SELECT count(AD_SurveyResponse_ID) FROM AD_SurveyResponse WHERE AD_User_ID=" + ctx.GetAD_User_ID() + " AND ad_window_id=" + AD_Window_ID+ " AND AD_Table_ID="+ AD_Table_ID + " AND Record_ID="+ AD_Record_ID + @") AS responseCount,
+                                                  (SELECT AD_SurveyResponse_ID FROM AD_SurveyResponse WHERE AD_User_ID=" + ctx.GetAD_User_ID() + " AND ad_window_id=" + AD_Window_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + AD_Record_ID + @" ORDER BY Created FETCH FIRST 1 ROWS ONLY) AS SurveyResponse_ID
+                                                  FROM ad_surveyassignment sa INNER JOIN AD_Survey s ON 
+                                                  s.ad_survey_ID= sa.ad_survey_id 
+                                                  LEFT JOIN AD_ResponseSetting RS ON (RS.ad_surveyassignment_ID=sa.ad_surveyassignment_ID)
+                                                  WHERE sa.IsActive='Y' AND sa.ad_tab_id=" + AD_Tab_ID + " AND sa.ad_window_id= " + AD_Window_ID+ " ORDER BY s.name");
             DataSet _dsDetails = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(sql.ToString(), "sa", true, false), null);
             if (_dsDetails != null && _dsDetails.Tables[0].Rows.Count > 0)
-            {
+            {                
                 foreach (DataRow dt in _dsDetails.Tables[0].Rows)
-                {
+                {                    
                     if (Util.GetValueOfString(dt["AD_ShowEverytime"])=="N")
                     {
                         bool isvalidate = Common.checkConditions(ctx, AD_Window_ID, AD_Table_ID, AD_Record_ID);
@@ -49,7 +54,11 @@ namespace VIS.Models
                         SurveyName = Util.GetValueOfString(dt["name"]),
                         QuestionsPerPage = Util.GetValueOfInt(dt["QuestionsPerPage"]),
                         IsDocActionActive = checkDocActionColumn(AD_Tab_ID),
-                        ShowEverytime= Util.GetValueOfBool(Util.GetValueOfString(dt["AD_ShowEverytime"]).Equals("Y"))
+                        ShowEverytime= Util.GetValueOfBool(Util.GetValueOfString(dt["AD_ShowEverytime"]).Equals("Y")),
+                        IsSelfshow = Util.GetValueOfBool(Util.GetValueOfString(dt["isSelfshow"]).Equals("Y")),
+                        Limit = Util.GetValueOfInt(dt["Limit"]),
+                        ResponseCount = Util.GetValueOfInt(dt["responseCount"]),
+                        SurveyResponse_ID=Util.GetValueOfInt(dt["SurveyResponse_ID"])
                     }); 
                 }
             }
@@ -63,6 +72,7 @@ namespace VIS.Models
             UPPER(c.ColumnName)='DOCACTION' AND f.IsActive='Y'")) > 0;
             return IsDocActionExists;
         }
+        
 
         /// <summary>
         /// Get Survey Items
@@ -233,6 +243,72 @@ namespace VIS.Models
                 return false;
             }
         }
+
+        /// <summary>
+        /// Get Response list
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="AD_Window_ID"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="AD_Record_ID"></param>
+        /// <param name="AD_User_ID"></param>
+        /// <returns></returns>
+        public List<SurveyResponseList> GetResponseList(Ctx ctx, int AD_Window_ID, int AD_Table_ID, int AD_Record_ID, int AD_User_ID,int AD_SurveyResponse_ID)
+        {
+
+            List<SurveyResponseList> LsResponse = new List<SurveyResponseList>();
+            string sql = @"SELECT SRL.AD_SurveyResponse_ID, 
+                            CASE WHEN SI.AnswerType='TX' THEN SRL.ANSWER
+                            ELSE SRL.AD_SurveyValue_ID
+                            END AS Answer,
+                            SRL.AD_SurveyValue_ID,SRL.AD_SurveyItem_ID,SI.AnswerType FROM AD_SurveyResponse SR
+            INNER JOIN AD_SurveyResponseLine  SRL ON SR.AD_SurveyResponse_ID=SRL.AD_SurveyResponse_ID
+            INNER JOIN AD_SurveyItem SI ON SI.AD_SurveyItem_ID=SRL.AD_SurveyItem_ID
+            WHERE SR.AD_SurveyResponse_ID="+ AD_SurveyResponse_ID + " AND SR.ad_window_id=" + AD_Window_ID + " AND SR.AD_Table_ID=" + AD_Table_ID + " AND SR.Record_ID=" + AD_Record_ID + " AND SR.ad_user_id=" + AD_User_ID;
+            DataSet _dsDetails = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(sql, "SR", true, false), null);
+            if (_dsDetails != null && _dsDetails.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dt in _dsDetails.Tables[0].Rows)
+                {
+                    LsResponse.Add(new SurveyResponseList
+                    {
+                        AD_SurveyItem_ID = Util.GetValueOfInt(dt["AD_SurveyItem_ID"]),
+                        AD_SurveyValue_ID = Util.GetValueOfString(dt["AD_SurveyValue_ID"]),
+                        AD_SurveyResponse_ID = Util.GetValueOfInt(dt["AD_SurveyResponse_ID"]),
+                        Answer = Util.GetValueOfString(dt["Answer"]),
+                        AnswerType = Util.GetValueOfString(dt["AnswerType"]),
+                    });
+                }
+            }
+            return LsResponse;
+        }
+
+        public List<UserList> CheckResponseAccess(Ctx ctx,int AD_Survey_ID, int AD_SurveyAssignment_ID, int AD_User_ID, int AD_Role_ID, int Record_ID,int AD_Window_ID,int AD_Table_ID) {
+            string sql = @"SELECT COUNT(AD_ResponseAccess_ID) FROM AD_ResponseAccess  
+                            WHERE AD_SurveyAssignment_ID="+ AD_SurveyAssignment_ID + " AND ISActive='Y' AND ((responsibletype='R' AND ad_role_id="+ AD_Role_ID + ") OR (responsibletype='H' AND ad_user_id="+ AD_User_ID + "))";
+            int Count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+            List<UserList> UList = new List<UserList>();
+            if (Count > 0) {
+                sql = @"SELECT sr.AD_SurveyResponse_ID, u.ad_user_id,CASE u.ad_user_id WHEN  101 THEN CAST( 'Self' AS Nvarchar2(60)) ELSE u.name END  name
+                        FROM ad_user u INNER JOIN ad_surveyresponse sr ON u.ad_user_id = sr.ad_user_id WHERE Record_ID="+ Record_ID + " AND ad_window_id=" + AD_Window_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND AD_Survey_ID=" + AD_Survey_ID;
+
+                DataSet _dsDetails = DB.ExecuteDataset(MRole.GetDefault(ctx).AddAccessSQL(sql, "SR", true, false), null);
+                if (_dsDetails != null && _dsDetails.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dt in _dsDetails.Tables[0].Rows)
+                    {
+                        UList.Add(new UserList
+                        {
+                            User_ID = Util.GetValueOfInt(dt["ad_user_id"]),
+                            AD_SurveyResponse_ID = Util.GetValueOfInt(dt["AD_SurveyResponse_ID"]),
+                            Name = Util.GetValueOfString(dt["name"])
+                        });
+                    }
+                }
+
+            }
+            return UList;
+        }
        
     }
 
@@ -251,6 +327,10 @@ namespace VIS.Models
         public int QuestionsPerPage { get; set; }
         public bool IsDocActionActive { get; set; }
         public bool ShowEverytime { get; set; }
+        public int Limit { get; set; }
+        public int ResponseCount { get; set; }
+        public int SurveyResponse_ID { get; set; }
+        public bool IsSelfshow { get; set; }
     }
 
     public class ListSurveyItemValues
@@ -286,6 +366,22 @@ namespace VIS.Models
         public int AD_SurveyItem_ID { get; set; }
         public string AD_SurveyValue_ID { get; set; }
         
+    }
+
+    public class SurveyResponseList
+    {
+        public int AD_SurveyResponse_ID { get; set; }
+        public int AD_SurveyItem_ID { get; set; }
+        public string AD_SurveyValue_ID { get; set; }
+        public string Answer { get; set; }
+        public string AnswerType { get; set; }
+    }
+
+    public class UserList
+    {
+        public int User_ID { get; set; }
+        public string Name { get; set; }
+        public int AD_SurveyResponse_ID { get; set; }
     }
 
 }

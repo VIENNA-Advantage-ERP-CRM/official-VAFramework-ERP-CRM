@@ -120,3 +120,66 @@
 .vis-tp-listWrap {
     margin-left: 1rem;
 }
+
+
+.vis-tabContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+
+
+.vis-tabPrimary .nav-tabs .nav-item .nav-link.active {
+    background-color: #fff;
+    color: rgba(var(--v-c-on-secondary), 1);
+    border-radius: 0;
+}
+
+.vis-tabPrimary .nav-tabs .nav-link {
+    color: rgba(var(--v-c-on-secondary), 1);
+    background: rgba(var(--v-c-secondary), 1)
+}
+
+        .vis-tabPrimary .nav-tabs .nav-link.active {
+            color: rgba(var(--v-c-primary), 1);
+            font-weight: 600;
+            background-color: #fff;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .vis-tabPrimary .nav-tabs .nav-link:focus,
+        .vis-tabPrimary .nav-tabs .nav-link:hover {
+            border-color: transparent;
+        }
+
+        .vis-tabPrimary .nav-tabs .nav-link.active:hover,
+        .vis-tabPrimary .nav-link.active {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+.vis-respSection .nav-tabs .nav-link {
+    color: rgba(var(--v-c-on-secondary), 1);
+    background-color: #fff;
+}
+
+    .vis-respSection .nav-tabs .nav-link.active {
+        color: rgba(var(--v-c-primary), 1);
+        font-weight: 600;
+        border: none !important;
+    }
+
+        .vis-respSection .nav-tabs .nav-link.active:hover {
+            border: none !important;
+        }
+.vis-primarySection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: none;
+
+}

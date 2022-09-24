@@ -69,6 +69,27 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             return Json(JsonConvert.SerializeObject(obj.CheckDocActionInTable(fields)), JsonRequestBehavior.AllowGet);
         }
+        
+        /// <summary>
+        /// Get Response List
+        /// </summary>
+        /// <param name="AD_Window_ID"></param>
+        /// <param name="AD_Table_ID"></param>
+        /// <param name="Record_ID"></param>
+        /// <param name="AD_User_ID"></param>
+        /// <returns></returns>
+        public JsonResult GetResponseList(int AD_Window_ID, int AD_Table_ID, int Record_ID,int AD_User_ID,int AD_SurveyResponse_ID)
+        {
+            SurveyPanelModel obj = new SurveyPanelModel();
+            Ctx ctx = Session["ctx"] as Ctx;
+            return Json(JsonConvert.SerializeObject(obj.GetResponseList(ctx, AD_Window_ID, AD_Table_ID, Record_ID,AD_User_ID, AD_SurveyResponse_ID)), JsonRequestBehavior.AllowGet);
+        } 
+        public JsonResult CheckResponseAccess(int AD_Survey_ID, int AD_SurveyAssignment_ID, int AD_User_ID, int AD_Role_ID, int Record_ID, int AD_Window_ID, int AD_Table_ID)
+        {
+            SurveyPanelModel obj = new SurveyPanelModel();
+            Ctx ctx = Session["ctx"] as Ctx;
+            return Json(JsonConvert.SerializeObject(obj.CheckResponseAccess(ctx, AD_Survey_ID, AD_SurveyAssignment_ID, AD_User_ID, AD_Role_ID, Record_ID, AD_Window_ID, AD_Table_ID)), JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
