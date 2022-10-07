@@ -5714,8 +5714,9 @@
             return false;
         //  Fields always enabled (are usually not updateable)
 
+        // VIS0008 Change done to check original display type as find dialog sometimes changes display type
         if (_vo.ColumnName.equals("Posted")
-            || (_vo.ColumnName.equals("Record_ID") && _vo.displayType == VIS.DisplayType.Button))	//  Zoom
+            || (_vo.ColumnName.equals("Record_ID") && (_vo.displayType == VIS.DisplayType.Button || _vo.orginalDispaly == VIS.DisplayType.Button)))	//  Zoom
             return true;
 
         var hasMRDisplayLogic = isMR && !(this.vo.DisplayLogic == null || this.vo.DisplayLogic.equals(""))
