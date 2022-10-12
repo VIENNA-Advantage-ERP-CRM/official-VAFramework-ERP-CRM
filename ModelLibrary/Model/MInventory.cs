@@ -690,7 +690,7 @@ namespace VAdvantage.Model
                     {
                         sql.Clear();
                         sql.Append(DBFunctionCollection.ConcatnatedListOfRequisition(delReq.ToString()));
-                        sql = sql.Replace("'", "''");
+                        //sql = sql.Replace("'", "''");
                         string req = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "RequisitionAlreadyDone") + ": " + req;
