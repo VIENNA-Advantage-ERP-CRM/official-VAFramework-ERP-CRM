@@ -38,6 +38,9 @@ namespace VAdvantage.Process
         DateTime? currentDate;
         DateTime? minDateRecord;
 
+        /// <summary>
+        /// Prepare Parameters
+        /// </summary>
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -59,11 +62,15 @@ namespace VAdvantage.Process
             }
         }
 
+        /// <summary>
+        /// Implement Functionality
+        /// </summary>
+        /// <returns>String Message</returns>
         protected override string DoIt()
         {
             try
             {
-                // min date record from the transaction window
+                //DevOps Task ID: 1732 -  min date record from the transaction window
                 minDateRecord = SerachMinDate();
 
                 int diff = (int)(Math.Ceiling((currentDate.Value.Date - minDateRecord.Value.Date).TotalDays));
