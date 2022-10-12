@@ -356,6 +356,7 @@ namespace VAdvantage.Process
 
         /// <summary>
         /// Search Minimum Date from Transactions
+        /// VIS0060
         /// </summary>
         /// <returns>Minimum Transaction Date</returns>
         public DateTime? SerachMinDate()
