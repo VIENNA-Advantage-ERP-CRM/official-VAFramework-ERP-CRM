@@ -367,10 +367,18 @@ namespace VAdvantage.Process
             {
                 sql.Clear();
                 sql.Append("SELECT Min(MovementDate) FROM M_Inventory WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO', 'CL', 'RE', 'VO')");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 minDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                 sql.Clear();
                 sql.Append("SELECT Min(MovementDate) FROM M_Movement WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO', 'CL', 'RE', 'VO')");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -380,6 +388,10 @@ namespace VAdvantage.Process
                 // Production 
                 sql.Clear();
                 sql.Append(@"SELECT Min(MovementDate) FROM M_Production WHERE IsActive = 'Y' AND IsCreated = 'Y'");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -389,6 +401,10 @@ namespace VAdvantage.Process
                 //Order
                 sql.Clear();
                 sql.Append("SELECT Min(DateAcct) FROM C_Order WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO', 'CL', 'RE', 'VO')");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -398,6 +414,10 @@ namespace VAdvantage.Process
                 //Invoice
                 sql.Clear();
                 sql.Append("SELECT Min(DateAcct) FROM C_Invoice WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO', 'CL', 'RE', 'VO')");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -407,6 +427,10 @@ namespace VAdvantage.Process
                 //Shipment/Receipt
                 sql.Clear();
                 sql.Append("SELECT Min(DateAcct) FROM M_InOut WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO', 'CL', 'RE', 'VO')");
+                if (GetAD_Client_ID() > 0)
+                {
+                    sql.Append(" AND AD_Client_ID = " + GetAD_Client_ID());
+                }
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
