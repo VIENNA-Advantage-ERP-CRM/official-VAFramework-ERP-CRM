@@ -296,22 +296,23 @@ namespace VAdvantage.Model
                 param[0] = new SqlParameter("@sdate", TimeUtil.GetDay(dateAcct));
                 idr = DB.ExecuteReader(sql, param, trxName);
                 dt = new DataTable();
-                dt.Load(idr);
-                idr.Close();
+                dt.Load(idr);                
                 foreach (DataRow dr in dt.Rows)
                 {
                     retValue = new MCash(ctx, dr, trxName);
                 }
             }
             catch (Exception e)
-            {
+            {                
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally {
                 if (idr != null)
                 {
                     idr.Close();
-                }
-                _log.Log(Level.SEVERE, sql, e);
-            }
-            finally { dt = null; }
+                    idr = null;
+                }                
+                dt = null; }
 
             if (retValue != null)
                 return retValue;
