@@ -2857,14 +2857,24 @@ namespace VAdvantage.Model
                             } // end vapos order
                             else // std pos order
                             {
-                                cash = MCash.Get(GetCtx(), GetAD_Org_ID(),
-                                   GetDateInvoiced(), GetC_Currency_ID(), Get_TrxName());
+                                // VIS0060: Get Cash Journal from the CashBook selected on Organization Unit Info.
+                                cash = GetCasJournal(GetDateInvoiced(), GetAD_OrgTrx_ID());
+                                if (cash == null)
+                                {
+                                    cash = MCash.Get(GetCtx(), GetAD_Org_ID(),
+                                       GetDateInvoiced(), GetC_Currency_ID(), Get_TrxName());
+                                }
                             }
                         }
                         else
                         {
-                            cash = MCash.Get(GetCtx(), GetAD_Org_ID(),
+                            // VIS0060: Get Cash Journal from the CashBook selected on Organization Unit Info.
+                            cash = GetCasJournal(GetDateInvoiced(), GetAD_OrgTrx_ID());
+                            if (cash == null)
+                            {
+                                cash = MCash.Get(GetCtx(), GetAD_Org_ID(),
                                GetDateInvoiced(), GetC_Currency_ID(), Get_TrxName());
+                            }
                         }
                         if (isStdPosOrder)
                         {
@@ -4806,6 +4816,28 @@ namespace VAdvantage.Model
                 SetIsPaid(true);
             }
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        /// <summary>
+        /// Get or Create Cash Journal from CashBook selected on Organization Unit Info
+        /// </summary>
+        /// <param name="dateAcct">Account Date</param>
+        /// <returns>Cash Journal</returns>
+        private MCash GetCasJournal(DateTime? dateAcct, int AD_OrgTrx_ID)
+        {
+            int cashbook_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_CashBook_ID FROM AD_OrgInfo WHERE AD_Org_ID=" + AD_OrgTrx_ID, null, Get_Trx()));
+                        
+            // get cashbook 
+            if (cashbook_ID > 0)
+            {
+                // Get or Create Cash Journal
+                return MCash.Get(GetCtx(), cashbook_ID, AD_OrgTrx_ID, dateAcct, Get_Trx());
+            }
+            else
+            {
+                _log.Warning("No CashBook for Organization Unit " + AD_OrgTrx_ID);
+                return null;
+            }            
         }
 
         /// <summary>
