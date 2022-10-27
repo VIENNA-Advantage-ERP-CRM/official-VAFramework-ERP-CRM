@@ -271,6 +271,81 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Cash Journal for CashBook and date
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="C_CashBook_ID">CashBook</param>
+        /// <param name="AD_OrgTrx_ID">Organization Unit</param>
+        /// <param name="dateAcct">Date</param>
+        /// <param name="trxName">Transaction</param>
+        /// <returns></returns>
+        public static MCash Get(Ctx ctx, int C_CashBook_ID, int AD_OrgTrx_ID, DateTime? dateAcct, Trx trxName)
+        {
+            MCash retValue = null;
+            //	Existing Journal
+            String sql = "SELECT * FROM C_Cash c "
+                + "WHERE c.C_CashBook_ID=" + C_CashBook_ID					//	#1
+                + " AND TRUNC(c.StatementDate,'DD')=@sdate"			//	#2
+                + " AND c.Processed='N'";
+            DataTable dt = null;
+            SqlParameter[] param = null;
+            IDataReader idr = null;
+            try
+            {
+                param = new SqlParameter[1];
+                param[0] = new SqlParameter("@sdate", TimeUtil.GetDay(dateAcct));
+                idr = DB.ExecuteReader(sql, param, trxName);
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MCash(ctx, dr, trxName);
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally { dt = null; }
+
+            if (retValue != null)
+                return retValue;
+
+            //	Get CashBook
+            MCashBook cb = new MCashBook(ctx, C_CashBook_ID, trxName);
+            if (cb.Get_ID() == 0)
+            {
+                _log.Warning("Not found C_CashBook_ID=" + C_CashBook_ID);
+                return null;
+            }
+
+            //	Create New Journal
+            retValue = new MCash(cb, dateAcct);
+            sql = @"SELECT SUM(completedbalance + runningbalance)AS BegningBalance FROM c_cashbook WHERE IsActive = 'Y' AND  c_cashbook_id =" + cb.GetC_CashBook_ID();
+            decimal beginingBalance = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, trxName));
+            
+            int DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Doctype_ID FROM C_Doctype WHERE DocBaseType='CMC' AND AD_Client_ID='" + ctx.GetAD_Client_ID() + "' AND AD_Org_ID IN('0','" + ctx.GetAD_Org_ID() + "') ORDER BY  AD_Org_ID DESC"));
+            if (DocType_ID != 0)
+            {
+                retValue.SetC_DocType_ID(DocType_ID);
+            }
+
+            // Set Organization Unit
+            if(AD_OrgTrx_ID > 0)
+            {
+                retValue.SetAD_OrgTrx_ID(AD_OrgTrx_ID);
+            }            
+
+            retValue.SetBeginningBalance(beginingBalance);
+            retValue.Save(trxName);
+            return retValue;
+        }
+        /// <summary>
         /// Get MCash Model against cash book id ,date acoount ,and shift date 
         /// </summary>
         /// <param name="ctx"></param>
