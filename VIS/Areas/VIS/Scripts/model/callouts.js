@@ -14327,6 +14327,37 @@
         return "";
     };//	type
 
+    /// <summary>
+    /// Request - Copy Resolution Data - <b>Callout</b>
+    /// </summary>
+    /// <param name="ctx">Context</param>
+    /// <param name="WindowNo">current Window No</param>
+    /// <param name="mTab">Model Tab</param>
+    /// <param name="mField">Model Field</param>
+    /// <param name="value">The new value</param>
+    /// <returns>Error message or ""</returns>
+    CalloutRequest.prototype.CopyResolution = function (ctx, windowNo, mTab, mField, value, oldValue) {  // VIS_0336 callout for showing comments of selected Resolution in result field.
+        //  
+        var colName = mField.getColumnName();
+        this.log.info(colName + "=" + value);
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+
+        try {
+            var txt = VIS.dataContext.getJSONRecord("MRequestType/GetResolutionText", value.toString());
+            txt = VIS.Env.parseContext(ctx, windowNo, txt, false, true);
+            mTab.setValue("Result", txt);
+
+
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            this.log.log(Level.SEVERE, sql, err);
+        }
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
 
     //CalloutRequest.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
     //    if (value == null || value.toString() == "" || this.isCalloutActive()) {
