@@ -1240,8 +1240,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                                 if (Env.Signum(cost.GetCumulatedQty()) != 0)
                                 {
-                                    price = Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero);
-                                    cost.SetCurrentCostPrice(price);
+                                    cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(cost.GetCumulatedAmt(), cost.GetCumulatedQty()), precision, MidpointRounding.AwayFromZero));
                                 }
                                 else
                                 {
@@ -1251,9 +1250,8 @@ namespace VAdvantage.Model
                             else if (ce.IsWeightedAverageCost() || ce.IsWeightedAveragePO())
                             {
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
-                                price = Decimal.Round(Decimal.Divide(
-                                        Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt), cost.GetCurrentQty()), precision);
-                                cost.SetCurrentCostPrice(price);
+                                cost.SetCurrentCostPrice(Decimal.Round(Decimal.Divide(
+                                        Decimal.Add(Decimal.Multiply(cost.GetCurrentCostPrice(), cost.GetCurrentQty()), amt), cost.GetCurrentQty()), precision));
                             }
                             else if (ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsLastPOPrice())
                             {
@@ -1266,6 +1264,7 @@ namespace VAdvantage.Model
 
                             if (costingCheck != null && costingCheck.invoiceline != null && !costingCheck.invoiceline.IsCostImmediate())
                             {
+
                                 // we have to reduce price
                                 if (amt < 0 && price > 0)
                                 {
@@ -1308,9 +1307,8 @@ namespace VAdvantage.Model
                                             if (cq == 0 && ce.GetM_CostElement_ID() == cQueue[cq].GetM_CostElement_ID())
                                             {
                                                 cost.SetCurrentCostPrice(queueAmt);
-                                                costingCheck.currentQtyonQueue = cQueue[cq].GetCurrentQty();
                                             }
-
+                                            costingCheck.currentQtyonQueue = cQueue[cq].GetCurrentQty();
                                             // Create Cost Queue Transactional Record
                                             if (!MCostQueueTransaction.CreateCostQueueTransaction(GetCtx(), cd.GetAD_Client_ID(), cd.GetAD_Org_ID(),
                                                 cQueue[cq].GetM_CostQueue_ID(), cd, cd.GetQty(), costingCheck))
