@@ -52,6 +52,9 @@ namespace ModelLibrary.Classes
         private StringBuilder query = new StringBuilder();
         public int M_Transaction_ID = 0, M_TransactionTo_ID = 0;
         public string errorMessage = String.Empty;
+        public decimal? onHandQty = null;
+        public bool IsCostCalculationfromProcess = false;
+        public decimal? currentQtyonQueue = null;
 
         /// <summary>
         /// Constructor
@@ -152,7 +155,6 @@ namespace ModelLibrary.Classes
             Fifo_ID = 0;
             costinglevel = String.Empty;
             MMPolicy = String.Empty;
-            isReversal = null;
             isMatchFromForm = "N";
             movementDate = null;
             query.Clear();
