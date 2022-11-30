@@ -1287,19 +1287,19 @@ namespace VAdvantage.Model
                                 {
                                     // get Cost Queue List Detail
                                     MCostQueue[] cQueue = MCostQueue.GetQueueforDiscount(product, cd.GetM_AttributeSetInstance_ID(),
-                                                          mas, cd.GetAD_Org_ID(), lstCostElement[cel], Get_TrxName(), cd.GetM_Warehouse_ID() , costingCheck);
+                                                          mas, cd.GetAD_Org_ID(), lstCostElement[cel], Get_TrxName(), cd.GetM_Warehouse_ID(), costingCheck);
                                     if (cQueue != null && cQueue.Length > 0)
                                     {
                                         decimal remainningQty = cd.GetQty();
                                         decimal queueAmt = 0;
                                         for (int cq = 0; cq < cQueue.Length; cq++)
                                         {
-                                            if (cQueue[cq].GetCurrentQty() > Math.Abs(remainningQty))
+                                            if (cQueue[cq].GetCurrentQty() > Math.Abs(remainningQty) && cQueue[cq].GetCurrentQty() != 0)
                                             {
                                                 queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) + (price * Decimal.Negate(remainningQty))) / cQueue[cq].GetCurrentQty(), precision);
                                                 remainningQty = 0;
                                             }
-                                            else
+                                            else if(cQueue[cq].GetCurrentQty() != 0)
                                             {
                                                 queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) + (price * cQueue[cq].GetCurrentQty())) / cQueue[cq].GetCurrentQty(), precision);
                                                 remainningQty += cQueue[cq].GetCurrentQty();
@@ -1308,7 +1308,10 @@ namespace VAdvantage.Model
                                             {
                                                 cost.SetCurrentCostPrice(queueAmt);
                                             }
-                                            costingCheck.currentQtyonQueue = cQueue[cq].GetCurrentQty();
+                                            if (lstCostElement[cel].IsFifo())
+                                            {
+                                                costingCheck.currentQtyonQueue = cQueue[cq].GetCurrentQty();
+                                            }
                                             // Create Cost Queue Transactional Record
                                             if (!MCostQueueTransaction.CreateCostQueueTransaction(GetCtx(), cd.GetAD_Client_ID(), cd.GetAD_Org_ID(),
                                                 cQueue[cq].GetM_CostQueue_ID(), cd, cd.GetQty(), costingCheck))
@@ -1323,6 +1326,11 @@ namespace VAdvantage.Model
                                                 break;
                                             }
                                         }
+                                    }
+
+                                    if (costingCheck.currentQtyonQueue == null)
+                                    {
+                                        costingCheck.currentQtyonQueue = 0;
                                     }
                                 }
                             }
