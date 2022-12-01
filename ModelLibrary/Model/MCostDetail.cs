@@ -1296,12 +1296,14 @@ namespace VAdvantage.Model
                                         {
                                             if (cQueue[cq].GetCurrentQty() > Math.Abs(remainningQty) && cQueue[cq].GetCurrentQty() != 0)
                                             {
-                                                queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) + (price * Decimal.Negate(remainningQty))) / cQueue[cq].GetCurrentQty(), precision);
+                                                queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) + 
+                                                            (price * Math.Abs(remainningQty))) / cQueue[cq].GetCurrentQty(), precision);
                                                 remainningQty = 0;
                                             }
                                             else if(cQueue[cq].GetCurrentQty() != 0)
                                             {
-                                                queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) + (price * cQueue[cq].GetCurrentQty())) / cQueue[cq].GetCurrentQty(), precision);
+                                                queueAmt = Decimal.Round(((cQueue[cq].GetCurrentCostPrice() * cQueue[cq].GetCurrentQty()) +
+                                                            (price * cQueue[cq].GetCurrentQty())) / cQueue[cq].GetCurrentQty(), precision);
                                                 remainningQty += cQueue[cq].GetCurrentQty();
                                             }
                                             if (cq == 0 && ce.GetM_CostElement_ID() == cQueue[cq].GetM_CostElement_ID())
