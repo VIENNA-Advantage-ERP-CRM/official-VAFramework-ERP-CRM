@@ -153,6 +153,15 @@ namespace ViennaAdvantage.Process
             {
                 return product.GetName() + " @NotValid@ @M_BOM_ID@";
             }
+            //VIS_336 : Changes done for checking records exist in BOM and BOM Component tab.
+            string Sql = @"SELECT COUNT(M_BOMProduct_ID) FROM M_BOMProduct WHERE M_BOM_ID IN (SELECT M_BOM_ID FROM M_BOM WHERE M_Product_ID=" + product.GetM_Product_ID() + " AND ISACTIVE='Y')" +
+                          "AND ISACTIVE='Y' ";
+            int Count = Util.GetValueOfInt(DB.ExecuteScalar(Sql));
+            if (Count <= 0)
+            {
+                return product.GetName() + " @VAS_BomNotDefined@";
+            }
+
             _product = product;
             //	Check Old Product BOM Structure
             log.Config(_product.GetName());
@@ -277,11 +286,14 @@ namespace ViennaAdvantage.Process
                 if (pp.IsBOM() && BOMproduct.GetM_ProductBOMVersion_ID() > 0)
                 {
                     //return ValidateProduct(pp, bom.GetBOMType(), bom.GetBOMUse());
-                    if (_products.Contains(pp))
-                    {
-                        log.Warning(_product.GetName() + " recursively includes " + pp.GetName());
-                        return false;
-                    }
+
+                    // VIS_336:changes made for verifying duplicate records in BOM Component tab. 
+
+                    //if (_products.Contains(pp))
+                    //{
+                    //    log.Warning(_product.GetName() + " recursively includes " + pp.GetName());
+                    //    return false;
+                    //}
                     _products.Add(pp);
 
                     if (!pp.IsVerified())
