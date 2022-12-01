@@ -384,6 +384,56 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// DevOps Task-1851 -- This function is used to get Cost Queue with the refernce of GRN
+        /// </summary>
+        /// <param name="product">Product</param>
+        /// <param name="M_ASI_ID">Atributeset Instance ID</param>
+        /// <param name="mas">Accounting Schema</param>
+        /// <param name="Org_ID">Organization</param>
+        /// <param name="ce">Cost Element</param>
+        /// <param name="trxName">TrxName</param>
+        /// <param name="M_Warehouse_ID">Warehouse</param>
+        /// <param name="costingCheck">Costing Check VO</param>
+        /// <returns>Array of MCostQueue</returns>
+        public static MCostQueue[] GetQueueforDiscount(MProduct product, int M_ASI_ID, MAcctSchema mas,
+         int Org_ID, MCostElement ce, Trx trxName, int M_Warehouse_ID, CostingCheck costingCheck)
+        {
+            List<MCostQueue> list = new List<MCostQueue>();
+            String sql = @"SELECT M_CostQueue.*  FROM M_CostQueue 
+                            INNER JOIN M_CostQueueTransaction ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
+                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
+                            WHERE M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + ce.GetM_CostElement_ID() + @"
+                            AND M_CostQueue.C_ACCTSCHEMA_ID = " + mas.GetC_AcctSchema_ID() + @"
+                            AND M_CostQueueTransaction.M_InoutLine_ID = (SELECT NVL(C_InvoiceLine.M_InoutLine_ID, 0) FROM C_InvoiceLine
+                             WHERE C_InvoiceLine.C_InvoiceLine_ID = " + costingCheck.invoiceline.Get_ValueAsInt("Ref_InvoiceLineOrg_ID") + ")";
+            sql += " ORDER BY M_CostQueue.queuedate ";
+            if (!ce.IsFifo())
+                sql += "DESC ";
+            sql += " , M_CostQueue.M_AttributeSetInstance_ID ";
+            if (!ce.IsFifo())
+                sql += "DESC";
+            try
+            {
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        list.Add(new MCostQueue(product.GetCtx(), dr, trxName));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
+
+            MCostQueue[] costQ = new MCostQueue[list.Count];
+            costQ = list.ToArray();
+            return costQ;
+        }
+
+        /// <summary>
         /// This function is used to get the Current Cost from Cost Queue
         /// </summary>
         /// <param name="AD_Client_ID">client id</param>
@@ -743,7 +793,22 @@ namespace VAdvantage.Model
                                     " Transaction Qty = " + Math.Abs(Qty));
                                 costingCheck.errorMessage += "Qty not available on Product Cost, Product Cost Qty = " + productCostsQty +
                                                              " Transaction Qty = " + Math.Abs(Qty);
+                                //if (optionalstr != "process" && !client.IsCostMandatory())
+                                //{
+                                //    // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                                //    // Consume available qty 
+                                //    if (productCostsQty == 0) { return true; }
+                                //    if (Price != 0)
+                                //    {
+                                //        Price = Price / Qty; // Calcualte each price
+                                //        Price = Price * Decimal.Negate(productCostsQty); // calculate total price
+                                //    }
+                                //    Qty = Decimal.Negate(productCostsQty);
+                                //}
+                                //else
+                                //{
                                 return false;
+                                //}
                             }
                         }
                         else if (windowName == "Inventory Move" && AD_Org_ID > 0)
@@ -789,9 +854,40 @@ namespace VAdvantage.Model
                                     " Transaction Qty = " + Math.Abs(Qty));
                                 costingCheck.errorMessage += "Qty not available on Product Cost, Product Cost Qty = " + productCostsQty +
                                                              " Transaction Qty = " + Math.Abs(Qty);
+                                //if (optionalstr != "process" && !client.IsCostMandatory())
+                                //{
+                                //    // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                                //    // Consume available qty 
+                                //    if (productCostsQty == 0) { return true; }
+                                //    if (costingCheck.isReversal == null || !costingCheck.isReversal.Value)
+                                //    {
+                                //        Qty = Qty >= 0 ? Math.Abs(productCostsQty) : Decimal.Negate(productCostsQty);
+                                //    }
+                                //}
+                                //else
+                                //{
                                 return false;
+                                //}
                             }
                         }
+
+                        // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                        //if (windowName != "Inventory Move" && optionalstr != "process" && !client.IsCostMandatory() && Qty > 0 && costingCheck.onHandQty != null)
+                        //{
+                        //    if (costingCheck.onHandQty == 0)
+                        //    {
+                        //        _log.Info("CostingEngine: Qty after transaction for window = " + windowName +
+                        //               " On Hand Qty = " + 0 +
+                        //               " Transaction Qty = " + Math.Abs(Qty));
+                        //        return true;
+                        //    }
+                        //    if (Price != 0)
+                        //    {
+                        //        Price = Price / Qty; // Calcualte each price
+                        //        Price = Price * costingCheck.onHandQty.Value; // calculate total price
+                        //    }
+                        //    Qty = costingCheck.onHandQty.Value;
+                        //}
 
                         if (windowName == "Material Receipt" || windowName == "Customer Return" || windowName == "Shipment" || windowName == "Return To Vendor")
                         {
@@ -879,6 +975,8 @@ namespace VAdvantage.Model
                                 //get price from product costs based on costing method if not found 
                                 //then check price list based on trx org or (*) org 
                                 price = MCostQueue.CalculateCost(ctx, acctSchema, product, M_ASI_ID, AD_Client_ID, AD_Org_ID, M_Warehouse_Id);
+                                // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                                //Price = price * (costingCheck.onHandQty != null ? costingCheck.onHandQty.Value : inoutline.GetMovementQty());
                                 Price = price * inoutline.GetMovementQty();
                                 cmPrice = Price;
                                 if (Price == 0)
@@ -912,6 +1010,8 @@ namespace VAdvantage.Model
                                                          WHERE C_InvoiceLine_ID = " + invoiceLineId + ")", null, trxName);
 
                                         Price = Decimal.Divide(invoiceline.GetProductLineCost(invoiceline), invoiceline.GetQtyInvoiced());
+                                        // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                                        //Price = Price * (costingCheck.onHandQty != null ? costingCheck.onHandQty.Value : inoutline.GetMovementQty());
                                         Price = Price * inoutline.GetMovementQty();
                                         if (Util.GetValueOfInt(dsInv.Tables[0].Rows[0]["C_Currency_ID"]) != acctSchema.GetC_Currency_ID())
                                         {
@@ -2823,6 +2923,18 @@ namespace VAdvantage.Model
                             //AD_Org_ID = (MWarehouse.Get(ctx, M_Warehouse_Id)).GetAD_Org_ID();
                             M_Warehouse_Id = costingCheck.M_WarehouseTo_ID;
                             AD_Org_ID = costingCheck.AD_OrgTo_ID;
+                            //if (costingCheck.onHandQty != null)
+                            //{
+                            //    if (cmPrice > 0)
+                            //    {
+                            //        cmPrice = (cmPrice / Qty) * costingCheck.onHandQty.Value;
+                            //    }
+                            //    else
+                            //    {
+                            //        Price = (Price / Qty) * costingCheck.onHandQty.Value;
+                            //    }
+                            //    Qty = costingCheck.onHandQty.Value;
+                            //}
                             #endregion
                         }
 
@@ -7552,6 +7664,15 @@ namespace VAdvantage.Model
             DataSet dsCostQueue = DB.ExecuteDataset(sql, null, cd.Get_Trx());
             if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
             {
+                // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                // Update Qty and Price on Cost detail 
+                //decimal MovementQty = Convert.ToDecimal(dsCostQueue.Tables[0].Compute("SUM(MovementQty)", string.Empty));
+                //if (Math.Abs(cd.GetQty()) > Math.Abs(MovementQty))
+                //{
+                //    cd.SetAmt(Decimal.Round(Decimal.Multiply(Decimal.Divide(cd.GetAmt(), cd.GetQty()), Math.Abs(MovementQty)), 12));
+                //    cd.SetQty(Math.Abs(MovementQty));
+                //    cd.Save();
+                //}
                 for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
                 {
                     // when qty on Queue Transaction is greaterthan or Equal to 
@@ -7667,6 +7788,16 @@ namespace VAdvantage.Model
             DataSet dsCostQueue = DB.ExecuteDataset(selectStatement + sql, null, cd.Get_Trx());
             if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
             {
+                // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
+                // Update Qty and Price on Cost detail 
+                //decimal MovementQty = Convert.ToDecimal(dsCostQueue.Tables[0].Compute("SUM(MovementQty)", string.Empty));
+                //if (Math.Abs(cd.GetQty()) > Math.Abs(MovementQty))
+                //{
+                //    decimal calculative = Decimal.Round(Decimal.Multiply(Decimal.Divide(cd.GetAmt(), cd.GetQty()), MovementQty), 12);
+                //    cd.SetAmt(cd.GetAmt() > 0 ? Math.Abs(calculative) : Decimal.Negate(Math.Abs(calculative)));
+                //    cd.SetQty(cd.GetQty() > 0 ? Math.Abs(MovementQty) : Decimal.Negate(Math.Abs(MovementQty)));
+                //    cd.Save();
+                //}
                 for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
                 {
                     // when qty on Queue Transaction is greaterthan or Equal to 
