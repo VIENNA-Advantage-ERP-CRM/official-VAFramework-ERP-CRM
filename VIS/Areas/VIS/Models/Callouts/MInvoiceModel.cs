@@ -1549,5 +1549,32 @@ namespace VIS.Models
             return stdPrecision;
 
         }
+
+        /// <summary>
+        /// Get Invoice Details
+        /// </summary>
+        /// <param name="fields">Invoice Line ID</param>
+        /// <returns>InvoiceLineDetail</returns>
+        /// <writer>VIS_0045</writer>
+        public Dictionary<string, object> GetInvoiceLineDetail(string fields)
+        {
+            DataSet _ds = null;
+            string[] paramValue = fields.Split(',');
+            int C_InvoiceLine_ID = Util.GetValueOfInt(paramValue[0]);
+            Dictionary<string, object> retValue = null;
+            string sql = @"SELECT M_Product_ID, M_AttributeSetInstance_ID, C_UOM_ID , QtyEntered, QtyInvoiced 
+                           FROM C_InvoiceLine WHERE C_InvoiceLine_ID = " + C_InvoiceLine_ID;
+            _ds = DB.ExecuteDataset(sql, null, null);
+            if (_ds != null && _ds.Tables[0].Rows.Count > 0)
+            {
+                retValue = new Dictionary<string, object>();
+                retValue["M_Product_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["M_Product_ID"]);
+                retValue["M_AttributeSetInstance_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["M_AttributeSetInstance_ID"]);
+                retValue["C_UOM_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_UOM_ID"]);
+                retValue["QtyEntered"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["QtyEntered"]);
+                retValue["QtyInvoiced"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["QtyInvoiced"]);
+            }
+            return retValue;
+        }
     }
 }

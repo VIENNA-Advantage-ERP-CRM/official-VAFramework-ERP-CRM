@@ -13054,6 +13054,42 @@
         return "";
     };
 
+    /**
+     * This function is used to get the detail of Invoice line
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutInvoice.prototype.GetInvoiceLineDetail = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        try {
+            this.setCalloutActive(true);
+
+            var paramString = value.toString();
+            var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoiceLineDetail", paramString);
+
+            if (invoiceRecord != null ) {
+                mTab.setValue("M_Product_ID", invoiceRecord["M_Product_ID"]);
+                mTab.setValue("M_AttributeSetInstance_ID", invoiceRecord["M_AttributeSetInstance_ID"]);
+                mTab.setValue("C_UOM_ID", invoiceRecord["C_UOM_ID"]);
+                mTab.setValue("QtyEntered", invoiceRecord["QtyEntered"]);
+                mTab.setValue("QtyInvoiced", invoiceRecord["QtyInvoiced"]);
+            }
+            ctx = windowNo = mTab = mField = value = oldValue = null;
+            this.setCalloutActive(false);
+        }
+        catch (err) {
+            this.setCalloutActive(false);
+            return err;
+        }
+        return "";
+    };
+
     VIS.Model.CalloutInvoice = CalloutInvoice;
     //**************CalloutInvoice End*********
 
@@ -14403,7 +14439,7 @@
     CalloutRequisition.prototype.Product = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         try {
-            if (this.isCalloutActive() ||value == null || value.toString() == "") {
+            if (this.isCalloutActive() || value == null || value.toString() == "") {
                 return "";
             }
             var M_Product_ID = value;
@@ -14426,11 +14462,11 @@
 
             var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
             var qty = mTab.getValue("Qty");
-            var isSOTrx = false;            
-            var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");            
-            var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");            
+            var isSOTrx = false;
+            var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
+            var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
             var orderDate = ctx.getContext(windowNo, "DateDoc");
-            
+
             var paramString;
             var C_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID);
 
@@ -14680,7 +14716,7 @@
             /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
             else if (mField.getColumnName() == "C_UOM_ID" || mField.getColumnName() == "M_AttributeSetInstance_ID") {
                 var C_UOM_To_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"));
-                QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));                
+                QtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
                 var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
                 var M_AttributeSetInstance_ID;
                 /** Price List - Ensuring valid Uom id ** Dt:01/02/2021 ** Modified By: Kumar **/
@@ -14702,7 +14738,7 @@
                 var productPrices = VIS.dataContext.getJSONRecord("MProductPricing/GetPricesOnChange", params);
 
                 if (productPrices != null) {
-                    mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));    
+                    mTab.setValue("PriceActual", Util.getValueOfDecimal(productPrices["PriceEntered"]));
                     gp = Util.getValueOfInt(productPrices["UOMPrecision"]);
                     QtyRequired = productPrices["QtyOrdered"];
                 }

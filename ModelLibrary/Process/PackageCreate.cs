@@ -21,8 +21,9 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
+using VAdvantage.ProcessEngine;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+namespace VAdvantage.Process
 {
     public class PackageCreate : ProcessEngine.SvrProcess
     {
@@ -49,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _M_Shipper_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_Invoice_ID"))
+                else if (name.Equals("M_InOut_ID"))
                 {
                     _M_InOut_ID = para[i].GetParameterAsInt();
                 }
@@ -80,11 +81,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("No Shipper");
             }
 
-            string sql = "select M_Inout_ID from M_InoutConfirm where M_InoutConfirm_ID = " + _M_InOut_ID;
-            int _M_Shipment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            //string sql = "select M_Inout_ID from M_InoutConfirm where M_InoutConfirm_ID = " + _M_InOut_ID;
+            //int _M_Shipment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-            MInOut shipment = new MInOut(GetCtx(), _M_Shipment_ID, null);
-            if (shipment.Get_ID() != _M_Shipment_ID)
+            // VIS0060: Handled issue of Mandatory M_InOut on Create Package process.
+            MInOut shipment = new MInOut(GetCtx(), _M_InOut_ID, null);
+            if (shipment.Get_ID() != _M_InOut_ID)
             {
                 throw new Exception("Cannot find Shipment ID=" + _M_InOut_ID);
             }
@@ -93,7 +95,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("Cannot find Shipper ID=" + _M_InOut_ID);
             }
-           
+
             MPackage pack = MPackage.Create(shipment, shipper, null, Get_TrxName());
 
             return pack.GetDocumentNo();
