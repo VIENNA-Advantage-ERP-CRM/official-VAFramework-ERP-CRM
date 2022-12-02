@@ -99,6 +99,10 @@ namespace VAdvantage.Model
                         }
                     }
                 }
+                if (cd.GetC_InvoiceLine_ID() > 0 && ced.Get_ColumnIndex("C_InvoiceLine_ID") >= 0)
+                {
+                    ced.Set_Value("C_InvoiceLine_ID", cd.GetC_InvoiceLine_ID());
+                }
                 ced.SetM_InventoryLine_ID(cd.GetM_InventoryLine_ID());
                 if (ced.GetM_InventoryLine_ID() > 0)
                 {
