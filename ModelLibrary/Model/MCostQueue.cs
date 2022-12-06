@@ -384,6 +384,84 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Cost Queue Records in Lifo/Fifo order
+        /// </summary>
+        /// <param name="product">product</param>
+        /// <param name="M_ASI_ID">costing level ASI</param>
+        /// <param name="mas">accounting schema</param>
+        /// <param name="Org_ID">costing level org</param>
+        /// <param name="ce">Cost Element</param>
+        /// <param name="trxName">transaction</param>
+        /// <returns>cost queue or null</returns>
+        public static MCostQueue[] GetQueueForCostUpdate(MProduct product, int M_ASI_ID, MAcctSchema mas,
+            int Org_ID, MCostElement ce, Trx trxName, int M_Warehouse_ID, CostingCheck costingCheck)
+        {
+            string costingLevel = costingCheck.costinglevel;
+            if (string.IsNullOrEmpty(costingLevel))
+            {
+                costingLevel = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT 
+                        CASE WHEN M_Product_Category.CostingLevel IS NOT NULL THEN M_Product_Category.CostingLevel
+                             WHEN C_AcctSchema.CostingLevel IS NOT NULL THEN C_AcctSchema.CostingLevel END AS CostingLevel
+                        FROM M_Product
+                              INNER JOIN M_Product_Category ON M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID
+                              INNER JOIN C_AcctSchema ON C_AcctSchema.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @"
+                        WHERE M_Product.M_Product_ID = " + product.GetM_Product_ID()));
+            }
+
+            List<MCostQueue> list = new List<MCostQueue>();
+            String sql = $@"SELECT * FROM M_CostQueue 
+                            WHERE AD_Client_ID={product.GetAD_Client_ID()} 
+                                 AND M_Product_ID={product.GetM_Product_ID()}
+                                 AND M_CostType_ID={mas.GetM_CostType_ID()} 
+                                 AND C_AcctSchema_ID={mas.GetC_AcctSchema_ID()}
+                                 AND M_CostElement_ID={ce.GetM_CostElement_ID()}";
+            if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Organization) ||
+                costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_OrgPlusBatch) ||
+                costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Warehouse) ||
+                costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql += " AND AD_Org_ID=" + Org_ID;
+            }
+            if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Warehouse) ||
+                 costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql += " AND NVL(M_Warehouse_ID, 0) = " + M_Warehouse_ID;
+            }
+            if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_BatchLot) ||
+               costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_OrgPlusBatch) ||
+               costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql += " AND NVL(M_AttributeSetInstance_ID, 0)=" + M_ASI_ID;
+            }
+            sql += " AND CurrentQty<>0 ";
+            sql += "ORDER BY queuedate ";
+            if (!ce.IsFifo())
+                sql += "DESC ";
+            sql += " , M_AttributeSetInstance_ID ";
+            if (!ce.IsFifo())
+                sql += "DESC";
+            try
+            {
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        list.Add(new MCostQueue(product.GetCtx(), dr, trxName));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _log.Log(Level.SEVERE, sql, e);
+            }
+
+            MCostQueue[] costQ = new MCostQueue[list.Count];
+            costQ = list.ToArray();
+            return costQ;
+        }
+
+        /// <summary>
         /// DevOps Task-1851 -- This function is used to get Cost Queue with the refernce of GRN
         /// </summary>
         /// <param name="product">Product</param>
