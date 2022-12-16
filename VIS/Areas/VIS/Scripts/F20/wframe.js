@@ -469,8 +469,8 @@
      *	Dynamic Initialization form
      *  @param AD_Form_ID form
      *  @param callback to add menu item for form
-  	 *  @return true if loaded OK
-	 */
+         *  @return true if loaded OK
+     */
     AWindow.prototype.initForm = function (AD_Form_ID, callback, action, additionalInfo) {
 
 
@@ -803,7 +803,22 @@
             var li = $("<li>");
             var d = $("<div></div>");
             var fired = true;
+
+            var mouseDown = false;
+            if (this.action == "Save") {
+                // Handle case if user direct click on save button 
+                li.on("mousedown touchstrat", function (e) {
+
+                    mouseDown = true;
+                    window.setTimeout(function (md) {
+                        if (mouseDown)
+                            li.trigger('click');
+                    }, 1000);
+                });
+            }
+
             li.on(VIS.Events.onClick, function (e) {
+                mouseDown = false;
                 e.stopPropagation();
                 if (fired && that.onAction && that.isEnabled) {
                     if (that.toggle) {
@@ -962,7 +977,7 @@
         }
     };
 
-    
+
     AppsAction.prototype.highlightNewButton = function (highlight) {
         if (highlight) {
             if (this.$li.instructionPopRemoved)
