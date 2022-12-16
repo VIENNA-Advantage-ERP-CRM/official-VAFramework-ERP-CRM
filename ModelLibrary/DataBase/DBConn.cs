@@ -123,7 +123,7 @@ namespace VAdvantage.DataBase
             string connection_string = "";
             if (db_to_match.Equals(VEnvironment.DBTYPE_PG))
             {
-                connection_string = "Server=" + host_name + ";Port=" + port_number + ";User Id=" + user_id + ";Password=" + password + ";Database=" + database + ";";
+                connection_string = "Server=" + host_name + ";Port=" + port_number + ";User Id=" + user_id.ToLower() + ";Password=" + password + ";Database=" + user_id.ToLower() + ";";
                 SetPostgresConnectionString(connection_string);
 
             }

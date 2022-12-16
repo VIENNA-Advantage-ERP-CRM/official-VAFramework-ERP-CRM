@@ -18,6 +18,7 @@ namespace VAdvantage.Model
     {
 
 
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -64,7 +65,7 @@ namespace VAdvantage.Model
         private bool m_hasSRegion = false;
         /** Account Creation OK		*/
         private bool m_accountsOK = false;
-
+        private const string InternalUseInventory = "Internal Use Inventory";
 
         /// <summary>
         /// Create new Client/Tenant
@@ -83,7 +84,7 @@ namespace VAdvantage.Model
             String name = null;
             String sql = null;
             int no = 0;
-
+            Common.Common.GetAllTable();
             /**
              *  Create Client
              */
@@ -94,6 +95,8 @@ namespace VAdvantage.Model
             m_client = new MClient(m_ctx, 0, true, m_trx);
             m_client.SetValue(m_clientName);
             m_client.SetName(m_clientName);
+            m_client.SetIsPostImmediate(true);
+            m_client.SetIsCostImmediate(true);
             if (!m_client.Save())
             {
                 String err = "Client NOT created";
@@ -128,7 +131,8 @@ namespace VAdvantage.Model
             }
 
             //  Trees and Client Info
-            if (!m_client.SetupClientInfo(m_lang))
+            //if (!m_client.SetupClientInfo(m_lang)) // problem occur when tenat created without ERP tables
+            if (!m_client.SetupClientInfo(m_lang) && Common.Common.ISTENATRUNNINGFORERP)
             {
                 String err = "Client Info NOT created";
                 log.Log(Level.SEVERE, err);
@@ -148,6 +152,7 @@ namespace VAdvantage.Model
             if (name == null || name.Length == 0)
                 name = "newOrg";
             m_org = new MOrg(m_client, name);
+            m_org.SetIsLegalEntity(true);
             if (!m_org.Save())
             {
                 String err = "Organization NOT created";
@@ -177,6 +182,8 @@ namespace VAdvantage.Model
             admin.SetUserLevel(MRole.USERLEVEL_ClientPlusOrganization);
             admin.SetPreferenceType(MRole.PREFERENCETYPE_Client);
             admin.SetIsShowAcct(true);
+            admin.SetIsAdministrator(true);
+            admin.SetIsManual(false);
             if (!admin.Save())
             {
                 String err = "Admin Role A NOT inserted";
@@ -242,10 +249,23 @@ namespace VAdvantage.Model
             //////////////
             AD_User_Name = name;
             name = DataBase.DB.TO_STRING(name);
+
+            ///Change by Sukhwinder on 28-Oct-2016 for password encryption when tenant creation.
+
+            var isPwdEncrypted = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISENCRYPTED FROM AD_COLUMN WHERE  AD_TABLE_ID=" + MTable.Get_Table_ID("AD_User") + " AND ColumnName = 'Password' AND EXPORT_ID = 'VIS_417'"));
+            string password = "";
+            if (isPwdEncrypted == "Y")
+            {
+                password = VAdvantage.Utility.SecureEngine.Encrypt(name);
+            }
+            else
+            {
+                password = name;
+            }
             sql = "INSERT INTO AD_User(" + m_stdColumns + ",AD_User_ID,"
-                + " Value,Name,Description,Password)"
+                + " Value,Name,Description,Password,IsLoginUser)"
                 + " VALUES (" + m_stdValuesOrg + "," + AD_User_ID + ","
-                + name + "," + name + "," + name + "," + name + ")";
+                + name + "," + name + "," + name + "," + password + ",'Y')";
             no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
             if (no != 1)
             {
@@ -257,6 +277,14 @@ namespace VAdvantage.Model
                 m_ctx.SetContext("#AD_User_A_ID", 0);
                 return false;
             }
+            //Save Default Login Settings for Admin User
+            //string str =
+            SetupDefaultLogin(m_trx, m_client.GetAD_Client_ID(), admin.GetAD_Role_ID(), m_org.GetAD_Org_ID(), AD_User_ID, 0);
+            //if (str != "OK")
+            //{
+            //    tInfo.Log = "Login Settings Not Saved for:" + name;
+            //    return tInfo;
+            //}
             //  Info
             m_info.Append(Msg.Translate(m_lang, "AD_User_ID")).Append("=").Append(AD_User_Name).Append("/").Append(AD_User_Name).Append("\n");
 
@@ -274,10 +302,20 @@ namespace VAdvantage.Model
 
                 AD_User_U_Name = name;
                 name = DataBase.DB.TO_STRING(name);
+
+                password = "";
+                if (isPwdEncrypted == "Y")
+                {
+                    password = VAdvantage.Utility.SecureEngine.Encrypt(name);
+                }
+                else
+                {
+                    password = name;
+                }
                 sql = "INSERT INTO AD_User(" + m_stdColumns + ",AD_User_ID,"
-                    + "Value,Name,Description,Password)"
+                    + "Value,Name,Description,Password,IsLoginUser)"
                     + " VALUES (" + m_stdValuesOrg + "," + AD_User_U_ID + ","
-                    + name + "," + name + "," + name + "," + name + ")";
+                    + name + "," + name + "," + name + "," + password + ",'Y')";
                 no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                 {
@@ -288,6 +326,15 @@ namespace VAdvantage.Model
                     m_trx.Close();
                     return false;
                 }
+
+                //Save Default Login Settings for Org User
+                //str =
+                SetupDefaultLogin(m_trx, m_client.GetAD_Client_ID(), user.GetAD_Role_ID(), m_org.GetAD_Org_ID(), AD_User_U_ID, 0);
+                //if (str != "OK")
+                //{
+                //    tInfo.Log = "Login Settings Not Saved for:" + name;
+                //    return tInfo;
+                //}
                 //  Info
                 m_info.Append(Msg.Translate(m_lang, "AD_User_ID")).Append("=").Append(AD_User_U_Name).Append("/").Append(AD_User_U_Name).Append("\n");
 
@@ -297,12 +344,7 @@ namespace VAdvantage.Model
                 no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "UserRole ClientUser+User NOT inserted");
-                //  OrgUser             - User
-                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                    + " VALUES (" + m_stdValues + "," + AD_User_U_ID + "," + user.GetAD_Role_ID() + ")";
-                no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
-                if (no != 1)
-                    log.Log(Level.SEVERE, "UserRole OrgUser+Org NOT inserted");
+
 
             }
             else
@@ -319,13 +361,46 @@ namespace VAdvantage.Model
             if (no != 1)
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
 
+            //  OrgUser             - User
+            sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
+                + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetAD_Role_ID() + ")";
+            no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
+            if (no != 1)
+                log.Log(Level.SEVERE, "UserRole OrgUser+Org NOT inserted");
+
             //	Processors
-            MAcctProcessor ap = new MAcctProcessor(m_client, AD_User_ID);
-            ap.Save();
+            if (Common.Common.lstTableName.Contains("C_AcctProcessor")) // Update by Paramjeet Singh
+            {
+                MAcctProcessor ap = new MAcctProcessor(m_client, AD_User_ID);
+                ap.Save();
+            }
+            if (Common.Common.lstTableName.Contains("R_RequestProcessor")) // Update by Paramjeet Singh
+            {
+                MRequestProcessor rp = new MRequestProcessor(m_client, AD_User_ID);
+                rp.Save();
+            }
 
-            MRequestProcessor rp = new MRequestProcessor(m_client, AD_User_ID);
-            rp.Save();
+            ///////////////////////////////////////////
+            ///////Create Default Roles
+            CreateDefaultRoles(AD_User_ID);
+            ///////////////////////////////////////////
+            /////////Create AccountGroup/////////////
 
+            CreateAccountingGroup();
+            ////////CopyPrintFormat
+            //CopyPrintFormat();
+            ////////Create CurrencySource//////
+            //CreateCurrencySource();
+            CreateKpi(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CreateKPIPane(); // Update by Paramjeet Singh
+            CreateChartPane(); // Update by Paramjeet Singh
+            CreateView(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CreateTopMenu(admin.GetAD_Role_ID());
+            CreateAppointmentCategory(); // Update by Paramjeet Singh
+            CreateCostElement();
+            CopyRoleCenter(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CopyDashBoard(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CopyOrgType();
             log.Info("fini");
             return true;
         }   //  createClient
@@ -529,8 +604,8 @@ namespace VAdvantage.Model
             //Save Default Login Settings for Admin User
             //string str =
             SetupDefaultLogin(m_trx, m_client.GetAD_Client_ID(), admin.GetAD_Role_ID(), m_org.GetAD_Org_ID(), AD_User_ID, 0);
-            
-            
+
+
             //  Info
             m_info.Append(Msg.Translate(m_lang, "AD_User_ID")).Append("=").Append(AD_User_Name).Append("/").Append(AD_User_Name).Append("\n");
 
@@ -597,6 +672,14 @@ namespace VAdvantage.Model
             if (no != 1)
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
 
+            if (user.GetAD_Role_ID() > 0)
+            {
+                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
+                 + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetAD_Role_ID() + ")";
+                no = DataBase.DB.ExecuteQuery(sql, null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "UserRole ClientUser+User NOT inserted");
+            }
             //	Processors
             if (Common.Common.lstTableName.Contains("C_AcctProcessor")) // Update by Paramjeet Singh
             {
@@ -2358,44 +2441,16 @@ namespace VAdvantage.Model
             int C_Element_ID = 0;
             if (Common.Common.lstTableName.Contains("C_Element")) // Update by Paramjeet Singh
             {
-                MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_AD_Tree_Account_ID);
+                //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
+
+                //MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_AD_Tree_Account_ID);
 
 
 
-                if (!element.Save())
-                {
-                    String err = "Acct Element NOT inserted";
-                    //result = err;
-                    log.Log(Level.SEVERE, err);
-                    m_info.Append(err);
-                    m_trx.Rollback();
-                    m_trx.Close();
-                    return false;
-                }
-
-                C_Element_ID = element.GetC_Element_ID();
-
-                m_info.Append(Msg.Translate(m_lang, "C_Element_ID")).Append("=").Append(name).Append("\n");
-
-                //	Create Account Values
-                m_nap = new NaturalAccountMap<String, MElementValue>(m_ctx, m_trx);
-                MTree tree = MTree.Get(m_ctx, m_AD_Tree_Account_ID, m_trx);
-                String errMsg = m_nap.ParseFile(AccountingFile, GetAD_Client_ID(), GetAD_Org_ID(), C_Element_ID, tree);
-                if (errMsg.Length != 0)
-                {
-                    log.Log(Level.SEVERE, errMsg);
-                    //result = errMsg;
-                    m_info.Append(errMsg);
-                    m_trx.Rollback();
-                    m_trx.Close();
-                    return false;
-                }
-
-                //if (m_nap.SaveAccounts(GetAD_Client_ID(), GetAD_Org_ID(), C_Element_ID))
-                //    m_info.Append(Msg.Translate(m_lang, "C_ElementValue_ID")).Append(" # ").Append(m_nap.Count).Append("\n");
-                //else
+                //if (!element.Save())
                 //{
-                //    String err = "Acct Element Values NOT inserted";
+                //    String err = "Acct Element NOT inserted";
+                //    result = err;
                 //    log.Log(Level.SEVERE, err);
                 //    m_info.Append(err);
                 //    m_trx.Rollback();
@@ -2403,8 +2458,40 @@ namespace VAdvantage.Model
                 //    return false;
                 //}
 
-                C_ElementValue_ID = m_nap.GetC_ElementValue_ID("DEFAULT_ACCT");
-                log.Fine("C_ElementValue_ID=" + C_ElementValue_ID);
+                //C_Element_ID = element.GetC_Element_ID();
+
+                //m_info.Append(Msg.Translate(m_lang, "C_Element_ID")).Append("=").Append(name).Append("\n");
+
+                ////	Create Account Values
+                //m_nap = new NaturalAccountMap<String, MElementValue>(m_ctx, m_trx);
+                //MTree tree = MTree.Get(m_ctx, m_AD_Tree_Account_ID, m_trx);
+                //String errMsg = m_nap.ParseFile(AccountingFile, GetAD_Client_ID(), GetAD_Org_ID(), C_Element_ID, tree);
+                //if (errMsg.Length != 0)
+                //{
+                //    log.Log(Level.SEVERE, errMsg);
+                //    result = errMsg;
+                //    m_info.Append(errMsg);
+                //    m_trx.Rollback();
+                //    m_trx.Close();
+                //    return false;
+                //}
+
+                ////if (m_nap.SaveAccounts(GetAD_Client_ID(), GetAD_Org_ID(), C_Element_ID))
+                ////    m_info.Append(Msg.Translate(m_lang, "C_ElementValue_ID")).Append(" # ").Append(m_nap.Count).Append("\n");
+                ////else
+                ////{
+                ////    String err = "Acct Element Values NOT inserted";
+                ////    log.Log(Level.SEVERE, err);
+                ////    m_info.Append(err);
+                ////    m_trx.Rollback();
+                ////    m_trx.Close();
+                ////    return false;
+                ////}
+
+                //C_ElementValue_ID = m_nap.GetC_ElementValue_ID("DEFAULT_ACCT");
+                //log.Fine("C_ElementValue_ID=" + C_ElementValue_ID);
+
+                //********************END***********************//
             }
             /**
              *  Create AccountingSchema
@@ -2434,7 +2521,7 @@ namespace VAdvantage.Model
                 sql2 = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=181";
             else
                 sql2 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=181 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID";
+                    + "WHERE l.AD_Reference_ID=181 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND t.AD_Language='" + m_lang + "'";
             //
             int Element_OO = 0, Element_AC = 0, Element_PR = 0, Element_BP = 0, Element_PJ = 0,
                 Element_MC = 0, Element_SR = 0;
@@ -2575,197 +2662,205 @@ namespace VAdvantage.Model
             tableName = "C_AcctSchema_GL";
             if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
-                sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_GL (");
-                sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
-                    /*jz
-                        + "USESUSPENSEBALANCING,SUSPENSEBALANCING_Acct,"
-                        + "USESUSPENSEERROR,SUSPENSEERROR_Acct,"
-                        + "USECURRENCYBALANCING,CURRENCYBALANCING_Acct,"
-                        + "RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,"
-                        + "INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct,"
-                        + "PPVOFFSET_Acct, CommitmentOffset_Acct) VALUES (");
-                    sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",")
-                        .Append("'Y',").Append(GetAcct("SUSPENSEBALANCING_Acct")).Append(",")
-                        .Append("'Y',").Append(GetAcct("SUSPENSEERROR_Acct")).Append(",")
-                        .Append("'Y',").Append(GetAcct("CURRENCYBALANCING_Acct")).Append(",");
-                    //  RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,
-                    sqlCmd.Append(GetAcct("RETAINEDEARNING_Acct")).Append(",")
-                        .Append(GetAcct("INCOMESUMMARY_Acct")).Append(",")
-                    //  INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct)
-                        .Append(GetAcct("INTERCOMPANYDUETO_Acct")).Append(",")
-                        .Append(GetAcct("INTERCOMPANYDUEFROM_Acct")).Append(",")
-                        .Append(GetAcct("PPVOFFSET_Acct")).Append(",")
-                        */
-                    + "UseSuspenseBalancing,SuspenseBalancing_Acct,"
-                    + "UseSuspenseError,SuspenseError_Acct,"
-                    + "UseCurrencyBalancing,CurrencyBalancing_Acct,"
-                    + "RetainedEarning_Acct,IncomeSummary_Acct,"
-                    + "IntercompanyDueTo_Acct,IntercompanyDueFrom_Acct,"
-                    + "PPVOffset_Acct, CommitmentOffset_Acct) VALUES (");
-                sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",")
-                    .Append("'Y',").Append(GetAcct("SuspenseBalancing_Acct")).Append(",")
-                    .Append("'Y',").Append(GetAcct("SuspenseError_Acct")).Append(",")
-                    .Append("'Y',").Append(GetAcct("CurrencyBalancing_Acct")).Append(",");
-                //  RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,
-                sqlCmd.Append(GetAcct("RetainedEarning_Acct")).Append(",")
-                    .Append(GetAcct("INCOMESUMMARY_Acct")).Append(",")
-                    //  INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct)
-                    .Append(GetAcct("IntercompanyDueTo_Acct")).Append(",")
-                    .Append(GetAcct("IntercompanyDueFrom_Acct")).Append(",")
-                    .Append(GetAcct("PPVOffset_Acct")).Append(",")
-                    .Append(GetAcct("CommitmentOffset_Acct"))
-                    .Append(")");
-                if (m_accountsOK)
-                    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                else
-                    no = -1;
-                if (no != 1)
-                {
-                    String err = "GL Accounts NOT inserted";
-                    //result = err;
-                    log.Log(Level.SEVERE, err);
-                    m_info.Append(err);
-                    m_trx.Rollback();
-                    m_trx.Close();
-                    return false;
-                }
+                //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
+
+                //sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_GL (");
+                //sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
+                //    /*jz
+                //        + "USESUSPENSEBALANCING,SUSPENSEBALANCING_Acct,"
+                //        + "USESUSPENSEERROR,SUSPENSEERROR_Acct,"
+                //        + "USECURRENCYBALANCING,CURRENCYBALANCING_Acct,"
+                //        + "RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,"
+                //        + "INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct,"
+                //        + "PPVOFFSET_Acct, CommitmentOffset_Acct) VALUES (");
+                //    sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",")
+                //        .Append("'Y',").Append(GetAcct("SUSPENSEBALANCING_Acct")).Append(",")
+                //        .Append("'Y',").Append(GetAcct("SUSPENSEERROR_Acct")).Append(",")
+                //        .Append("'Y',").Append(GetAcct("CURRENCYBALANCING_Acct")).Append(",");
+                //    //  RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,
+                //    sqlCmd.Append(GetAcct("RETAINEDEARNING_Acct")).Append(",")
+                //        .Append(GetAcct("INCOMESUMMARY_Acct")).Append(",")
+                //    //  INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct)
+                //        .Append(GetAcct("INTERCOMPANYDUETO_Acct")).Append(",")
+                //        .Append(GetAcct("INTERCOMPANYDUEFROM_Acct")).Append(",")
+                //        .Append(GetAcct("PPVOFFSET_Acct")).Append(",")
+                //        */
+                //    + "UseSuspenseBalancing,SuspenseBalancing_Acct,"
+                //    + "UseSuspenseError,SuspenseError_Acct,"
+                //    + "UseCurrencyBalancing,CurrencyBalancing_Acct,"
+                //    + "RetainedEarning_Acct,IncomeSummary_Acct,"
+                //    + "IntercompanyDueTo_Acct,IntercompanyDueFrom_Acct,"
+                //    + "PPVOffset_Acct, CommitmentOffset_Acct) VALUES (");
+                //sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",")
+                //    .Append("'Y',").Append(GetAcct("SuspenseBalancing_Acct")).Append(",")
+                //    .Append("'Y',").Append(GetAcct("SuspenseError_Acct")).Append(",")
+                //    .Append("'Y',").Append(GetAcct("CurrencyBalancing_Acct")).Append(",");
+                ////  RETAINEDEARNING_Acct,INCOMESUMMARY_Acct,
+                //sqlCmd.Append(GetAcct("RetainedEarning_Acct")).Append(",")
+                //    .Append(GetAcct("INCOMESUMMARY_Acct")).Append(",")
+                //    //  INTERCOMPANYDUETO_Acct,INTERCOMPANYDUEFROM_Acct)
+                //    .Append(GetAcct("IntercompanyDueTo_Acct")).Append(",")
+                //    .Append(GetAcct("IntercompanyDueFrom_Acct")).Append(",")
+                //    .Append(GetAcct("PPVOffset_Acct")).Append(",")
+                //    .Append(GetAcct("CommitmentOffset_Acct"))
+                //    .Append(")");
+                //if (m_accountsOK)
+                //    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                //else
+                //    no = -1;
+                //if (no != 1)
+                //{
+                //    String err = "GL Accounts NOT inserted";
+                //    result = err;
+                //    log.Log(Level.SEVERE, err);
+                //    m_info.Append(err);
+                //    m_trx.Rollback();
+                //    m_trx.Close();
+                //    return false;
+                //}
+
+                //********************END***********************//
             }
             //	Create Std Accounts
             tableName = "C_AcctSchema_GL";
             if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
-                sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_Default (");
-                sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
-                    + "W_Inventory_Acct,W_Differences_Acct,W_Revaluation_Acct,W_InvActualAdjust_Acct, "
-                    + "P_Revenue_Acct,P_Expense_Acct,P_CostAdjustment_Acct,P_InventoryClearing_Acct,P_Asset_Acct,P_COGS_Acct, "
-                    + "P_PurchasePriceVariance_Acct,P_InvoicePriceVariance_Acct,P_TradeDiscountRec_Acct,P_TradeDiscountGrant_Acct, "
-                    + "C_Receivable_Acct,C_Receivable_Services_Acct,C_Prepayment_Acct, "
-                    + "V_Liability_Acct,V_Liability_Services_Acct,V_Prepayment_Acct, "
-                    + "PayDiscount_Exp_Acct,PayDiscount_Rev_Acct,WriteOff_Acct, "
-                    + "UnrealizedGain_Acct,UnrealizedLoss_Acct,RealizedGain_Acct,RealizedLoss_Acct, "
-                    + "Withholding_Acct,E_Prepayment_Acct,E_Expense_Acct, "
-                    + "PJ_Asset_Acct,PJ_WIP_Acct,"
-                    + "T_Expense_Acct,T_Liability_Acct,T_Receivables_Acct,T_Due_Acct,T_Credit_Acct, "
-                    + "B_InTransit_Acct,B_Asset_Acct,B_Expense_Acct,B_InterestRev_Acct,B_InterestExp_Acct,"
-                    + "B_Unidentified_Acct,B_SettlementGain_Acct,B_SettlementLoss_Acct,"
-                    + "B_RevaluationGain_Acct,B_RevaluationLoss_Acct,B_PaymentSelect_Acct,B_UnallocatedCash_Acct, "
-                    + "Ch_Expense_Acct,Ch_Revenue_Acct, "
-                    + "UnEarnedRevenue_Acct,NotInvoicedReceivables_Acct,NotInvoicedRevenue_Acct,NotInvoicedReceipts_Acct, "
-                    + "CB_Asset_Acct,CB_CashTransfer_Acct,CB_Differences_Acct,CB_Expense_Acct,CB_Receipt_Acct,"
-                    + "WO_MATERIAL_ACCT,WO_MATERIALOVERHD_ACCT,WO_RESOURCE_ACCT,WC_OVERHEAD_ACCT,P_MATERIALOVERHD_ACCT,"
-                    + "WO_MATERIALVARIANCE_ACCT,WO_MATERIALOVERHDVARIANCE_ACCT,WO_RESOURCEVARIANCE_ACCT,WO_OVERHDVARIANCE_ACCT,"
-                    + "WO_SCRAP_ACCT,P_Resource_Absorption_Acct,Overhead_Absorption_Acct) VALUES (");
-                //+ "ASSET_DEPRECIATION_ACCT,ASSET_DISP_REVENUE_ACCT) VALUES (");
-                sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",");
-                //  W_INVENTORY_Acct,W_Differences_Acct,W_REVALUATION_Acct,W_INVACTUALADJUST_Acct
-                sqlCmd.Append(GetAcct("W_Inventory_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("W_Differences_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("W_Revaluation_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("W_InvActualAdjust_Acct")).Append(", ");
-                //  P_Revenue_Acct,P_Expense_Acct,P_Asset_Acct,P_COGS_Acct,
-                sqlCmd.Append(GetAcct("P_Revenue_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_Expense_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_CostAdjustment_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_InventoryClearing_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_Asset_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_COGS_Acct")).Append(", ");
-                //  P_PURCHASEPRICEVARIANCE_Acct,P_INVOICEPRICEVARIANCE_Acct,P_TRADEDISCOUNTREC_Acct,P_TRADEDISCOUNTGRANT_Acct,
-                sqlCmd.Append(GetAcct("P_PurchasePriceVariance_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_InvoicePriceVariance_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_TradeDiscountRec_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("P_TradeDiscountGrant_Acct")).Append(", ");
-                //  C_RECEIVABLE_Acct,C_Receivable_Services_Acct,C_PREPAYMENT_Acct,
-                sqlCmd.Append(GetAcct("C_Receivable_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("C_Receivable_Services_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("C_Prepayment_Acct")).Append(", ");
-                //  V_LIABILITY_Acct,V_LIABILITY_Services_Acct,V_Prepayment_Acct,
-                sqlCmd.Append(GetAcct("V_Liability_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("V_Liability_Services_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("V_Prepayment_Acct")).Append(", ");
-                //  PAYDISCOUNT_EXP_Acct,PAYDISCOUNT_REV_Acct,WRITEOFF_Acct,
-                sqlCmd.Append(GetAcct("PayDiscount_Exp_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("PayDiscount_Rev_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("WriteOff_Acct")).Append(", ");
-                //  UNREALIZEDGAIN_Acct,UNREALIZEDLOSS_Acct,REALIZEDGAIN_Acct,REALIZEDLOSS_Acct,
-                sqlCmd.Append(GetAcct("UnrealizedGain_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("UnrealizedLoss_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("RealizedGain_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("RealizedLoss_Acct")).Append(", ");
-                //  WITHHOLDING_Acct,E_Prepayment_Acct,E_Expense_Acct,
-                sqlCmd.Append(GetAcct("Withholding_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("E_Prepayment_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("E_Expense_Acct")).Append(", ");
-                //  PJ_Asset_Acct,PJ_WIP_Acct,
-                sqlCmd.Append(GetAcct("PJ_Asset_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("PJ_WIP_Acct")).Append(",");
-                //  T_Expense_Acct,T_Liability_Acct,T_Receivables_Acct,T_DUE_Acct,T_CREDIT_Acct,
-                sqlCmd.Append(GetAcct("T_Expense_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("T_Liability_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("T_Receivables_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("T_Due_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("T_Credit_Acct")).Append(", ");
-                //  B_INTRANSIT_Acct,B_Asset_Acct,B_Expense_Acct,B_INTERESTREV_Acct,B_INTERESTEXP_Acct,
-                sqlCmd.Append(GetAcct("B_InTransit_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_Asset_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_Expense_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_InterestREV_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_InterestEXP_Acct")).Append(",");
-                //  B_UNIDENTIFIED_Acct,B_SETTLEMENTGAIN_Acct,B_SETTLEMENTLOSS_Acct,
-                sqlCmd.Append(GetAcct("B_Unidentified_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_SettlementGain_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_SettlementLoss_Acct")).Append(",");
-                //  B_RevaluationGain_Acct,B_RevaluationLoss_Acct,B_PAYMENTSELECT_Acct,B_UnallocatedCash_Acct,
-                sqlCmd.Append(GetAcct("B_RevaluationGain_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_RevaluationLoss_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_PaymentSelect_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("B_UnallocatedCash_Acct")).Append(", ");
-                //  CH_Expense_Acct,CH_Revenue_Acct,
-                sqlCmd.Append(GetAcct("Ch_Expense_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("Ch_Revenue_Acct")).Append(", ");
-                //  UnEarnedRevenue_Acct,NotInvoicedReceivables_Acct,NotInvoicedRevenue_Acct,NotInvoicedReceipts_Acct,
-                sqlCmd.Append(GetAcct("UnEarnedRevenue_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("NotInvoicedReceivables_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("NotInvoicedRevenue_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("NotInvoicedReceipts_Acct")).Append(", ");
-                //  CB_Asset_Acct,CB_CashTransfer_Acct,CB_Differences_Acct,CB_Expense_Acct,CB_Receipt_Acct)
-                sqlCmd.Append(GetAcct("CB_Asset_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("CB_CashTransfer_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("CB_Differences_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("CB_Expense_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("CB_Receipt_Acct")).Append(",");
+                //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
 
-                //Manufacturing
-                sqlCmd.Append(GetAcct("WO_MATERIAL_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_MATERIALOVERHD_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_RESOURCE_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WC_OVERHEAD_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("P_MATERIALOVERHD_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_MATERIALVARIANCE_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_MATERIALOVERHDVARIANCE_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_RESOURCEVARIANCE_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_OVERHDVARIANCE_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("WO_SCRAP_ACCT")).Append(",");
-                sqlCmd.Append(GetAcct("P_Resource_Absorption_Acct")).Append(",");
-                sqlCmd.Append(GetAcct("Overhead_Absorption_Acct")).Append(")");
 
-                //FixAsset
-                //sqlCmd.Append(GetAcct("ASSET_DEPRECIATION_ACCT")).Append(",");
-                //sqlCmd.Append(GetAcct("ASSET_DISP_REVENUE_ACCT")).Append(")");
+                //sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_Default (");
+                //sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
+                //    + "W_Inventory_Acct,W_Differences_Acct,W_Revaluation_Acct,W_InvActualAdjust_Acct, "
+                //    + "P_Revenue_Acct,P_Expense_Acct,P_CostAdjustment_Acct,P_InventoryClearing_Acct,P_Asset_Acct,P_COGS_Acct, "
+                //    + "P_PurchasePriceVariance_Acct,P_InvoicePriceVariance_Acct,P_TradeDiscountRec_Acct,P_TradeDiscountGrant_Acct, "
+                //    + "C_Receivable_Acct,C_Receivable_Services_Acct,C_Prepayment_Acct, "
+                //    + "V_Liability_Acct,V_Liability_Services_Acct,V_Prepayment_Acct, "
+                //    + "PayDiscount_Exp_Acct,PayDiscount_Rev_Acct,WriteOff_Acct, "
+                //    + "UnrealizedGain_Acct,UnrealizedLoss_Acct,RealizedGain_Acct,RealizedLoss_Acct, "
+                //    + "Withholding_Acct,E_Prepayment_Acct,E_Expense_Acct, "
+                //    + "PJ_Asset_Acct,PJ_WIP_Acct,"
+                //    + "T_Expense_Acct,T_Liability_Acct,T_Receivables_Acct,T_Due_Acct,T_Credit_Acct, "
+                //    + "B_InTransit_Acct,B_Asset_Acct,B_Expense_Acct,B_InterestRev_Acct,B_InterestExp_Acct,"
+                //    + "B_Unidentified_Acct,B_SettlementGain_Acct,B_SettlementLoss_Acct,"
+                //    + "B_RevaluationGain_Acct,B_RevaluationLoss_Acct,B_PaymentSelect_Acct,B_UnallocatedCash_Acct, "
+                //    + "Ch_Expense_Acct,Ch_Revenue_Acct, "
+                //    + "UnEarnedRevenue_Acct,NotInvoicedReceivables_Acct,NotInvoicedRevenue_Acct,NotInvoicedReceipts_Acct, "
+                //    + "CB_Asset_Acct,CB_CashTransfer_Acct,CB_Differences_Acct,CB_Expense_Acct,CB_Receipt_Acct,"
+                //    + "WO_MATERIAL_ACCT,WO_MATERIALOVERHD_ACCT,WO_RESOURCE_ACCT,WC_OVERHEAD_ACCT,P_MATERIALOVERHD_ACCT,"
+                //    + "WO_MATERIALVARIANCE_ACCT,WO_MATERIALOVERHDVARIANCE_ACCT,WO_RESOURCEVARIANCE_ACCT,WO_OVERHDVARIANCE_ACCT,"
+                //    + "WO_SCRAP_ACCT,P_Resource_Absorption_Acct,Overhead_Absorption_Acct) VALUES (");
+                ////+ "ASSET_DEPRECIATION_ACCT,ASSET_DISP_REVENUE_ACCT) VALUES (");
+                //sqlCmd.Append(m_stdValues).Append(",").Append(m_as.GetC_AcctSchema_ID()).Append(",");
+                ////  W_INVENTORY_Acct,W_Differences_Acct,W_REVALUATION_Acct,W_INVACTUALADJUST_Acct
+                //sqlCmd.Append(GetAcct("W_Inventory_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("W_Differences_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("W_Revaluation_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("W_InvActualAdjust_Acct")).Append(", ");
+                ////  P_Revenue_Acct,P_Expense_Acct,P_Asset_Acct,P_COGS_Acct,
+                //sqlCmd.Append(GetAcct("P_Revenue_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_Expense_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_CostAdjustment_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_InventoryClearing_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_Asset_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_COGS_Acct")).Append(", ");
+                ////  P_PURCHASEPRICEVARIANCE_Acct,P_INVOICEPRICEVARIANCE_Acct,P_TRADEDISCOUNTREC_Acct,P_TRADEDISCOUNTGRANT_Acct,
+                //sqlCmd.Append(GetAcct("P_PurchasePriceVariance_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_InvoicePriceVariance_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_TradeDiscountRec_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("P_TradeDiscountGrant_Acct")).Append(", ");
+                ////  C_RECEIVABLE_Acct,C_Receivable_Services_Acct,C_PREPAYMENT_Acct,
+                //sqlCmd.Append(GetAcct("C_Receivable_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("C_Receivable_Services_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("C_Prepayment_Acct")).Append(", ");
+                ////  V_LIABILITY_Acct,V_LIABILITY_Services_Acct,V_Prepayment_Acct,
+                //sqlCmd.Append(GetAcct("V_Liability_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("V_Liability_Services_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("V_Prepayment_Acct")).Append(", ");
+                ////  PAYDISCOUNT_EXP_Acct,PAYDISCOUNT_REV_Acct,WRITEOFF_Acct,
+                //sqlCmd.Append(GetAcct("PayDiscount_Exp_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("PayDiscount_Rev_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("WriteOff_Acct")).Append(", ");
+                ////  UNREALIZEDGAIN_Acct,UNREALIZEDLOSS_Acct,REALIZEDGAIN_Acct,REALIZEDLOSS_Acct,
+                //sqlCmd.Append(GetAcct("UnrealizedGain_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("UnrealizedLoss_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("RealizedGain_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("RealizedLoss_Acct")).Append(", ");
+                ////  WITHHOLDING_Acct,E_Prepayment_Acct,E_Expense_Acct,
+                //sqlCmd.Append(GetAcct("Withholding_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("E_Prepayment_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("E_Expense_Acct")).Append(", ");
+                ////  PJ_Asset_Acct,PJ_WIP_Acct,
+                //sqlCmd.Append(GetAcct("PJ_Asset_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("PJ_WIP_Acct")).Append(",");
+                ////  T_Expense_Acct,T_Liability_Acct,T_Receivables_Acct,T_DUE_Acct,T_CREDIT_Acct,
+                //sqlCmd.Append(GetAcct("T_Expense_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("T_Liability_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("T_Receivables_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("T_Due_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("T_Credit_Acct")).Append(", ");
+                ////  B_INTRANSIT_Acct,B_Asset_Acct,B_Expense_Acct,B_INTERESTREV_Acct,B_INTERESTEXP_Acct,
+                //sqlCmd.Append(GetAcct("B_InTransit_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_Asset_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_Expense_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_InterestREV_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_InterestEXP_Acct")).Append(",");
+                ////  B_UNIDENTIFIED_Acct,B_SETTLEMENTGAIN_Acct,B_SETTLEMENTLOSS_Acct,
+                //sqlCmd.Append(GetAcct("B_Unidentified_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_SettlementGain_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_SettlementLoss_Acct")).Append(",");
+                ////  B_RevaluationGain_Acct,B_RevaluationLoss_Acct,B_PAYMENTSELECT_Acct,B_UnallocatedCash_Acct,
+                //sqlCmd.Append(GetAcct("B_RevaluationGain_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_RevaluationLoss_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_PaymentSelect_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("B_UnallocatedCash_Acct")).Append(", ");
+                ////  CH_Expense_Acct,CH_Revenue_Acct,
+                //sqlCmd.Append(GetAcct("Ch_Expense_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("Ch_Revenue_Acct")).Append(", ");
+                ////  UnEarnedRevenue_Acct,NotInvoicedReceivables_Acct,NotInvoicedRevenue_Acct,NotInvoicedReceipts_Acct,
+                //sqlCmd.Append(GetAcct("UnEarnedRevenue_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("NotInvoicedReceivables_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("NotInvoicedRevenue_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("NotInvoicedReceipts_Acct")).Append(", ");
+                ////  CB_Asset_Acct,CB_CashTransfer_Acct,CB_Differences_Acct,CB_Expense_Acct,CB_Receipt_Acct)
+                //sqlCmd.Append(GetAcct("CB_Asset_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("CB_CashTransfer_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("CB_Differences_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("CB_Expense_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("CB_Receipt_Acct")).Append(",");
 
-                if (m_accountsOK)
-                    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
-                else
-                    no = -1;
-                if (no != 1)
-                {
-                    String err = "Default Accounts Not inserted";
-                    //result = err;
-                    log.Log(Level.SEVERE, err);
-                    m_info.Append(err);
-                    m_trx.Rollback();
-                    m_trx.Close();
-                    return false;
-                }
+                ////Manufacturing
+                //sqlCmd.Append(GetAcct("WO_MATERIAL_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_MATERIALOVERHD_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_RESOURCE_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WC_OVERHEAD_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("P_MATERIALOVERHD_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_MATERIALVARIANCE_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_MATERIALOVERHDVARIANCE_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_RESOURCEVARIANCE_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_OVERHDVARIANCE_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("WO_SCRAP_ACCT")).Append(",");
+                //sqlCmd.Append(GetAcct("P_Resource_Absorption_Acct")).Append(",");
+                //sqlCmd.Append(GetAcct("Overhead_Absorption_Acct")).Append(")");
+
+                ////FixAsset
+                ////sqlCmd.Append(GetAcct("ASSET_DEPRECIATION_ACCT")).Append(",");
+                ////sqlCmd.Append(GetAcct("ASSET_DISP_REVENUE_ACCT")).Append(")");
+
+                //if (m_accountsOK)
+                //    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                //else
+                //    no = -1;
+                //if (no != 1)
+                //{
+                //    String err = "Default Accounts Not inserted";
+                //    result = err;
+                //    log.Log(Level.SEVERE, err);
+                //    m_info.Append(err);
+                //    m_trx.Rollback();
+                //    m_trx.Close();
+                //    return false;
+                //}
+                //********************END***********************//
             }
             //  GL Categories
             tableName = "GL_Category";
@@ -2784,7 +2879,7 @@ namespace VAdvantage.Model
                 //	Base DocumentTypes
                 int ii = CreateDocType("GL Journal", Msg.GetElement(m_ctx, "GL_Journal_ID"),
                     MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
-                    1000, GL_GL);
+                    1000, GL_GL, MDocType.POSTINGCODE_GLJOURNAL);
                 if (ii == 0)
                 {
                     String err = "Document Type not created";
@@ -2796,121 +2891,199 @@ namespace VAdvantage.Model
                 }
                 CreateDocType("GL Journal Batch", Msg.GetElement(m_ctx, "GL_JournalBatch_ID"),
                     MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
-                    100, GL_GL);
+                    100, GL_GL, MDocType.POSTINGCODE_GLJOURNALBATCH);
                 //	MDocBaseType.DOCBASETYPE_GLDocument
                 //
                 int DT_I = CreateDocType("AR Invoice", Msg.GetElement(m_ctx, "C_Invoice_ID", true),
                     MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
-                    100000, GL_ARI);
+                    100000, GL_ARI, MDocType.POSTINGCODE_ARINVOICE);
                 int DT_II = CreateDocType("AR Invoice Indirect", Msg.GetElement(m_ctx, "C_Invoice_ID", true),
                     MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
-                    150000, GL_ARI);
+                    150000, GL_ARI, MDocType.POSTINGCODE_ARINVOICEINDIRECT);
                 //int DT_IC = CreateDocType("AR Credit Memo", Msg.GetMsg(m_ctx, "CreditMemo"),
                 //    MDocBaseType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
                 //    170000, GL_ARI);
                 int DT_IC = CreateDocType("AR Credit Memo", Msg.GetMsg(m_ctx, "CreditMemo"),
                   MDocBaseType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
-                  170000, GL_ARI, true, false);
+                  170000, GL_ARI, true, false, MDocType.POSTINGCODE_ARCREDITMEMO);
                 //	MDocBaseType.DOCBASETYPE_ARProFormaInvoice
 
                 CreateDocType("AP Invoice", Msg.GetElement(m_ctx, "C_Invoice_ID", false),
                     MDocBaseType.DOCBASETYPE_APINVOICE, null, 0, 0,
-                    0, GL_API);
+                    0, GL_API, MDocType.POSTINGCODE_APINVOICE);
                 //CreateDocType("AP CreditMemo", Msg.GetMsg(m_ctx, "CreditMemo"),
                 //    MDocBaseType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
                 //    0, GL_API);
                 CreateDocType("AP CreditMemo", Msg.GetMsg(m_ctx, "CreditMemo"),
                     MDocBaseType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
-                    0, GL_API, true, false);
+                    0, GL_API, true, false, MDocType.POSTINGCODE_APCREDITMEMO);
                 CreateDocType("Match Invoice", Msg.GetElement(m_ctx, "M_MatchInv_ID", false),
                     MDocBaseType.DOCBASETYPE_MATCHINVOICE, null, 0, 0,
-                    390000, GL_API);
+                    390000, GL_API, MDocType.POSTINGCODE_MATCHINVOICE);
 
                 CreateDocType("AR Receipt", Msg.GetElement(m_ctx, "C_Payment_ID", true),
                     MDocBaseType.DOCBASETYPE_ARRECEIPT, null, 0, 0,
-                    0, GL_ARR);
+                    0, GL_ARR, MDocType.POSTINGCODE_ARRECEIPT);
                 CreateDocType("AP Payment", Msg.GetElement(m_ctx, "C_Payment_ID", false),
                     MDocBaseType.DOCBASETYPE_APPAYMENT, null, 0, 0,
-                    0, GL_APP);
+                    0, GL_APP, MDocType.POSTINGCODE_APPAYMENT);
                 CreateDocType("Allocation", "Allocation",
                     MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, null, 0, 0,
-                    490000, GL_CASH);
+                    490000, GL_CASH,MDocType.POSTINGCODE_ALLOCATION);
 
                 int DT_S = CreateDocType("MM Shipment", "Delivery Note",
                     MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
-                    500000, GL_MM);
+                    500000, GL_MM, MDocType.POSTINGCODE_MMSHIPMENT);
                 int DT_SI = CreateDocType("MM Shipment Indirect", "Delivery Note",
                     MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
-                    550000, GL_MM);
+                    550000, GL_MM, MDocType.POSTINGCODE_MMSHIPMENTINDIRECT);
                 int DT_SR = CreateDocType("MM Customer Return", "Customer Return",
                     MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
-                    590000, GL_MM, true, false);
+                    590000, GL_MM, true, false, MDocType.POSTINGCODE_MMCUSTOMERRETURN);
 
                 CreateDocType("MM Receipt", "Vendor Delivery",
-                    MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
-                    0, GL_MM);
+                   MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
+                   0, GL_MM, MDocType.POSTINGCODE_MMRECEIPT);
                 CreateDocType("MM Vendor Return", "Vendor Return",
                     MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
-                    0, GL_MM, true, false);
+                    0, GL_MM, true, false, MDocType.POSTINGCODE_MMVENDORRETURN);
 
                 CreateDocType("Purchase Order", Msg.GetElement(m_ctx, "C_Order_ID", false),
                     MDocBaseType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
-                    800000, GL_None);
+                    800000, GL_None, MDocType.POSTINGCODE_PURCHASEORDER);
                 CreateDocType("Vendor RMA", "Vendor RMA",
                     MDocBaseType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
-                    890000, GL_None, true, false);
+                    890000, GL_None, true, false, MDocType.POSTINGCODE_VENDORRMA);
                 CreateDocType("Match PO", Msg.GetElement(m_ctx, "M_MatchPO_ID", false),
                     MDocBaseType.DOCBASETYPE_MATCHPO, null, 0, 0,
-                    880000, GL_None);
+                    880000, GL_None, MDocType.POSTINGCODE_MATCHPO);
                 CreateDocType("Purchase Requisition", Msg.GetElement(m_ctx, "M_Requisition_ID", false),
                     MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, null, 0, 0,
-                    900000, GL_None);
+                    900000, GL_None, MDocType.POSTINGCODE_PURCHASEREQUISITION);
 
                 CreateDocType("Bank Statement", Msg.GetElement(m_ctx, "C_BankStatemet_ID", true),
                     MDocBaseType.DOCBASETYPE_BANKSTATEMENT, null, 0, 0,
-                    700000, GL_CASH);
+                    700000, GL_CASH, MDocType.POSTINGCODE_BANKSTATEMENT);
                 CreateDocType("Cash Journal", Msg.GetElement(m_ctx, "C_Cash_ID", true),
                     MDocBaseType.DOCBASETYPE_CASHJOURNAL, null, 0, 0,
-                    750000, GL_CASH);
+                    750000, GL_CASH, MDocType.POSTINGCODE_CASHJOURNAL);
 
                 CreateDocType("Material Movement", Msg.GetElement(m_ctx, "M_Movement_ID", false),
                     MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, null, 0, 0,
-                    610000, GL_MM);
+                    610000, GL_MM, MDocType.POSTINGCODE_MATERIALMOVEMENT);
                 CreateDocType("Physical Inventory", Msg.GetElement(m_ctx, "M_Inventory_ID", false),
                     MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
-                    620000, GL_MM);
+                    620000, GL_MM, MDocType.POSTINGCODE_PHYSICALINVENTORY);
                 CreateDocType("Material Production", Msg.GetElement(m_ctx, "M_Production_ID", false),
                     MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, null, 0, 0,
-                    630000, GL_MM);
+                    630000, GL_MM, MDocType.POSTINGCODE_MATERIALPRODUCTION);
                 CreateDocType("Project Issue", Msg.GetElement(m_ctx, "C_ProjectIssue_ID", false),
                     MDocBaseType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
-                    640000, GL_MM);
+                    640000, GL_MM, MDocType.POSTINGCODE_PROJECTISSUE);
+
+                //If Change name here, then change at other places also.
+                CreateDocType(InternalUseInventory, Msg.GetElement(m_ctx, "M_Inventory_ID", false),
+                    MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
+                    620000, GL_MM, MDocType.POSTINGCODE_PHYSICALINVENTORY);
 
                 //  Order Entry
-                CreateDocType("Binding offer", "Quotation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
-                    10000, GL_None);
+                //CreateDocType("Binding offer", "Quotation",
+                //    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
+                //    10000, GL_None, MDocType.POSTINGCODE_BINDINGOFFER);
                 CreateDocType("Non binding offer", "Proposal",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Proposal, 0, 0,
-                    20000, GL_None);
+                    20000, GL_None, MDocType.POSTINGCODE_NONBINDINGOFFER);
                 CreateDocType("Prepay Order", "Prepay Order",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_PrepayOrder, DT_S, DT_I,
-                    30000, GL_None);
+                    30000, GL_None, MDocType.POSTINGCODE_PREPAYORDER);
                 CreateDocType("Standard Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_StandardOrder, DT_S, DT_I,
-                    50000, GL_None);
+                    50000, GL_None, MDocType.POSTINGCODE_STANDARDORDER);
                 CreateDocType("Customer RMA", "Customer RMA",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_StandardOrder, DT_SR, DT_IC,
-                    59000, GL_None, true, false);
+                    59000, GL_None, true, false, MDocType.POSTINGCODE_CUSTOMERRMA);
                 CreateDocType("Credit Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_OnCreditOrder, DT_SI, DT_I,
-                    60000, GL_None);   //  RE
+                    60000, GL_None, MDocType.POSTINGCODE_CREDITORDER);   //  RE
                 CreateDocType("Warehouse Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_WarehouseOrder, DT_S, DT_I,
-                    70000, GL_None);    //  LS
+                    70000, GL_None, MDocType.POSTINGCODE_WAREHOUSEORDER);    //  LS
+
+                // Release Sales Order
+                int DT_R = CreateDocType("Release Sales Order", "Blanket Order",
+                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_BlanketOrder, DT_S, DT_I,
+                    72000, GL_None, MDocType.POSTINGCODE_RELEASESALESORDER);
+
+                // Blanket Sales Order
+                CreateDocType("Blanket Sales Order", "Blanket Order",
+                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, null, DT_R, 0,
+                    71000, GL_None, MDocType.POSTINGCODE_BLANKETSALESORDER);
+
+                // Release Purchase Order
+                DT_R = CreateDocType("Release Purchase Order", "Blanket Order",
+                    MDocBaseType.DOCBASETYPE_PURCHASEORDER, MDocType.DOCSUBTYPESO_BlanketOrder, 0, 0,
+                    720000, GL_None, MDocType.POSTINGCODE_RELEASEPURCHASEORDER);
+
+                // Blanket Purchase Order
+                CreateDocType("Blanket Purchase Order", "Blanket Order",
+                    MDocBaseType.DOCBASETYPE_BLANKETSALESORDER, null, DT_R, 0,
+                    710000, GL_None, MDocType.POSTINGCODE_BLANKETPURCHASESORDER);
+
                 int DT = CreateDocType("POS Order", "Order Confirmation",
                     MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_POSOrder, DT_SI, DT_II,
-                    80000, GL_None);    // Bar
+                    80000, GL_None, MDocType.POSTINGCODE_POSORDER);    // Bar
+                #region Lakhwinder 29Jan2020
+                //Adding new DocBaseType
+                int docBasetypeID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocBaseType_ID from C_DocBaseType WHERE docbasetype='MMC'", null, m_trx));
+                if (docBasetypeID < 1)//INSERT DocBaseType
+                {
+
+                    DB.ExecuteQuery(@"INSERT INTO C_DocBaseType (AD_Client_ID,AD_Org_ID,C_DocBaseType_ID,Created,CreatedBy,Description,DocBaseType,EntityType,IsActive,Name,Updated,UpdatedBy) VALUES (
+                                            0,
+                                            0,
+                                            (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
+                                           " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                             " + m_ctx.GetAD_User_ID() + @",
+                                            '*** System Maintained ***',
+                                            '" + MDocBaseType.DOCBASETYPE_MoveConfirmation + @"',
+                                            'D',
+                                            'Y',
+                                            'Move Confirmation',
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            " + m_ctx.GetAD_User_ID() + @",
+                                        ) ", null, m_trx);
+
+
+                }
+                CreateDocType("Move Confirmation", "Move Confirmation",
+                    MDocBaseType.DOCBASETYPE_MoveConfirmation, null, 0, 0,
+                    0, GL_MM, String.Empty);
+
+                docBasetypeID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocBaseType_ID from C_DocBaseType WHERE docbasetype='SRC'", null, m_trx));
+                if (docBasetypeID < 1)//INSERT DocBaseType
+                {
+
+                    DB.ExecuteQuery(@"INSERT INTO C_DocBaseType (AD_Client_ID,AD_Org_ID,C_DocBaseType_ID,Created,CreatedBy,Description,DocBaseType,EntityType,IsActive,Name,Updated,UpdatedBy) VALUES (
+                                            0,
+                                            0,
+                                            (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            " + m_ctx.GetAD_User_ID() + @",
+                                            '*** System Maintained ***',
+                                            '" + MDocBaseType.DOCBASETYPE_ShipReceiptConfirmation + @"',
+                                            'D',
+                                            'Y',
+                                            'Ship/Receipt Confirmation',
+                                             " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
+                                            100
+                                        ) ", null, m_trx);
+
+                }
+                CreateDocType("Ship/Receipt Confirmation", "Ship/Receipt Confirmation",
+                   MDocBaseType.DOCBASETYPE_ShipReceiptConfirmation, null, 0, 0,
+                   0, GL_MM, String.Empty);
+
+                #endregion
                 //	POS As Default for window SO
                 //CreatePreference("C_DocTypeTarGet_ID", DT.ToString(), 143);
                 CreatePreference("C_DocTypeTarget_ID", DT.ToString(), 143);//13feb2013 lakhwinder
@@ -3013,12 +3186,14 @@ namespace VAdvantage.Model
         /// <param name="StartNo">doc no</param>
         /// <param name="GL_Category_ID">gl category</param>
         /// <returns>doc type or 0 for error</returns>
-        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int C_DocTypeShipment_ID, int C_DocTypeInvoice_ID, int StartNo, int GL_Category_ID)
+        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int C_DocTypeShipment_ID, int C_DocTypeInvoice_ID, int StartNo, int GL_Category_ID, string postingCode)
         {
             return CreateDocType(Name, PrintName, DocBaseType, DocSubTypeSO,
                     C_DocTypeShipment_ID, C_DocTypeInvoice_ID,
-                    StartNo, GL_Category_ID, false, true);
+                    StartNo, GL_Category_ID, false, true, postingCode);
         }	//	CreateDocType
+
+       
 
         /// <summary>
         /// Create Document Types with Sequence
@@ -3034,7 +3209,7 @@ namespace VAdvantage.Model
         /// <param name="IsCreateCounter"></param>
         /// <param name="isReturnTrx">optinal trx</param>
         /// <returns>doc type or 0 for error</returns>
-        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int C_DocTypeShipment_ID, int C_DocTypeInvoice_ID, int StartNo, int GL_Category_ID, bool isReturnTrx, bool IsCreateCounter)
+        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int C_DocTypeShipment_ID, int C_DocTypeInvoice_ID, int StartNo, int GL_Category_ID, bool isReturnTrx, bool IsCreateCounter, string postingCode)
         {
             MSequence sequence = null;
             if (StartNo != 0)
@@ -3052,8 +3227,20 @@ namespace VAdvantage.Model
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)
                 dt.SetDocSubTypeSO(DocSubTypeSO);
+
+
+            // For Blanket Order Set Document Type of Release
             if (C_DocTypeShipment_ID != 0)
-                dt.SetC_DocTypeShipment_ID(C_DocTypeShipment_ID);
+            {
+                if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))
+                {
+                    dt.SetDocumentTypeforReleases(C_DocTypeShipment_ID);
+                }
+                else
+                {
+                    dt.SetC_DocTypeShipment_ID(C_DocTypeShipment_ID);
+                }
+            }
             if (C_DocTypeInvoice_ID != 0)
                 dt.SetC_DocTypeInvoice_ID(C_DocTypeInvoice_ID);
             if (GL_Category_ID != 0)
@@ -3068,6 +3255,38 @@ namespace VAdvantage.Model
             dt.SetIsSOTrx();
             dt.SetIsReturnTrx(isReturnTrx);
             dt.SetIsCreateCounter(IsCreateCounter);
+
+            //Set Is Internal Use checked for Internal Use Inventory 
+            if (Name.Equals(InternalUseInventory))
+            {
+                dt.SetIsInternalUse(true);
+            }
+
+            // Set Blanket Transaction for Blanket Order
+            if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))
+            {
+                dt.Set_Value("IsBlanketTrx", true);
+            }
+
+            // Set Release Document for Release Order
+            if (postingCode.Equals(MDocType.POSTINGCODE_RELEASESALESORDER) || postingCode.Equals(MDocType.POSTINGCODE_RELEASEPURCHASEORDER))
+            {
+                dt.SetIsReleaseDocument(true);
+            }
+
+            //Add by Raghu for New accountig logic
+            try
+            {
+                if (postingCode.Length > 0)
+                {
+                    dt.SetValue(postingCode);
+                }
+            }
+            catch
+            {
+                //if column not found then also tenant must be created
+            }
+
             if (!dt.Save())
             {
                 log.Log(Level.SEVERE, "DocType NOT created - " + Name);
@@ -3263,6 +3482,13 @@ namespace VAdvantage.Model
                 else
                     log.Log(Level.SEVERE, "Tax NOT inserted");
 
+                sqlCmd.Clear();
+                sqlCmd.Append("UPDATE C_TaxCategory SET C_Tax_ID=" + tax.GetC_Tax_ID() + " WHERE C_TaxCategory_ID=" + C_TaxCategory_ID);
+                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                if (no != 1)
+                    log.Log(Level.SEVERE, "TaxCategory NOT Updated With Default Tax");
+
+
                 //	Create Product
                 product = new MProduct(m_ctx, 0, m_trx);
                 product.SetValue(defaultName);
@@ -3351,9 +3577,7 @@ namespace VAdvantage.Model
                 {
                     String err = "ClientInfo not updated";
                     log.Log(Level.SEVERE, err);
-                    m_info.Append(err);
-                    m_trx.Rollback();
-                    m_trx.Close();
+                    m_info.Append(err);                   
                     return false;
                 }
             }
@@ -3391,30 +3615,40 @@ namespace VAdvantage.Model
 
             }
 
-            ////	Create Sales Rep for Client-User
-            //MBPartner bpCU = new MBPartner(m_ctx, 0, m_trx);
-            //bpCU.SetValue(AD_User_U_Name);
-            //bpCU.SetName(AD_User_U_Name);
-            //bpCU.SetBPGroup(bpg);
-            //bpCU.SetIsEmployee(true);
-            //bpCU.SetIsSalesRep(true);
-            //if (bpCU.Save())
-            //    m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(AD_User_U_Name).Append("\n");
-            //else
-            //    log.Log(Level.SEVERE, "SalesRep (User) NOT inserted");
-            ////  Location for Client-User
+            //MBPartner bpCU = null;
+            //if (Common.Common.lstTableName.Contains("C_BPartner"))
+            //{
+            //    bpCU = new MBPartner(m_ctx, 0, m_trx);
+            //    bpCU.SetValue(AD_User_U_Name);
+            //    bpCU.SetName(AD_User_U_Name);
 
-            //MLocation bpLocCU = new MLocation(m_ctx, C_Country_ID, C_Region_ID, City, m_trx);
-            //bpLocCU.Save();
-            //MBPartnerLocation bplCU = new MBPartnerLocation(bpCU);
-            //bplCU.SetC_Location_ID(bpLocCU.GetC_Location_ID());
-            //if (!bplCU.Save())
-            //    log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
+            //    bpCU.SetBPGroup(bpg);
+            //    bpCU.SetIsEmployee(true);
+            //    bpCU.SetIsSalesRep(true);
+            //    if (bpCU.Save())
+            //        m_info.Append(Msg.Translate(m_lang, "SalesRep_ID")).Append("=").Append(AD_User_U_Name).Append("\n");
+            //    else
+            //        log.Log(Level.SEVERE, "SalesRep (User) NOT inserted");
 
+            //    if (Common.Common.lstTableName.Contains("C_BPartner_Location"))
+            //    {
+            //        //  Location for Client-User
+            //        MLocation bpLocCU = new MLocation(m_ctx, C_Country_ID, C_Region_ID, City, m_trx);
+            //        bpLocCU.Save();
+            //        MBPartnerLocation bplCU = new MBPartnerLocation(bpCU);
+            //        bplCU.SetC_Location_ID(bpLocCU.GetC_Location_ID());
+            //        if (!bplCU.Save())
+            //            log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
+            //    }
+            //}
 
-            ////  Update User
+            //////  Update User
             //sqlCmd = new StringBuilder("UPDATE AD_User SET C_BPartner_ID=");
-            //sqlCmd.Append(bpCU.GetC_BPartner_ID()).Append(" WHERE AD_User_ID=").Append(AD_User_U_ID);
+            //if (bpCU != null)
+            //{
+            //    sqlCmd.Append(bpCU.GetC_BPartner_ID());
+            //}
+            //sqlCmd.Append(" WHERE AD_User_ID=").Append(AD_User_U_ID);
             //no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
             //if (no != 1)
             //    log.Log(Level.SEVERE, "User of SalesRep (User) NOT updated");
@@ -3465,9 +3699,9 @@ namespace VAdvantage.Model
                 int C_PaymentTerm_ID = GetNextID(GetAD_Client_ID(), "C_PaymentTerm");
                 sqlCmd = new StringBuilder("INSERT INTO C_PaymentTerm ");
                 sqlCmd.Append("(C_PaymentTerm_ID,").Append(m_stdColumns).Append(",");
-                sqlCmd.Append("Value,Name,NetDays,GraceDays,DiscountDays,Discount,DiscountDays2,Discount2,IsDefault) VALUES (");
+                sqlCmd.Append("Value,Name,NetDays,GraceDays,DiscountDays,Discount,DiscountDays2,Discount2,IsDefault, IsValid) VALUES (");
                 sqlCmd.Append(C_PaymentTerm_ID).Append(",").Append(m_stdValues).Append(",");
-                sqlCmd.Append("'Immediate','Immediate',0,0,0,0,0,0,'Y')");
+                sqlCmd.Append("'Immediate','Immediate',0,0,0,0,0,0,'Y','Y')");
                 no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "PaymentTerm NOT inserted");
