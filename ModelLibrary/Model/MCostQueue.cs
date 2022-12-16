@@ -1021,7 +1021,9 @@ namespace VAdvantage.Model
                                     // convert amount on account date of M_Inout (discussed with Ashish, Suya, Mukesh sir)
                                     Price = MConversionRate.Convert(ctx, Price, order.GetC_Currency_ID(), acctSchema.GetC_Currency_ID(),
                                                                      inout.GetDateAcct(), order.GetC_ConversionType_ID(), AD_Client_ID, AD_Org_ID);
-                                    if (Price == 0)
+                                    // VIS_0045: 16-Dec-2022 -- DevOps ID - 1885
+                                    // System should allow calculating the cost even if the price is ZERO on a sales order because during consumption cost will not be affected
+                                    if (Price == 0 && !(windowName == "Customer Return" || windowName == "Shipment"))
                                     {
                                         if (optionalstr != "window")
                                         {
@@ -1034,7 +1036,8 @@ namespace VAdvantage.Model
                                         return false;
                                     }
                                 }
-                                else if (Price == 0) //when order created with ZERO price then not to calculate cost 
+                                // VIS_0045: 16-Dec-2022 -- DevOps ID - 1885
+                                else if (Price == 0 && !(windowName == "Customer Return" || windowName == "Shipment")) //when order created with ZERO price then not to calculate cost 
                                 {
                                     if (optionalstr != "window")
                                     {
