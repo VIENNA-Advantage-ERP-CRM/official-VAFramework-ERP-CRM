@@ -4701,6 +4701,7 @@ namespace VAdvantage.Model
             // VIS0060: UnLink all the Requisition Lines linked with this order line.
             DB.ExecuteQuery("UPDATE M_RequisitionLine SET C_OrderLine_ID = NULL WHERE C_OrderLine_ID = " + Get_ID(), null, Get_Trx());
 
+
             //16-Dec-2022
             //Developer: lakhwinder
             //Requester Mandeep Singh Randhawa
