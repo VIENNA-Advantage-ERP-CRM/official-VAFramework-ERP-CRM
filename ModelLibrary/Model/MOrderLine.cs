@@ -4708,27 +4708,27 @@ namespace VAdvantage.Model
             //On Reactivation of Order If EDI Module Installed Record is copied to Replica Table
             //Once one trying to Delete order Line After Reactivation of Order System was not allowing to delete 
             //Rollback not required as System will recreate replica on reactivation
-            if (Env.IsModuleInstalled("VA071_"))
-            {
-                if (!DeleteVA071POL())
-                {
-                    log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "CannotDeleteOrderReplica"));
-                    return false;
-                }
-            }
+            //if (Env.IsModuleInstalled("VA071_"))
+            //{
+            //    if (!DeleteVA071POL())
+            //    {
+            //        log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "CannotDeleteOrderReplica"));
+            //        return false;
+            //    }
+            //}
 
             return true;
         }
         /// <summary>
         /// Delete Respective line from PO Replica
         /// </summary>
-        private bool DeleteVA071POL()
-        {
-            String str = "Delete FROM VA071_POL WHERE C_OrderLine_ID=" + GetC_OrderLine_ID();
-            if (DB.ExecuteQuery(str) == -1)
-            { return false; }
-            return true;
-        }
+        //private bool DeleteVA071POL()
+        //{
+        //    String str = "Delete FROM VA071_POL WHERE C_OrderLine_ID=" + GetC_OrderLine_ID();
+        //    if (DB.ExecuteQuery(str,null,Get_Trx()) == -1)
+        //    { return false; }
+        //    return true;
+        //}
         public bool DeleteCheck()
         {
             //	R/O Check - Something delivered. etc.
