@@ -3367,7 +3367,7 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
-                log.SaveError(Sql.ToString(), e);
+                log.Severe(Sql.ToString() + " - " + e.Message);
             }
         }
 
