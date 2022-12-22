@@ -542,6 +542,29 @@ namespace VAdvantage.Model
                 }
             }
 
+            // VIS0060: If ‘VAFAM_IsAssetRelated’ is true and ‘Capitalise’ is selected in column ‘VAFAM_CapitalExpense’ 
+            // then it will check whether ‘VAFAM_HasComponent’ checkbox is true on the asset selected in ‘A_Asset_ID’ column. 
+            // If it is true, then it should give a following message: “Please select the asset component”.
+            if (Env.IsModuleInstalled("VAFAM_") && Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+            {
+                if (Util.GetValueOfBool(Get_Value("VAFAM_IsAssetRelated")) && Util.GetValueOfInt(Get_Value("A_Asset_ID")) > 0)
+                {
+                    try
+                    {
+                        bool forComponent = Util.GetValueOfString(DB.ExecuteScalar("SELECT VAFAM_HasComponent FROM A_Asset WHERE A_Asset_ID = " +
+                            Util.GetValueOfInt(Get_Value("A_Asset_ID")), null, Get_TrxName())).Equals("Y");
+                        if (forComponent && Util.GetValueOfString(Get_Value("VAFAM_CapitalExpense")).Equals("C"))
+                        {
+                            log.SaveError("VAFAM_SelAssetComps", "");
+                            return false;
+                        }
+                    }
+                    catch
+                    {
+                        /*when VAFAM_HasComponent not exist into table*/
+                    }
+                }
+            }
             return true;
         }
 

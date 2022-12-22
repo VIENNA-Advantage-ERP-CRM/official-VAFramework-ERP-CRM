@@ -1862,6 +1862,70 @@ namespace VAdvantage.Model
                     #endregion
                 }
 
+                //VIS0060: Work done for Asset Capital/Expenses.
+                #region Calculating Cost on Expenses
+                if (IsInternalUse() && Env.IsModuleInstalled("VAFAM_") && line.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0 && !IsReversal())
+                {
+                    if (Util.GetValueOfBool(line.Get_Value("VAFAM_IsAssetRelated")))
+                    {
+                        decimal lineAmt = decimal.Multiply(Util.GetValueOfDecimal(line.Get_Value("QtyEntered")), line.GetCurrentCostPrice());
+                        #region To Mark Entry on Asset Expenses
+                        PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
+                        if (po != null)
+                        {
+                            po.SetAD_Client_ID(GetAD_Client_ID());
+                            po.SetAD_Org_ID(GetAD_Org_ID());
+                            po.Set_Value("M_Inventory_ID", GetM_Inventory_ID());
+                            po.Set_Value("DateAcct", GetMovementDate());
+                            po.Set_ValueNoCheck("A_Asset_ID", line.Get_Value("A_Asset_ID"));
+                            po.Set_Value("C_Charge_ID", line.GetC_Charge_ID());
+                            po.Set_Value("M_AttributeSetInstance_ID", line.GetM_AttributeSetInstance_ID());
+                            po.Set_Value("M_Product_ID", line.GetM_Product_ID());
+                            po.Set_Value("C_UOM_ID", line.Get_Value("C_UOM_ID"));
+                            po.Set_Value("Price", line.GetCurrentCostPrice());
+                            po.Set_Value("Qty", Util.GetValueOfDecimal(line.Get_Value("QtyEntered")));
+                            po.Set_Value("VAFAM_CapitalExpense", line.Get_Value("VAFAM_CapitalExpense"));
+                            po.Set_Value("Amount", lineAmt);
+
+                            if (!po.Save())
+                            {
+                                log.Info("Asset Expense Not Saved For Asset ");
+                            }
+                            else
+                            {
+                                // In Case of Capital Expense ..Asset Gross Value will be updated 
+                                string CapitalExpense_ = Util.GetValueOfString(line.Get_Value("VAFAM_CapitalExpense"));
+                                if (CapitalExpense_ == "C")
+                                {
+                                    MAsset asst = new MAsset(GetCtx(), Util.GetValueOfInt(line.Get_Value("A_Asset_ID")), Get_TrxName());
+                                    //Update Asset Gross Value in Case of Capital Expense
+                                    if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
+                                    {
+                                        asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), lineAmt));
+                                        if (!asst.Save(Get_TrxName()))
+                                        {
+                                            log.Info("Asset Expense Not Updated For Asset ");
+                                        }
+                                        else if (asst.Get_ColumnIndex("VAFAM_IsComponent") >= 0 && Util.GetValueOfBool(asst.Get_Value("VAFAM_IsComponent")))
+                                        {
+                                            int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT A_Asset_ID FROM VAFAM_ComponentAsset WHERE VAFAM_AssetComponent_ID = "
+                                                + Util.GetValueOfInt(line.Get_Value("A_Asset_ID")), null, Get_TrxName()));
+                                            asst = new MAsset(GetCtx(), Asset_ID, Get_TrxName());
+                                            asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), lineAmt));
+                                            if (!asst.Save(Get_TrxName()))
+                                            {
+                                                log.Info("Asset Expense Not Updated For Asset ");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
+                    }
+                }
+                #endregion
+
             }	//	for all lines
             log.Info("Lines Loop Ended");
             //	User Validation
@@ -1917,6 +1981,7 @@ namespace VAdvantage.Model
                         line.GetM_Product_ID(), costingCheck.M_ASI_ID, Get_Trx(), GetM_Warehouse_ID());
                     DB.ExecuteQuery("UPDATE M_InventoryLine SET CurrentCostPrice = " + currentCostPrice + @"
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                    line.SetCurrentCostPrice(currentCostPrice);
                 }
                 #endregion
 
@@ -2018,6 +2083,7 @@ namespace VAdvantage.Model
                                                 line.GetM_Product_ID(), costingCheck.M_ASI_ID, Get_Trx(), GetM_Warehouse_ID());
                             DB.ExecuteQuery("UPDATE M_InventoryLine SET PostCurrentCostPrice = " + currentCostPrice + @" , IsCostImmediate = 'Y' 
                                                 WHERE M_InventoryLine_ID = " + line.GetM_InventoryLine_ID(), null, Get_Trx());
+                            line.SetCurrentCostPrice(currentCostPrice);
 
                             // Transaction Update Query
                             sql += " , ProductCost = " + currentCostPrice;
@@ -3173,6 +3239,31 @@ namespace VAdvantage.Model
                     return false;
                 }
 
+                // VIS0060: Work done for Asset Capital/Expenses.
+                if (Env.IsModuleInstalled("VAFAM_") && rLine.Get_ColumnIndex("VAFAM_IsAssetRelated") > 0)
+                {
+                    if (Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
+                    {
+                        PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
+                        if (po != null)
+                        {
+                            CreateExpenseAgainstReverseInventory(rLine, oLine, po);
+
+                            if (!po.Save())
+                            {
+                                log.Info("Asset Expense Not Saved For Asset ");
+                            }
+                            else
+                            {
+                                UpdateDescriptionInOldExpnse(oLine, rLine);
+
+                                //In Case of Capital Expense ..Asset Gross Value will be updated 
+                                UpdateAssetGrossValue(rLine, po);
+                            }
+                        }
+                    }
+                }
+
                 //We need to copy Attribute MA
                 MInventoryLineMA[] mas = MInventoryLineMA.Get(GetCtx(), oLines[i].GetM_InventoryLine_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
@@ -3226,6 +3317,98 @@ namespace VAdvantage.Model
 
             return true;
         }
+
+        /// <summary>
+        /// Create a new expense against selected asset on Line of Inventory
+        /// </summary>
+        /// <param name="rLine"></param>
+        /// <param name="oldline"></param>
+        /// <param name="po"></param>
+        private void CreateExpenseAgainstReverseInventory(MInventoryLine rLine, MInventoryLine oldline, PO po)
+        {
+            po.SetAD_Client_ID(GetAD_Client_ID());
+            po.SetAD_Org_ID(GetAD_Org_ID());
+            po.Set_Value("M_Inventory_ID", rLine.GetM_Inventory_ID());
+            po.Set_Value("DateAcct", GetMovementDate());
+            po.Set_ValueNoCheck("A_Asset_ID", oldline.Get_Value("A_Asset_ID"));
+            po.Set_Value("C_Charge_ID", rLine.GetC_Charge_ID());
+            po.Set_Value("M_AttributeSetInstance_ID", rLine.GetM_AttributeSetInstance_ID());
+            po.Set_Value("M_Product_ID", rLine.GetM_Product_ID());
+            po.Set_Value("C_UOM_ID", rLine.Get_Value("C_UOM_ID"));
+            po.Set_Value("Price", rLine.GetCurrentCostPrice());
+            po.Set_Value("Qty", Util.GetValueOfDecimal(rLine.Get_Value("QtyEntered")));
+            po.Set_Value("VAFAM_CapitalExpense", rLine.Get_Value("VAFAM_CapitalExpense"));
+            po.Set_Value("Amount", decimal.Multiply(Util.GetValueOfDecimal(rLine.Get_Value("QtyEntered")), rLine.GetCurrentCostPrice()));
+            po.Set_Value("Description", "{->" + GetDocumentNo() + ")");
+        }
+
+        /// <summary>
+        /// Update Description on old Expense record against selected Asset.
+        /// </summary>
+        /// <param name="oldline"></param>
+        /// <param name="rLine"></param>
+        private void UpdateDescriptionInOldExpnse(MInventoryLine oldline, MInventoryLine rLine)
+        {
+            DataSet ds = null;
+            StringBuilder Sql = new StringBuilder();
+            try
+            {
+                Sql.Append("SELECT VAFAM_Expense_ID FROM VAFAM_Expense WHERE IsActive='Y' AND M_Inventory_ID=" + oldline.GetM_Inventory_ID());
+                ds = DB.ExecuteDataset(Sql.ToString(), null, Get_TrxName());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow idr in ds.Tables[0].Rows)
+                    {
+                        Sql.Clear();
+                        Sql.Append("UPDATE VAFAM_Expense SET Description = (" + this.GetDocumentNo() + " < -) WHERE VAFAM_Expense_ID = " + Util.GetValueOfInt(idr["VAFAM_Expense_ID"]));
+                        int no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Severe(Sql.ToString() + " - " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update Gross Value in Case Asset against Capital Expsnse Type - Capital
+        /// </summary>
+        /// <param name="rLine"></param>
+        /// <param name="po"></param>
+        private void UpdateAssetGrossValue(MInventoryLine rLine, PO po)
+        {
+            string CapitalExpense_ = Util.GetValueOfString(rLine.Get_Value("VAFAM_CapitalExpense"));
+            if (CapitalExpense_ == "C")
+            {
+                MAsset asst = new MAsset(GetCtx(), Util.GetValueOfInt(po.Get_Value("A_Asset_ID")), Get_TrxName());
+                //Update Asset Gross Value in Case of Capital Expense
+                if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
+                {
+                    //Ned to get conversion based on selected conversion type on Invoice.
+                    Decimal LineNetAmt_ = decimal.Multiply(Util.GetValueOfDecimal(rLine.Get_Value("QtyEntered")), rLine.GetCurrentCostPrice());
+                    asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Subtract(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
+                    if (!asst.Save(Get_TrxName()))
+                    {
+                        log.Info("Asset Expense Not Updated For Asset ");
+                    }
+
+                    // system will update ‘VAFAM_AssetGrossValue’ on component as well main asset which is linked to the component.
+                    else if (asst.Get_ColumnIndex("VAFAM_IsComponent") >= 0 && Util.GetValueOfBool(asst.Get_Value("VAFAM_IsComponent")))
+                    {
+                        int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT A_Asset_ID FROM VAFAM_ComponentAsset WHERE VAFAM_AssetComponent_ID = "
+                            + Util.GetValueOfInt(po.Get_Value("A_Asset_ID")), null, Get_TrxName()));
+                        asst = new MAsset(GetCtx(), Asset_ID, Get_TrxName());
+                        asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Subtract(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
+                        if (!asst.Save(Get_TrxName()))
+                        {
+                            log.Info("Asset Expense Not Updated For Asset ");
+                        }
+                    }
+                }
+            }
+        }
+
 
         /**
          * 	Reverse Accrual

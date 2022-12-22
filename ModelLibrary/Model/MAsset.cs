@@ -216,6 +216,26 @@ namespace VAdvantage.Model
             SetM_Product_ID(product.GetM_Product_ID());
             SetA_Asset_Group_ID(product.GetA_Asset_Group_ID());
 
+            // VIS0060: Set Equipment Category on Asset from Product and Product Category
+            if (Env.IsModuleInstalled("VA075_") && product.Get_ColumnIndex("VA075_EquipmentCategory_ID") >= 0)
+            {
+                // Get Equipment Category from Product
+                if (Util.GetValueOfInt(product.Get_Value("VA075_EquipmentCategory_ID")) > 0)
+                {
+                    Set_Value("VA075_EquipmentCategory_ID", Util.GetValueOfInt(product.Get_Value("VA075_EquipmentCategory_ID")));
+                }
+                else
+                {
+                    MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+
+                    // Get Equipment Category from Product Category
+                    if (Util.GetValueOfInt(pc.Get_Value("VA075_EquipmentCategory_ID")) > 0)
+                    {
+                        Set_Value("VA075_EquipmentCategory_ID", Util.GetValueOfInt(pc.Get_Value("VA075_EquipmentCategory_ID")));
+                    }
+                }
+            }
+
             //////////////////////////////*
             //Changes for vafam
             // SetAssetServiceDate(shipment.GetMovementDate());
@@ -766,7 +786,8 @@ namespace VAdvantage.Model
             GetQty();		//	set to 1
 
             // VIS0060: Get Current next from Serial no Control of Equipment Category selected on Asset.
-            if (newRecord && String.IsNullOrEmpty(GetValue()) && Env.IsModuleInstalled("VA075_") && Util.GetValueOfInt(Get_Value("VA075_EquipmentCategory_ID")) > 0)
+            if (newRecord && String.IsNullOrEmpty(GetValue()) && Env.IsModuleInstalled("VA075_") && Get_ColumnIndex("VA075_EquipmentCategory_ID") >= 0
+                && Util.GetValueOfInt(Get_Value("VA075_EquipmentCategory_ID")) > 0)
             {
                 int sernoCtlID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_SerNoCtl_ID FROM VA075_EquipmentCategory WHERE VA075_EquipmentCategory_ID = "
                     + Util.GetValueOfInt(Get_Value("VA075_EquipmentCategory_ID"))));
@@ -805,6 +826,7 @@ namespace VAdvantage.Model
                 }
                 SetValue(name);
             }
+
             #region Fixed Asset Management
             /*to Set Written Down Value on Asset i.e. Gross value of Asset-Depreciated/ Amortized Value Arpit*/
             if (Env.IsModuleInstalled("VAFAM_"))
