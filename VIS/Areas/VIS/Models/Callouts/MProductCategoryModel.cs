@@ -30,6 +30,12 @@ namespace VIS.Models
 
         }
 
+        /// <summary>
+        /// Get Product Category Data
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Category ID</param>
+        /// <returns>Product Category data</returns>
         public Dictionary<string, string> GetCategoryData(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
@@ -57,6 +63,11 @@ namespace VIS.Models
                 {
                     retDic["VA038_AmortizationTemplate_ID"] = Util.GetValueOfString(astGrp.Get_Value("VA038_AmortizationTemplate_ID"));
                 }
+            }
+            // VIS0060: Get Equipment Category from Product Category
+            if (Env.IsModuleInstalled("VA075_") && pc.Get_ColumnIndex("VA075_EquipmentCategory_ID") >= 0)
+            {                
+                retDic["VA075_EquipmentCategory_ID"] = Util.GetValueOfString(pc.Get_Value("VA075_EquipmentCategory_ID"));               
             }
             return retDic;
         }
