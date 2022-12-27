@@ -1924,6 +1924,18 @@ namespace VAdvantage.Model
                         #endregion
                     }
                 }
+
+                // VIS0060: Work done to set Processed on Sparepart and update Internal use quantity
+                if (IsInternalUse() && Env.IsModuleInstalled("VA075_") && line.Get_ColumnIndex("VA075_WorkOrderComponent_ID") >= 0 
+                    && Util.GetValueOfInt(line.Get_Value("VA075_WorkOrderComponent_ID")) > 0)
+                {
+                    int no = DB.ExecuteQuery("UPDATE VA075_WorkOrderComponent SET Processed='Y', Quantity=" + Util.GetValueOfDecimal(line.Get_Value("QtyEntered"))
+                        + " WHERE VA075_WorkOrderComponent_ID = " + Util.GetValueOfInt(line.Get_Value("VA075_WorkOrderComponent_ID")), null, Get_TrxName());
+                    if(no < 0)
+                    {
+                        log.Info("Spare Part Not Updated For Work Order: " + Util.GetValueOfInt(line.Get_Value("VA075_WorkOrder_ID")));
+                    }
+                }
                 #endregion
 
             }	//	for all lines
