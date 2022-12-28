@@ -238,7 +238,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String sql = "SELECT t.TableName, c.ColumnName "
                 + "FROM AD_Table t"
                 + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
-                + "WHERE t.IsView='N'"
+                + "WHERE t.IsView='N' AND c.AD_Reference_ID <> 45 "
                     + " AND t.TableName NOT IN ('C_TaxDeclarationAcct')"
                     + " AND c.ColumnSQL is NULL AND ("              // No Virtual Column
                     + "(c.ColumnName=@param1 AND c.IsKey='N')"		//	#1 - direct
