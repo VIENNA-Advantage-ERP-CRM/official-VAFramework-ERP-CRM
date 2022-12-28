@@ -784,18 +784,17 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             GetQty();		//	set to 1
-
+            string name = "";
             // VIS0060: Get Current next from Serial no Control of Equipment Category selected on Asset.
-            if (newRecord && String.IsNullOrEmpty(GetValue()) && Env.IsModuleInstalled("VA075_") && Get_ColumnIndex("VA075_EquipmentCategory_ID") >= 0
+            if (newRecord && Env.IsModuleInstalled("VA075_") && Get_ColumnIndex("VA075_EquipmentCategory_ID") >= 0
                 && Util.GetValueOfInt(Get_Value("VA075_EquipmentCategory_ID")) > 0)
             {
                 int sernoCtlID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_SerNoCtl_ID FROM VA075_EquipmentCategory WHERE VA075_EquipmentCategory_ID = "
                     + Util.GetValueOfInt(Get_Value("VA075_EquipmentCategory_ID"))));
-                string name = "";
+                
                 if (sernoCtlID > 0)
                 {
                     MSerNoCtl ctl = new MSerNoCtl(GetCtx(), sernoCtlID, Get_TrxName());
-
                     // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
                     if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
                     {
@@ -810,9 +809,8 @@ namespace VAdvantage.Model
             }
 
             MAssetGroup astGrp = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), Get_TrxName());
-            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0 && astGrp.GetM_SerNoCtl_ID() > 0 && String.IsNullOrEmpty(GetValue()))
+            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0 && astGrp.GetM_SerNoCtl_ID() > 0 && String.IsNullOrEmpty(name))
             {
-                string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
 
                 // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
