@@ -43,7 +43,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** Tables to delete (not update) for C_BPartner	*/
         static private String[] s_delete_BPartner = new String[]
 		{"C_BP_Employee_Acct", "C_BP_Vendor_Acct", "C_BP_Customer_Acct", 
-		"T_Aging", "FRPT_BP_Customer_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
+		"T_Aging", "FRPT_BP_Customer_Acct" ,"FRPT_BP_Vendor_Acct" , "FRPT_BP_Employee_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
         /** Tables to delete (not update) for M_Product		*/
         static private String[] s_delete_Product = new String[]
 		{"M_Product_PO", "M_Replenish", "T_Replenish", 
