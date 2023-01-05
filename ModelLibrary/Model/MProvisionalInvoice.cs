@@ -221,8 +221,9 @@ namespace VAdvantage.Model
                 // Get Product Cost
                 Decimal ProductLineCost = line.GetProductLineCost(line, isPOCostingMethod);
 
+                // VIS_0045: 16-Dec-2022 -- DevOps ID - 1885
                 // calculate invoice line costing after calculating costing of linked MR line 
-                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                       "ProvisionalInvoice", null, null, null, null, line, ProductLineCost, line.GetQtyInvoiced(),
                     Get_Trx(), out conversionNotFoundInvoice, optionalstr: (callingbyProcess ? "process" : "window")))
                 {
