@@ -43,7 +43,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** Tables to delete (not update) for C_BPartner	*/
         static private String[] s_delete_BPartner = new String[]
 		{"C_BP_Employee_Acct", "C_BP_Vendor_Acct", "C_BP_Customer_Acct", 
-		"T_Aging", "FRPT_BP_Customer_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
+		"T_Aging", "FRPT_BP_Customer_Acct" ,"FRPT_BP_Vendor_Acct" , "FRPT_BP_Employee_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
         /** Tables to delete (not update) for M_Product		*/
         static private String[] s_delete_Product = new String[]
 		{"M_Product_PO", "M_Replenish", "T_Replenish", 
@@ -163,16 +163,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             try
             {
-
-                //pstmt = DataBase.prepareStatement(fromSql, null);
-                //pstmt.setString(1, String.valueOf(from_ID));
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param", Utility.Util.GetValueOfString(from_ID));
+                //VIS_0045: DevOps Task ID - 1897, Handle Typecast issue in postgreSQL
+                param[0] = new SqlParameter("@param", from_ID);
                 idr = DataBase.DB.ExecuteReader(fromSql, param, Get_TrxName());
-
                 while (idr.Read())
                 {
-                    fromValue = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
+                    fromValue = Utility.Util.GetValueOfString(idr[0]);
 
                 }
                 idr.Close();
@@ -189,17 +186,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             try
             {
-
-                //pstmt = DataBase.prepareStatement(toSql, null);
-                //pstmt.setString(1, String.valueOf(to_ID));
                 param = new SqlParameter[1];
-                //ResultSet rs = pstmt.executeQuery();
-                param[0] = new SqlParameter("@param", Utility.Util.GetValueOfString(to_ID));
+                //VIS_0045: DevOps Task ID - 1897, Handle Typecast issue in postgreSQL
+                param[0] = new SqlParameter("@param", to_ID);
                 idr = DataBase.DB.ExecuteReader(toSql, param, Get_TrxName());
                 while (idr.Read())
                 {
-                    toValue = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
-
+                    toValue = Utility.Util.GetValueOfString(idr[0]);
                 }
                 idr.Close();
             }
@@ -245,7 +238,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String sql = "SELECT t.TableName, c.ColumnName "
                 + "FROM AD_Table t"
                 + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
-                + "WHERE t.IsView='N'"
+                + "WHERE t.IsView='N' AND c.AD_Reference_ID <> 45 "
                     + " AND t.TableName NOT IN ('C_TaxDeclarationAcct')"
                     + " AND c.ColumnSQL is NULL AND ("              // No Virtual Column
                     + "(c.ColumnName=@param1 AND c.IsKey='N')"		//	#1 - direct
@@ -257,51 +250,43 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ") "
                 + "ORDER BY t.LoadSeq DESC";
             SqlParameter[] param = new SqlParameter[2];
-            IDataReader idr = null;
-            //Savepoint sp = null;
+            DataSet ds = null;
             try
             {
-                //m_con = DataBase.createConnection(false, Connection.TRANSACTION_READ_COMMITTED);
-
-                //sp = m_con.setSavepoint("merge");
-                //
-                //pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setString(1, ColumnName);
                 param[0] = new SqlParameter("@param1", ColumnName);
-                //pstmt.setString(2, ColumnName);
                 param[1] = new SqlParameter("@param2", ColumnName);
-                idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
-                while (idr.Read())
+                //VIS_0045: DevOps Task ID - 1897, Replace DataReader with Dataset (facing issue with Update command, TMp Save Point issue in postgre)
+                ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    String tName = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
-                    String cName = Utility.Util.GetValueOfString(idr[1]); //rs.getString(2);
-                    if (!TableName.Equals(tName))	//	to be sure - sql should prevent it
+                    foreach ( DataRow idr in ds.Tables[0].Rows)
                     {
-                        int count = MergeTable(tName, cName, from_ID, to_ID);
-                        if (count < 0)
+                        String tName = Utility.Util.GetValueOfString(idr[0]);
+                        String cName = Utility.Util.GetValueOfString(idr[1]); 
+                        if (!TableName.Equals(tName))   //	to be sure - sql should prevent it
                         {
-                            success = false;
-                        }
-                        else
-                        {
-                            m_totalCount += count;
+                            int count = MergeTable(tName, cName, from_ID, to_ID);
+                            if (count < 0)
+                            {
+                                success = false;
+                            }
+                            else
+                            {
+                                m_totalCount += count;
+                            }
                         }
                     }
                 }
-                idr.Close();
                 //
                 log.Config("Success=" + success
                     + " - " + ColumnName + " - From=" + from_ID + ",To=" + to_ID);
                 if (success)
                 {
                     sql = "DELETE FROM " + TableName + " WHERE " + ColumnName + "=" + from_ID;
-                    //Statement stmt = m_con.createStatement();
                     int count = 0;
                     try
                     {
-                        //count = stmt.executeUpdate (sql);
                         count = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-                        //count = SqlExec.ExecuteQuery.ExecuteNonQuery(sql, null);
                         if (count != 1)
                         {
                             m_errorLog.Append(Env.NL).Append("DELETE FROM ").Append(TableName)
@@ -321,25 +306,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //
                 if (success)
                 {
-                    //_con.commit();
                     Commit();
                 }
                 else
                 {
                     Rollback();
-                    // m_con.rollback(sp);
                 }
-                // m_con.close();
-                // m_con = null;
 
             }
             catch (Exception ex)
             {
-                if (idr != null)
-                {
-                    idr.Close();
-                    idr = null;
-                }
                 log.Log(Level.SEVERE, ColumnName, ex);
             }
             //	Cleanup
@@ -358,9 +334,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int MergeTable(String TableName, String ColumnName, int from_ID, int to_ID)
         {
             log.Fine(TableName + "." + ColumnName + " - From=" + from_ID + ",To=" + to_ID);
+            //VIS_0045: DevOps Task ID - 1897, Handle Type Cast Issue
             StringBuilder sql = new StringBuilder("UPDATE " + TableName
                 + " SET " + ColumnName + "=" + to_ID
-                + " WHERE " + ColumnName + "=" + from_ID);
+                + " WHERE CAST(" + ColumnName + " AS INT) = " + from_ID);
             bool delete = false;
             for (int i = 0; i < m_deleteTables.Length; i++)
             {
@@ -373,13 +350,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             int count = -1;
-
             try
             {
-                //Statement stmt = m_con.createStatement ();
                 try
                 {
-                    //count = stmt.executeUpdate (sql);
                     count = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                     if (count < 0)          // Added in the Message if not Deleted or Updated
                     {
@@ -398,7 +372,6 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         .Append(TableName).Append(" - ").Append(ex1.ToString())
                         .Append(" - ").Append(sql.ToString());
                 }
-
             }
             catch (Exception ex)
             {
