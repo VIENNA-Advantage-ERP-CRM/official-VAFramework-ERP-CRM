@@ -3449,12 +3449,6 @@ namespace VAdvantage.Model
 
                         Decimal ProductLineCost = line.GetProductLineCost(line, true);
 
-                        // check IsCostAdjustmentOnLost exist on product 
-                        //string sql = @"SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsActive = 'Y' AND 
-                        //               AD_Table_ID =  ( SELECT AD_Table_ID FROM AD_Table WHERE IsActive = 'Y' AND TableName = 'M_Product' ) 
-                        //               AND ColumnName = 'IsCostAdjustmentOnLost' ";
-                        //count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-
                         if (line.GetC_OrderLine_ID() > 0)
                         {
                             if (line.GetC_Charge_ID() > 0)
@@ -3558,7 +3552,8 @@ namespace VAdvantage.Model
                                     if (order1.IsSOTrx() && !order1.IsReturnTrx()) // SO
                                     {
                                         #region against SO
-                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                        //(VIS_0045) Devops Task Id - 1909, 09 Jan,2022 - Handle cost with ZERO Price
+                                        if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                               "Invoice(Customer)", null, null, null, line, null,
                                               Decimal.Negate(ProductLineCost), Decimal.Negate(line.GetQtyInvoiced()),
                                               Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
@@ -3758,7 +3753,8 @@ namespace VAdvantage.Model
                                     else if (order1.IsSOTrx() && order1.IsReturnTrx()) // CRMA
                                     {
                                         #region CRMA
-                                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                        //(VIS_0045) Devops Task Id - 1909, 09 Jan,2022 - Handle cost with ZERO Price
+                                        if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                           "Invoice(Customer)", null, null, null, line, null, ProductLineCost,
                                            line.GetQtyInvoiced(), Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                         {
@@ -4042,7 +4038,8 @@ namespace VAdvantage.Model
                                 #region for Item Type product
                                 if (IsSOTrx() && !IsReturnTrx()) // SO
                                 {
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                    //(VIS_0045) Devops Task Id - 1909, 09 Jan,2022 - Handle cost with ZERO Price
+                                    if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                           "Invoice(Customer)", null, null, null, line, null, Decimal.Negate(ProductLineCost),
                                           Decimal.Negate(line.GetQtyInvoiced()), Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
@@ -4234,7 +4231,8 @@ namespace VAdvantage.Model
                                 }
                                 else if (IsSOTrx() && IsReturnTrx()) // CRMA
                                 {
-                                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                                    //(VIS_0045) Devops Task Id - 1909, 09 Jan,2022 - Handle cost with ZERO Price
+                                    if (ProductLineCost != 0 && !MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                                       "Invoice(Customer)", null, null, null, line, null, ProductLineCost, line.GetQtyInvoiced(),
                                       Get_Trx(), costingCheck, out conversionNotFoundInvoice, optionalstr: "window"))
                                     {
