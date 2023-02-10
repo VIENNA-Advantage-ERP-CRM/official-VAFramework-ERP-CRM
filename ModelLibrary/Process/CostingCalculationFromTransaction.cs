@@ -5510,7 +5510,7 @@ namespace VAdvantage.Process
                 sql.Append($" AND t.AD_Client_ID = {GetAD_Client_ID()}");
             }
             sql.Append($@" AND t.movementdate = {GlobalVariable.TO_DATE(minDateRecord, true)} ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");//1086280 ,1093414, 1132816
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");//1086280 ,1093414, 1132816
 
             //provisional Invoice
             sql.Append($@"UNION
@@ -5549,7 +5549,7 @@ namespace VAdvantage.Process
             ((i.docstatus IN ('CO' , 'CL') AND il.iscostcalculated = 'N' ) OR (i.docstatus  IN ('RE') AND il.iscostcalculated = 'Y'
                               AND il.ISREVERSEDCOSTCALCULATED= 'N' AND i.IsReversal ='Y'))");
             //sql.Append($@" AND il.M_Product_ID IN (  1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             // Match Invoice
             sql.Append($@" UNION
@@ -5589,7 +5589,7 @@ namespace VAdvantage.Process
                 mi.iscostcalculated = 'N' AND i.issotrx = 'N' 
             AND i.docstatus IN ( 'CO', 'CL' )");
             //sql.Append($@" AND il.M_Product_ID IN ( 1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             // Invoices
             sql.Append($@" UNION
@@ -5633,7 +5633,7 @@ namespace VAdvantage.Process
                    AND i.ReversalDoc_ID != 0 ) )
             AND ( i.issotrx = 'Y' OR i.isreturntrx = 'Y' )");
             //sql.Append($@" AND il.M_Product_ID IN (  1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             // AP Credit note Invoices where trast as discount is marked as treu
             sql.Append($@" UNION 
@@ -5678,7 +5678,7 @@ namespace VAdvantage.Process
                    AND i.ReversalDoc_ID != 0 ) )
                 AND ( i.issotrx = 'N' OR i.isreturntrx = 'Y' )");
             //sql.Append($@" AND il.M_Product_ID IN ( 1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             //  MatchInv CostTrack
             sql.Append($@" UNION
@@ -5718,7 +5718,7 @@ namespace VAdvantage.Process
             ( i.issotrx = 'N' )
             AND i.docstatus IN ( 'RE', 'VO' )");
             //sql.Append($@" AND il.M_Product_ID IN ( 1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             // landed Cost (TO-DO)
             sql.Append($@" UNION
@@ -5759,7 +5759,7 @@ namespace VAdvantage.Process
         WHERE i.dateacct = {GlobalVariable.TO_DATE(minDateRecord, true)} AND 
             lca.iscostcalculated = 'N' AND i.DOCSTATUS IN ('CO' , 'CL', 'RE', 'VO') AND i.ISSOTRX = 'N' AND i.ISRETURNTRX = 'N' ");
             //sql.Append($@" AND il.M_Product_ID IN (  1139494, 1139495, 1139496, 1139497, 1139498, 1139500, 1139501, 1139502) ");
-            sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
+            //sql.Append($@" AND t.M_Product_ID IN ( 1106268) ");
 
             // Close 
             sql.Append("  ) t ");
