@@ -65,7 +65,7 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
                                LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
                                INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
-                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
+                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID AND ct.M_CostType_ID = cst.M_CostType_ID 
                                INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
                               WHERE (( CASE WHEN PC.COSTINGMETHOD IS NOT NULL  THEN PC.COSTINGMETHOD
                                             ELSE ACC.COSTINGMETHOD  END) = CE.COSTINGMETHOD )
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(" + (IsRequiredQty ? "AVG(CST.CURRENTQTY)" : "AVG(CST.CURRENTCOSTPRICE)") + @", 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
                                LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
                                INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
-                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
+                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID  AND ct.M_CostType_ID = cst.M_CostType_ID 
                                INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
                               WHERE ((   CASE WHEN PC.COSTINGMETHOD IS NOT NULL  AND PC.COSTINGMETHOD   = 'C'  THEN (SELECT CAST( Cel.M_Ref_Costelement AS INTEGER)
                                                   FROM M_CostElement ced  INNER JOIN M_Costelementline Cel ON Ced.M_Costelement_Id = CAST( Cel.M_Ref_Costelement AS INTEGER)
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
                 sql = @"SELECT ROUND(AVG(CST.CURRENTCOSTPRICE), 10)   FROM M_PRODUCT P   INNER JOIN M_COST CST   ON P.M_PRODUCT_ID=CST.M_PRODUCT_ID
                                LEFT JOIN M_PRODUCT_CATEGORY PC   ON P.M_PRODUCT_CATEGORY_ID=PC.M_PRODUCT_CATEGORY_ID
                                INNER JOIN C_ACCTSCHEMA ACC   ON CST.C_ACCTSCHEMA_ID=ACC.C_ACCTSCHEMA_ID
-                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID
+                               INNER JOIN M_CostType ct ON ct.M_CostType_ID = acc.M_CostType_ID  AND ct.M_CostType_ID = cst.M_CostType_ID 
                                INNER JOIN M_COSTELEMENT CE  ON CST.M_COSTELEMENT_ID=CE.M_COSTELEMENT_ID
                               WHERE (( CASE WHEN PC.COSTINGMETHOD IS NOT NULL  THEN PC.COSTINGMETHOD
                                             ELSE ACC.COSTINGMETHOD  END) = CE.COSTINGMETHOD )
