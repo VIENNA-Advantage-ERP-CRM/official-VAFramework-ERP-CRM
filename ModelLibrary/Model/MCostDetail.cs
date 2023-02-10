@@ -1219,17 +1219,24 @@ namespace VAdvantage.Model
                         if (windowName == "Invoice(APC)")
                         {
                             Decimal adjustedAmt = 0;
-                            if (costingCheck != null && costingCheck.invoiceline != null && !costingCheck.invoiceline.IsCostImmediate())
+                            if (costingCheck != null && costingCheck.invoiceline != null && !costingCheck.invoiceline.IsCostImmediate() &&
+                                Util.GetValueOfDecimal(costingCheck.invoiceline.Get_Value("TotalInventoryAdjustment")) == 0)
                             {
                                 // we have to reduce price
                                 if (amt < 0 && price > 0)
                                 {
                                     price = decimal.Negate(price);
                                 }
+                                else
+                                { 
+                                     // when price -ve means increase cost
+                                    price = Math.Abs(price);
+                                }
 
                                 //DevOps Task-1851
                                 List<MCostElement> lstCostElement = new List<MCostElement>();
-                                if (!costingCheck.IsCostCalculationfromProcess)
+                                if (!costingCheck.IsCostCalculationfromProcess ||
+                                    Util.GetValueOfDecimal(costingCheck.invoiceline.Get_Value("TotalInventoryAdjustment")) == 0)
                                 {
                                     lstCostElement.Add(MCostElement.Get(GetCtx(), costingCheck.Lifo_ID));
                                     lstCostElement.Add(MCostElement.Get(GetCtx(), costingCheck.Fifo_ID));
@@ -1273,6 +1280,10 @@ namespace VAdvantage.Model
                                             if (costingCheck.MMPolicy.Equals(lstCostElement[cel].GetCostingMethod()))
                                             {
                                                 costingCheck.currentQtyonQueue = cQueue[cq].GetCurrentQty();
+                                            }
+                                            if (adjustedAmt != 0)
+                                            {
+                                                costingCheck.invoiceline.Set_Value("TotalInventoryAdjustment", adjustedAmt);
                                             }
 
                                             // Create Cost Queue Transactional Record
