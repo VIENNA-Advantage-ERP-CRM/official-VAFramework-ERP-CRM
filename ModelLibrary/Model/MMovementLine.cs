@@ -231,9 +231,9 @@ namespace VAdvantage.Model
                 if (Get_ValueAsInt("VAMFG_M_WorkOrder_ID") == 0)
                 {
                     if (Util.GetValueOfString(DB.ExecuteScalar("SELECT VAMFG_IsStagingLocator FROM M_Locator WHERE M_Locator_ID = "
-                        + GetM_Locator_ID(), null, Get_TrxName())).Equals("N"))
+                        + GetM_Locator_ID(), null, Get_TrxName())).Equals("Y"))
                     {
-                        log.SaveError("", Msg.GetElement(GetCtx(), "VAMFG_SelProdOrder"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "VAMFG_SelProdOrder"));
                         return false;
                     }
                 }
@@ -745,7 +745,7 @@ namespace VAdvantage.Model
             }
 
             // VIS0060: Show warning if raised by validation logic on before save.
-            if (Get_ColumnIndex("VAMFG_IsWarningRaised") >= 0 && Util.GetValueOfString(Get_Value("VAMFG_IsWarningRaised")).Equals("Y"))
+            if (Get_ColumnIndex("VAMFG_IsWarningRaised") >= 0 && Util.GetValueOfBool(Get_Value("VAMFG_IsWarningRaised")))
             {
                 log.SaveWarning("", Util.GetValueOfString(Get_Value("VAMFG_WarningReason")));
             }
