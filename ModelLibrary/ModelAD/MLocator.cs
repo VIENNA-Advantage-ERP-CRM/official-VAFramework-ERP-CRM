@@ -286,14 +286,27 @@ namespace VAdvantage.Model
                 } // storage
 
                 // JID:1888 Checks for the duplicate Searchkey
-               
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Locator WHERE Value= '" + GetValue() + "' AND M_Locator_ID !="+GetM_Locator_ID()));
+
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Locator WHERE Value= '" + GetValue() + "' AND M_Locator_ID !=" + GetM_Locator_ID()));
+                if (count > 0)
+                {
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                    return false;
+                }
+
+                // VIS0060 : Checks for the duplicate Staging Locator
+                if (Env.IsModuleInstalled("VAMFG_") && Get_ColumnIndex("VAMFG_IsStagingLocator") >= 0
+                    && Util.GetValueOfString(Get_Value("VAMFG_IsStagingLocator")).Equals("Y"))
+                {
+                    count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_Locator_ID FROM M_Locator WHERE VAMFG_IsStagingLocator = 'Y' 
+                        AND M_Locator_ID !=" + GetM_Locator_ID(), null, Get_TrxName()));
                     if (count > 0)
                     {
-                        log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "VAMFG_StagingLocator"));
                         return false;
                     }
-                
+                }
+
                 if (newRecord
                         || Is_ValueChanged("X")
                         || Is_ValueChanged("Y")
