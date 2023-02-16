@@ -1011,6 +1011,8 @@ namespace VAdvantage.Model
                     {
                         line.SetIsCostImmediate(false);
                     }
+                    line.Set_Value("TotalInventoryAdjustment", 0);
+                    line.Set_Value("TotalCOGSAdjustment", 0);
 
                     //
                     if (Get_ColumnIndex("BackupWithholdingAmount") > 0)
