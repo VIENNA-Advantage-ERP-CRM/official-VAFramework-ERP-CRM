@@ -225,6 +225,68 @@ namespace VAdvantage.Model
                 SetLine(ii);
             }
 
+            // VIS0060: Check if Production Order column is selected and Staging Locator is not selected, Then show message.
+            if (Get_ColumnIndex("VAMFG_M_WorkOrder_ID") >= 0)
+            {
+                if (Get_ValueAsInt("VAMFG_M_WorkOrder_ID") == 0)
+                {
+                    if (Util.GetValueOfString(DB.ExecuteScalar("SELECT VAMFG_IsStagingLocator FROM M_Locator WHERE M_Locator_ID = "
+                        + GetM_Locator_ID(), null, Get_TrxName())).Equals("Y"))
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "VAMFG_SelProdOrder"));
+                        return false;
+                    }
+                }
+                else
+                {
+                    StringBuilder sql = new StringBuilder();
+
+                    // VIS0060: if Production Order is in Progress then need to show warning.
+                    sql.Clear();
+                    sql.Append("SELECT DocStatus FROM VAMFG_M_WorkOrder WHERE VAMFG_M_WorkOrder_ID=" + Get_ValueAsInt("VAMFG_M_WorkOrder_ID"));
+                    if (!Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())).Equals("CO"))
+                    {
+                        Set_Value("VAMFG_IsWarningRaised", true);
+                        Set_Value("VAMFG_WarningReason", Msg.GetMsg(GetCtx(), "VAMFG_CompProdOrder"));
+                    }
+
+                    // VIS0060: If Advance Budget and Costing module is installed --check production order reference on Production time ticket is processed or not;
+                    if (Env.IsModuleInstalled("VA073_"))
+                    {
+                        sql.Clear();
+                        sql.Append(@"SELECT t.tkt FROM (SELECT COUNT(dt.VA073_Personnel_ID) AS tkt, 
+                        CASE WHEN (pc.VA073_ProductGroup = 'S') THEN (SELECT COUNT(woo.VAMFG_M_WorkOrderOperation_ID) FROM VAMFG_M_WorkOrderOperation woo 
+                        INNER JOIN VAMFG_M_Operation op ON woo.VAMFG_M_Operation_ID = op.VAMFG_M_Operation_ID WHERE woo.VAMFG_M_WorkOrder_ID = tt.VAMFG_M_WorkOrder_ID"
+                        + (Env.IsModuleInstalled("VA076_") ? " AND op.VA076_IsQuality='N')" : ")") +
+                        @" ELSE (SELECT COUNT(VAMFG_M_WorkOrderOperation_ID) FROM VAMFG_M_WorkOrderOperation WHERE VAMFG_M_WorkOrder_ID=tt.VAMFG_M_WorkOrder_ID) END AS opr
+                        FROM VA073_Personnel dt INNER JOIN VA073_POActualTime tt ON dt.VA073_POActualTime_ID = tt.VA073_POActualTime_ID
+                        INNER JOIN M_Product pp ON tt.M_Product_ID = pp.M_Product_ID INNER JOIN M_Product_Category pc ON pc.M_Product_Category_ID = pp.M_Product_Category_ID
+                        WHERE tt.VAMFG_M_WorkOrder_ID = " + Get_ValueAsInt("VAMFG_M_WorkOrder_ID") +
+                        @" GROUP BY tt.VA073_POActualTime_ID, tt.VAMFG_M_WorkOrder_ID, pc.VA073_ProductGroup) t WHERE t.tkt >= t.opr");
+                        int count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                        if (count > 0)
+                        {
+                            sql.Clear();
+                            sql.Append(@"SELECT COUNT(dt.VA073_Personnel_ID) FROM VA073_Personnel dt 
+                            INNER JOIN VA073_POActualTime tt ON dt.VA073_POActualTime_ID = tt.VA073_POActualTime_ID 
+                            WHERE tt.VAMFG_M_WorkOrder_ID = " + Get_ValueAsInt("VAMFG_M_WorkOrder_ID") + " AND dt.Processed='N'");
+                            count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                            // If not processed then give message and save line                            
+                            if (count > 0)
+                            {
+                                Set_Value("VAMFG_IsWarningRaised", true);
+                                Set_Value("VAMFG_WarningReason", Msg.GetMsg(GetCtx(), "VA073_PTTNotProcessed"));
+                            }
+                        }
+                        else
+                        {
+                            Set_Value("VAMFG_IsWarningRaised", true);
+                            Set_Value("VAMFG_WarningReason", Msg.GetMsg(GetCtx(), "VA073_DailyTicketsNotFound"));
+                        }
+                    }
+                }
+            }
+
             // JID_0775: System is not checking on move line that the attribute set instance is mandatory.
             if (GetM_AttributeSetInstance_ID() == 0)
             {
@@ -680,6 +742,12 @@ namespace VAdvantage.Model
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VA024_AlreadyProvisionConvey"));
                     }
                 }
+            }
+
+            // VIS0060: Show warning if raised by validation logic on before save.
+            if (Get_ColumnIndex("VAMFG_IsWarningRaised") >= 0 && Util.GetValueOfBool(Get_Value("VAMFG_IsWarningRaised")))
+            {
+                log.SaveWarning("", Util.GetValueOfString(Get_Value("VAMFG_WarningReason")));
             }
             return true;
         }
