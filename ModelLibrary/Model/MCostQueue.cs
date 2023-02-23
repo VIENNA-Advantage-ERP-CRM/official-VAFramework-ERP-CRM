@@ -1139,6 +1139,10 @@ namespace VAdvantage.Model
                                 invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
                                 costingCheck.invoice = invoice;
                             }
+                            if (costingCheck.invoiceline == null)
+                            {
+                                costingCheck.invoiceline = invoiceline;
+                            }
 
                             if (invoiceline.GetM_InOutLine_ID() > 0)
                             {
@@ -3446,7 +3450,7 @@ namespace VAdvantage.Model
                         else if (windowName != "Match PO" && windowName != "Match IV")
                         {
                             #region check cost detail is created on completion or not. if not then create cost detail
-                            if (optionalstr == "process")
+                            if (optionalstr == "process" && false)
                             {
                                 query.Clear();
                                 query.Append(@"SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE NVL(M_CostElement_ID , 0) = 0 

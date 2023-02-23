@@ -1733,6 +1733,7 @@
     <Compile Include="Process\CostCalculationWithAcctSchema.cs" />
     <Compile Include="Process\CostCreate.cs" />
     <Compile Include="Process\CostingCalculation.cs" />
+    <Compile Include="Process\CostingCalculationFromTransaction.cs" />
     <Compile Include="Process\CostUpdate.cs" />
     <Compile Include="Process\CreateAppointment.cs" />
     <Compile Include="Process\CreateContractInvoice.cs" />
