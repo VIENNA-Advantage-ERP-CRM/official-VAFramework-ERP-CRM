@@ -517,6 +517,7 @@ namespace VIS.Models
                     }
                     else if (window_ID == 341)
                     {
+                        M_Warehouse_ID = WarehouseID;
                         query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + M_Warehouse_ID + " AND DocStatus IN ('CO'))";
                     }
                     else
