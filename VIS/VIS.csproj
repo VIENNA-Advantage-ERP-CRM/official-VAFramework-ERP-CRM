@@ -742,6 +742,7 @@
     <Content Include="Areas\VIS\Scripts\home\home.js" />
     <Content Include="Areas\VIS\Scripts\home\shortcut.js" />
     <Content Include="Areas\VIS\Scripts\model\calloutColumn.js" />
+    <Content Include="Areas\VIS\Scripts\model\calloutInvRevaluation.js" />
     <Content Include="Areas\VIS\Scripts\model\callouts.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
@@ -790,6 +791,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MInventoryLineController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceBatchLineController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MInvoiceController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MInvRevaluationController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MLocatorContoller.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\ModulePrefixController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MOrderController.cs" />
@@ -913,6 +915,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MInventoryModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInvoiceBatchLineModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MInvoiceModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MInvRevaluationModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MLocatorModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\ModulePrefixModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MOrderLineModel.cs" />
