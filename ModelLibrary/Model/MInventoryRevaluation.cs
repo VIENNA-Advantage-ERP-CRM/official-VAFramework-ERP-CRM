@@ -209,13 +209,6 @@ namespace VAdvantage.Model
         /// <returns>new status (Complete, In Progress, Invalid, Waiting ..)</returns>
         public string CompleteIt()
         {
-            String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
-            if (valid != null)
-            {
-                _processMsg = valid;
-                return DocActionVariables.STATUS_INVALID;
-            }
-
             //	Re-Check
             if (!_justPrepared)
             {
@@ -238,6 +231,13 @@ namespace VAdvantage.Model
             {
                 // Revaluate Cost
                 RevaluateProductCost(lines[lineIndex], M_CostType_ID);
+            }
+
+            String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
+            if (valid != null)
+            {
+                _processMsg = valid;
+                return DocActionVariables.STATUS_INVALID;
             }
 
             SetProcessed(true);
