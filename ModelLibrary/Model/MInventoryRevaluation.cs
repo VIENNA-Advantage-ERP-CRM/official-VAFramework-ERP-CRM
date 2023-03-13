@@ -247,6 +247,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Update Revaluated Cost
+        /// DevOps Task - FEATURE 1995
         /// </summary>
         /// <param name="objRevaluationLine">Revaluation Line Object</param>
         /// <param name="M_CostType_ID">Cost Type</param>
