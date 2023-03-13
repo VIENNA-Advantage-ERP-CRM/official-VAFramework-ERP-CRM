@@ -60,6 +60,7 @@ namespace VIS
                 "~/Areas/VIS/Scripts/app/datacontext.js",
                 "~/Areas/VIS/Scripts/app/calloutengine.js",
                 "~/Areas/VIS/Scripts/model/Callouts.js",
+                "~/Areas/VIS/Scripts/model/CalloutInvRevaluation.js",
                 "~/Areas/VIS/Scripts/home/home.js",
                 "~/Areas/VIS/Scripts/home/changeuserimage.js",
                 "~/Areas/VIS/Scripts/home/shortcut.js",
