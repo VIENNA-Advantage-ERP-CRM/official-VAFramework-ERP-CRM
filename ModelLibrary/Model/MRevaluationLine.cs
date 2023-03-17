@@ -68,6 +68,24 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Implement After Delete Logic
+        /// </summary>
+        /// <param name="success">Is New Record</param>
+        /// <returns>True, when success</returns>
+        protected override bool AfterDelete(bool success)
+        {
+            if (!success)
+                return success;
+
+            // Update difference on Inventory revaluation Header 
+            if (isUpdateHeader)
+            {
+                UpdateHeader();
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Update difference on Inventory revaluation Header 
         /// </summary>
         /// <returns>true</returns>

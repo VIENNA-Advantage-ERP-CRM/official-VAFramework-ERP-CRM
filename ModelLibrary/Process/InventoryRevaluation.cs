@@ -113,7 +113,8 @@ namespace VAdvantage.Process
                     objRevaluationLine.SetNewCostPrice(objRevaluationLine.GetCurrentCostPrice());
                     objRevaluationLine.SetDifferenceCostPrice(0);
                     objRevaluationLine.SetSoldQty(Decimal.Negate(Util.GetValueOfDecimal(dsRevaluation.Tables[0].Rows[i]["SoldQty"])));
-                    objRevaluationLine.SetSoldValue(Decimal.Round(Decimal.Multiply(objRevaluationLine.GetSoldQty(), objRevaluationLine.GetCurrentCostPrice())
+                    objRevaluationLine.SetSoldValue(Decimal.Round(Decimal.Multiply(objRevaluationLine.GetSoldQty(),
+                                                      Util.GetValueOfDecimal(dsRevaluation.Tables[0].Rows[i]["SoldCurrentcostprice"]))
                                                       , precision, MidpointRounding.AwayFromZero));
                     objRevaluationLine.SetNewValue(Decimal.Round(Decimal.Multiply(objRevaluationLine.GetSoldQty(), objRevaluationLine.GetNewCostPrice())
                                                       , precision, MidpointRounding.AwayFromZero));
@@ -236,7 +237,7 @@ namespace VAdvantage.Process
                             INNER JOIN M_Storage st ON (st.M_Locator_ID = loc.M_Locator_ID)
                             INNER JOIN M_Product p ON (p.M_Product_ID = st.M_Product_ID)
                             WHERE st.QtyOnhand 
-                {(objInventoryRevaluation.GetRevaluationType().Equals(MInventoryRevaluation.REVALUATIONTYPE_OnAvailableQuantity) ? " > " : " >= ")} 0 ");
+                {(objInventoryRevaluation.GetRevaluationType().Equals(MInventoryRevaluation.REVALUATIONTYPE_OnAvailableQuantity) ? " <> " : " <> ")} 0 ");
 
                 sql.Append($@" AND st.AD_Client_ID = { objInventoryRevaluation.GetAD_Client_ID()}");
                 if (objInventoryRevaluation.GetM_Product_ID() > 0)
@@ -329,8 +330,8 @@ namespace VAdvantage.Process
                     sql.Append(@" , NVL(st.M_AttributeSetInstance_ID, 0) AS M_AttributeSetInstance_ID ");
                 }
 
-                sql.Append(" , SUM(st.QtyOnhand) as TotalQty ");
-
+                sql.Append(" , SUM(st.QtyOnhand) AS TotalQty ");
+                sql.Append(", SUM (st.Currentcostprice) AS Currentcostprice ");
                 sql.Append($@" FROM (
                             SELECT st.AD_Client_ID, loc.AD_Org_ID, p.M_Product_Category_ID, st.M_Product_ID, 
                                    st.M_Attributesetinstance_ID, loc.M_Warehouse_ID, 
@@ -341,8 +342,16 @@ namespace VAdvantage.Process
                     sql.Append(@" WHEN st.movementtype IN ('W-', 'W+') AND 
                                   (wot.VAMFG_WorkOrderTxnType NOT IN ('CI' , 'CR') OR wot.VAMFG_WorkOrderTxnType IS NULL) THEN 0 ");
                 }
-                sql.Append($@" ELSE st.MovementQty END ) AS QtyOnhand
-                               FROM M_Transaction st 
+                sql.Append($@" ELSE st.MovementQty END ) AS QtyOnhand ");
+                sql.Append(@" , SUM(CASE WHEN st.movementtype IN ('I+', 'I-') AND (inv.isinternaluse = 'N' OR inv.isinternaluse IS NULL) THEN 0 
+                                            WHEN st.movementtype IN ('P-', 'P+') AND (pl.MaterialType = 'F' OR pl.MaterialType IS NULL) THEN 0 ");
+                if (Env.IsModuleInstalled("VAMFG_"))
+                {
+                    sql.Append(@" WHEN st.movementtype IN ('W-', 'W+') AND 
+                                  (wot.VAMFG_WorkOrderTxnType NOT IN ('CI' , 'CR') OR wot.VAMFG_WorkOrderTxnType IS NULL) THEN 0 ");
+                }
+                sql.Append($@" ELSE (st.MovementQty * CASE WHEN st.ProductCost <> 0 THEN st.ProductCost ELSE st.ProductApproxCost END ) END ) AS Currentcostprice "); 
+                sql.Append($@" FROM M_Transaction st 
                                INNER JOIN M_Locator loc ON (loc.M_Locator_ID = st.M_Locator_ID)
                                INNER JOIN M_Product p ON (p.M_Product_ID = st.M_Product_ID)
                                INNER JOIN C_Period prd ON (prd.C_Period_ID = {objInventoryRevaluation.GetC_Period_ID()})
@@ -499,7 +508,8 @@ namespace VAdvantage.Process
             }
             if (objInventoryRevaluation.GetRevaluationType().Equals(MInventoryRevaluation.REVALUATIONTYPE_OnSoldConsumedQuantity))
             {
-                sql.Append(@"  ,s.TotalQty AS SoldQty");
+                sql.Append(@"  , s.TotalQty AS SoldQty
+                               , CASE WHEN s.TotalQty = 0 THEN 0 ELSE ROUND(s.Currentcostprice/s.TotalQty, 12) END AS SoldCurrentcostprice ");
             }
 
             //ASI
@@ -540,19 +550,19 @@ namespace VAdvantage.Process
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Organization) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Warehouse)))
                 {
-                    sql.Append(" cq.M_AttributeSetInstance_ID = CST.M_AttributeSetInstance_ID ");
+                    sql.Append(" AND cq.M_AttributeSetInstance_ID = CST.M_AttributeSetInstance_ID ");
                 }
                 if (objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Warehouse) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_WarehousePlusBatch))
                 {
-                    sql.Append(@" cq.M_Warehouse_ID = CST.M_Warehouse_ID ");
+                    sql.Append(@" AND cq.M_Warehouse_ID = CST.M_Warehouse_ID ");
                 }
                 if (objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Organization) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_OrgPlusBatch) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Warehouse) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_WarehousePlusBatch))
                 {
-                    sql.Append(@" cq.AD_Org_ID = CST.AD_Org_ID ");
+                    sql.Append(@" AND cq.AD_Org_ID = CST.AD_Org_ID ");
                 }
                 sql.Append(" ) ");
             }
@@ -596,7 +606,7 @@ namespace VAdvantage.Process
                                  stk.TotalQty");
                 if (objInventoryRevaluation.GetRevaluationType().Equals(MInventoryRevaluation.REVALUATIONTYPE_OnSoldConsumedQuantity))
                 {
-                    sql.Append(@"  ,s.TotalQty");
+                    sql.Append(@"  ,s.TotalQty , s.Currentcostprice ");
                 }
                 if (!(objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Client) ||
                     objInventoryRevaluation.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Organization) ||
