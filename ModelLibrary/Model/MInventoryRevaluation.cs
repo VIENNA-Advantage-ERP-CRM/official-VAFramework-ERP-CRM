@@ -124,7 +124,7 @@ namespace VAdvantage.Model
             }
 
             // Set Accounting Schema Currency
-            if (GetC_AcctSchema_ID() > 0 && (GetC_Currency_ID() != 0 || Is_ValueChanged("C_AcctSchema_ID")))
+            if (GetC_AcctSchema_ID() > 0 && (GetC_Currency_ID() == 0 || Is_ValueChanged("C_AcctSchema_ID")))
             {
                 SetC_Currency_ID(MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetC_Currency_ID());
             }
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
             // Document Date / Account Date should be equal to current date
             if ((newRecord || Is_ValueChanged("DateDoc") || Is_ValueChanged("DateAcct")) && GetRevaluationType().Equals(REVALUATIONTYPE_OnAvailableQuantity))
             {
-                if (GetDateDoc() != GetDateAcct())
+                if (GetDateDoc().Value.Date != GetDateAcct().Value.Date)
                 {
                     log.SaveError("RevaluationDateNotMatch", "");
                     return false;
@@ -195,6 +195,15 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            //when newcostprice is ZERO then returm message, please define revaluated cost
+            if (Util.GetValueOfInt(DB.ExecuteScalar($@"SELECT COUNT(M_RevaluationLine_ID) FROM M_RevaluationLine 
+                WHERE M_InventoryRevaluation_ID = {GetM_InventoryRevaluation_ID()} AND NewCostPrice = 0 ")) > 0)
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "EnterRevaluatedCost");
+                log.Info(_processMsg);
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             //
             _justPrepared = true;
 
@@ -229,7 +238,6 @@ namespace VAdvantage.Model
             MRevaluationLine[] lines = GetLines(true);
             for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
-                // Revaluate Cost
                 RevaluateProductCost(lines[lineIndex], M_CostType_ID);
             }
 
@@ -295,7 +303,7 @@ namespace VAdvantage.Model
                 GetCostingLevel().Equals(COSTINGLEVEL_BatchLot) ||
                 GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
             {
-                sql.Append($@" AND NVL(M_AttributeSetInstace_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
+                sql.Append($@" AND NVL(M_AttributeSetInstance_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
             }
             if (GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
                 GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
@@ -343,7 +351,7 @@ namespace VAdvantage.Model
                 GetCostingLevel().Equals(COSTINGLEVEL_BatchLot) ||
                 GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
             {
-                sql.Append($@" AND NVL(M_AttributeSetInstace_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
+                sql.Append($@" AND NVL(M_AttributeSetInstance_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
             }
             if (GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
                 GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
