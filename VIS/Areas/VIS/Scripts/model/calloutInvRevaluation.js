@@ -124,7 +124,7 @@
                     // When REVALUATIONTYPE_OnSoldConsumedQuantity
                     if (Util.getValueOfString(dr["RevaluationType"]) == "S") {
                         mTab.setValue("NewValue", (mTab.getValue("SoldQty") * mTab.getValue("NewCostPrice")).toFixed(CostingPrecision));
-                        mTab.setValue("DifferenceValue", mTab.getValue("NewValue") - mTab.getValue("SoldValue"));
+                        mTab.setValue("DifferenceValue", (mTab.getValue("NewValue") - mTab.getValue("SoldValue")).toFixed(CostingPrecision));
                     }
                 }
             }
