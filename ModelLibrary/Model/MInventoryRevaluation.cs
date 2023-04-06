@@ -36,12 +36,20 @@ namespace VAdvantage.Model
         private StringBuilder sql = new StringBuilder();
         /** Rows Affected after execute query */
         int no = 0;
+        /** Accounting Schema*/
+        MAcctSchema acctSchema = null;
         /** Cost Element ID*/
         int M_CostElement_ID = 0;
         int Binded_CostElement_ID = 0;
         /** Get Product Cost Element */
         DataSet dsCostElement = null;
         DataRow[] drCostElement = null;
+        /** Product Transaction Details*/
+        DataSet dsProdutTransaction = null;
+        DataRow[] drProdutTransaction = null;
+        /* Product Cost**/
+        decimal productCost = 0;
+        decimal combCost = 0;
 
         /// <summary>
         /// Standard Constructor
@@ -130,7 +138,8 @@ namespace VAdvantage.Model
             }
 
             // Document Date / Account Date should be equal to current date
-            if ((newRecord || Is_ValueChanged("DateDoc") || Is_ValueChanged("DateAcct")) && GetRevaluationType().Equals(REVALUATIONTYPE_OnAvailableQuantity))
+            if ((newRecord || Is_ValueChanged("DateDoc") || Is_ValueChanged("DateAcct") || Is_ValueChanged("RevaluationType"))
+                && GetRevaluationType().Equals(REVALUATIONTYPE_OnAvailableQuantity))
             {
                 if (GetDateDoc().Value.Date != GetDateAcct().Value.Date)
                 {
@@ -227,7 +236,8 @@ namespace VAdvantage.Model
             }
 
             // Get Accounting Schema Cost Type
-            int M_CostType_ID = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetM_CostType_ID();
+            acctSchema = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID());
+            int M_CostType_ID = acctSchema.GetM_CostType_ID();
 
             // Get Product Cost Element based on selected Costing Method
             M_CostElement_ID = MCostElement.GetMaterialCostElement(GetCtx(), GetCostingMethod()).GetM_CostElement_ID();
@@ -235,10 +245,17 @@ namespace VAdvantage.Model
             // Get Cost Element ID's binded on product Category
             GetCostElements();
 
+            // Get Product Transaction Details
+            GetProductTransaction();
+
             MRevaluationLine[] lines = GetLines(true);
             for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
                 RevaluateProductCost(lines[lineIndex], M_CostType_ID);
+                if (!string.IsNullOrEmpty(_processMsg))
+                {
+                    return DocActionVariables.STATUS_INVALID;
+                }
             }
 
             String valid = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_AFTER_COMPLETE);
@@ -262,14 +279,33 @@ namespace VAdvantage.Model
         /// <returns>true, when updated lines</returns>
         private string RevaluateProductCost(MRevaluationLine objRevaluationLine, int M_CostType_ID)
         {
+            combCost = 0;
+            productCost = 0;
             // Update Cost Queue Cost
             if (UpdateCostQueue(objRevaluationLine))
             {
                 // Update Product Costs - CurrentCostPrice and AccumulationCost
-                if (UpdateproductCost(objRevaluationLine, M_CostType_ID))
+                if (UpdateproductCost(objRevaluationLine, M_CostType_ID, out productCost))
                 {
-                    UpdateCostCombination(objRevaluationLine);
+                    // Update Cost Combination
+                    if (UpdateCostCombination(objRevaluationLine, out combCost))
+                    {
+                        // Create Transaction
+                        CreateRevaluationTransaction(objRevaluationLine, (combCost != 0 ? combCost : productCost));
+                    }
+                    else
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "IRCostCombNotUpdated");
+                    }
                 }
+                else
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "IRProdCostNotUpdated");
+                }
+            }
+            else
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "IRQueueNotUpdated");
             }
             return "";
         }
@@ -280,10 +316,12 @@ namespace VAdvantage.Model
         /// <param name="objRevaluationLine">Revaluation Line Object</param>
         /// <param name="M_CostType_ID">Cost Type</param>
         /// <returns>true, when updated lines</returns>
-        private bool UpdateproductCost(MRevaluationLine objRevaluationLine, int M_CostType_ID)
+        private bool UpdateproductCost(MRevaluationLine objRevaluationLine, int M_CostType_ID, out decimal productCost)
         {
             sql.Clear();
-            sql.Append($@"UPDATE M_Cost SET CurrentCostPrice = {objRevaluationLine.GetNewCostPrice()}, 
+            productCost = Decimal.Round(GetProductCost(objRevaluationLine), acctSchema.GetCostingPrecision(), MidpointRounding.AwayFromZero);
+            sql.Clear();
+            sql.Append($@"UPDATE M_Cost SET CurrentCostPrice = {productCost}, 
                             CumulatedAmt  = NVL(CumulatedAmt, 0) + {objRevaluationLine.GetTotalDifference()}, 
                             Updated = {GlobalVariable.TO_DATE(DateTime.Now, false)},
                             UpdatedBy = {GetCtx().GetAD_User_ID()}
@@ -324,6 +362,98 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Get Product Costs from Cost Queue based on Costing Level or Material Policy defined on Product Category
+        /// </summary>
+        /// <param name="objRevaluationLine">Inventory Revaluation Line</param>
+        /// <returns>Product Costs</returns>
+        private decimal GetProductCost(MRevaluationLine objRevaluationLine)
+        {
+            decimal cost = 0;
+
+            bool isMMPolicyFIFO = true;
+            if (GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Fifo))
+            {
+                isMMPolicyFIFO = true;
+            }
+            else if (GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Lifo))
+            {
+                isMMPolicyFIFO = false;
+            }
+            else
+            {
+                MProductCategory pc = MProductCategory.Get(GetCtx(), objRevaluationLine.GetM_Product_Category_ID());
+                if (pc.GetMMPolicy().Equals(MProductCategory.MMPOLICY_FiFo))
+                {
+                    isMMPolicyFIFO = true;
+                }
+                else
+                {
+                    isMMPolicyFIFO = false;
+                }
+            }
+
+            sql.Clear();
+            sql.Append(@"SELECT");
+            if (GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Fifo) ||
+                GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Lifo))
+            {
+                sql.Append(" cq.CurrentCostPrice");
+            }
+            else
+            {
+                sql.Append(@" CASE WHEN SUM(cq.CurrentQty) = 0
+                                   THEN 0 ELSE ROUND(SUM(cq.CurrentQty * cq.currentcostprice) / SUM(cq.CurrentQty), 10)
+                              END AS CurrentCostPrice ");
+            }
+            sql.Append(" FROM M_CostQueue cq ");
+
+            // Where Clause
+            sql.Append($@" WHERE cq.CurrentQty <> 0 AND cq.C_AcctSchema_ID = {GetC_AcctSchema_ID()} 
+                            AND cq.M_Product_ID = {objRevaluationLine.GetM_Product_ID()}
+                            AND cq.AD_Client_ID = {GetAD_Client_ID()}");
+
+            if (GetCostingLevel().Equals(COSTINGLEVEL_Organization) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_OrgPlusBatch) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql.Append($" AND cq.AD_Org_ID = {GetAD_Org_ID()}");
+            }
+
+            if (GetCostingLevel().Equals(COSTINGLEVEL_OrgPlusBatch) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_BatchLot) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql.Append($@" AND NVL(cq.M_AttributeSetInstance_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
+            }
+
+            if (GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
+                GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
+            {
+                sql.Append($@" AND NVL(cq.M_Warehouse_ID , 0) = {GetM_Warehouse_ID()}");
+            }
+
+            // Order BY
+            if (GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Fifo) ||
+                GetCostingMethod().Equals(MInventoryRevaluation.COSTINGMETHOD_Lifo))
+            {
+                sql.Append(@" ORDER BY cq.QueueDate ");
+                if (!isMMPolicyFIFO)
+                {
+                    sql.Append("DESC ");
+                }
+                sql.Append(@" , cq.M_AttributeSetInstance_ID ");
+                if (!isMMPolicyFIFO)
+                {
+                    sql.Append("DESC ");
+                }
+            }
+
+            cost = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+            return cost;
+        }
+
+        /// <summary>
         /// Update Cost Queue line with Revaluated Cost
         /// </summary>
         /// <param name="objRevaluationLine">Revaluation Line Object</param>
@@ -354,7 +484,8 @@ namespace VAdvantage.Model
                 sql.Append($@" AND NVL(M_AttributeSetInstance_ID , 0) = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
             }
             if (GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
-                GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch))
+                GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch) ||
+                GetM_Warehouse_ID() > 0)
             {
                 sql.Append($@" AND NVL(M_Warehouse_ID , 0) = {GetM_Warehouse_ID()}");
             }
@@ -381,8 +512,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="objRevaluationLine">Revaluation Line Object</param>
         /// <returns>true, when combination updated</returns>
-        private bool UpdateCostCombination(MRevaluationLine objRevaluationLine)
+        private bool UpdateCostCombination(MRevaluationLine objRevaluationLine, out Decimal ProductCost)
         {
+            ProductCost = 0;
             if (dsCostElement != null && dsCostElement.Tables.Count > 0 && dsCostElement.Tables[0].Rows.Count > 0)
             {
                 drCostElement = dsCostElement.Tables[0].Select($"M_Product_Category_ID = {objRevaluationLine.GetM_Product_Category_ID()}");
@@ -421,10 +553,11 @@ namespace VAdvantage.Model
                                 if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["iscostMethod"]) == 1)
                                 {
                                     costCombination = MCost.Get(product, objRevaluationLine.GetM_AttributeSetInstance_ID(), acctSchema,
-                                    ((GetCostingLevel() == MProductCategory.COSTINGLEVEL_Client ||
-                                     GetCostingLevel() == MProductCategory.COSTINGLEVEL_BatchLot) ? 0 : GetAD_Org_ID()),
+                                    ((GetCostingLevel().Equals(COSTINGLEVEL_Client) ||
+                                     GetCostingLevel().Equals(COSTINGLEVEL_BatchLot)) ? 0 : GetAD_Org_ID()),
                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]),
-                                    GetM_Warehouse_ID());
+                                    ((GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
+                                      GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch)) ? GetM_Warehouse_ID() : 0));
 
                                     costCombination.SetCurrentCostPrice(0);
                                     costCombination.SetCurrentQty(0);
@@ -445,12 +578,16 @@ namespace VAdvantage.Model
                                 costCombination = MCost.Get(product, objRevaluationLine.GetM_AttributeSetInstance_ID(), acctSchema,
                                     ((GetCostingLevel() == MProductCategory.COSTINGLEVEL_Client ||
                                      GetCostingLevel() == MProductCategory.COSTINGLEVEL_BatchLot) ? 0 : GetAD_Org_ID()),
-                                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), GetM_Warehouse_ID());
+                                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]),
+                                    ((GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
+                                      GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch)) ? GetM_Warehouse_ID() : 0));
 
                                 cost = MCost.Get(product, objRevaluationLine.GetM_AttributeSetInstance_ID(), acctSchema,
                                     ((GetCostingLevel() == MProductCategory.COSTINGLEVEL_Client ||
                                      GetCostingLevel() == MProductCategory.COSTINGLEVEL_BatchLot) ? 0 : GetAD_Org_ID()),
-                                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), GetM_Warehouse_ID());
+                                    Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]),
+                                    ((GetCostingLevel().Equals(COSTINGLEVEL_Warehouse) ||
+                                      GetCostingLevel().Equals(COSTINGLEVEL_WarehousePlusBatch)) ? GetM_Warehouse_ID() : 0));
 
                                 // if m_ref_costelement is of Freight type then current cost against this record is :: 
                                 // Formula : (Freight Current Cost * Freight Current Qty) / Current Qty (whose costing method is available)
@@ -467,6 +604,7 @@ namespace VAdvantage.Model
                                 }
                                 costCombination.Save();
                             }
+                            ProductCost = costCombination.GetCurrentCostPrice();
                         }
                     }
                     catch { }
@@ -501,6 +639,102 @@ namespace VAdvantage.Model
             sql.Append(")");
             dsCostElement = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
             return dsCostElement;
+        }
+
+        /// <summary>
+        /// Create Tranaction Line for Inventory Revaluation
+        /// </summary>
+        /// <param name="objRevaluationLine">Revaluation Line</param>
+        /// <param name="ProductCost">Product Costs</param>
+        /// <returns>Error Message if any</returns>
+        private string CreateRevaluationTransaction(MRevaluationLine objRevaluationLine, decimal ProductCost)
+        {
+            MTransaction objTransaction = null;
+            if (dsProdutTransaction != null && dsProdutTransaction.Tables.Count > 0 && dsProdutTransaction.Tables[0].Rows.Count > 0)
+            {
+                if (!(GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Client) ||
+                    GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Organization) ||
+                   GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Warehouse)))
+                {
+                    // Get data Atribute wise when costing level belong to Batch
+                    drProdutTransaction = dsProdutTransaction.Tables[0].Select($@"M_Product_ID = {objRevaluationLine.GetM_Product_ID()} AND 
+                                            M_AttributeSetInstance_ID = {objRevaluationLine.GetM_AttributeSetInstance_ID()}");
+                }
+                else
+                {
+                    drProdutTransaction = dsProdutTransaction.Tables[0].Select($@"M_Product_ID = {objRevaluationLine.GetM_Product_ID()}");
+                }
+                if (drProdutTransaction != null && drProdutTransaction.Length > 0)
+                {
+                    for (int i = 0; i < drProdutTransaction.Length; i++)
+                    {
+                        objTransaction = new MTransaction(GetCtx(), 0, Get_Trx());
+                        objTransaction.SetAD_Client_ID(Util.GetValueOfInt(drProdutTransaction[i]["AD_Client_ID"]));
+                        objTransaction.SetAD_Org_ID(Util.GetValueOfInt(drProdutTransaction[i]["AD_Org_ID"]));
+                        objTransaction.SetM_Locator_ID(Util.GetValueOfInt(drProdutTransaction[i]["M_Locator_ID"]));
+                        objTransaction.SetM_ProductContainer_ID(Util.GetValueOfInt(drProdutTransaction[i]["M_ProductContainer_ID"]));
+                        objTransaction.SetM_Product_ID(Util.GetValueOfInt(drProdutTransaction[i]["M_Product_ID"]));
+                        objTransaction.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(drProdutTransaction[i]["M_AttributeSetInstance_ID"]));
+                        objTransaction.SetCurrentQty(Util.GetValueOfDecimal(drProdutTransaction[i]["CurrentQty"]));
+                        objTransaction.SetContainerCurrentQty(Util.GetValueOfDecimal(drProdutTransaction[i]["ContainerCurrentQty"]));
+                        objTransaction.Set_Value("CostingLevel", Util.GetValueOfString(drProdutTransaction[i]["CostingLevel"]));
+                        objTransaction.Set_Value("M_CostElement_ID", Util.GetValueOfInt(drProdutTransaction[i]["M_CostElement_ID"]));
+                        objTransaction.Set_Value("ProductCost", ProductCost);
+                        objTransaction.Set_Value("M_RevaluationLine_ID", objRevaluationLine.GetM_RevaluationLine_ID());
+                        objTransaction.Set_ValueNoCheck("MovementType", "IR");
+                        if (!objTransaction.Save())
+                        {
+                            ValueNamePair vp = VLogger.RetrieveError();
+                            string val = "";
+                            if (vp != null)
+                            {
+                                val = vp.GetName();
+                                if (String.IsNullOrEmpty(val))
+                                {
+                                    val = vp.GetValue();
+                                }
+                            }
+                            _processMsg = Msg.GetMsg(GetCtx(), "IRTrxNotSaved") + " " + (String.IsNullOrEmpty(val) ? "" : val);
+                            log.Log(Level.SEVERE, "Transaction not created for Inventory Revaluation" + val);
+                            return _processMsg;
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Get Product Transaction Details
+        /// </summary>
+        /// <returns>DataSet Transaction Details</returns>
+        private DataSet GetProductTransaction()
+        {
+            sql.Clear();
+            sql.Append($@"SELECT AD_Client_ID, AD_Org_ID , M_Locator_ID, M_ProductContainer_ID, 
+                                 M_Product_ID, M_AttributeSetInstance_ID, CurrentQty, ContainerCurrentQty,
+                                 CostingLevel, M_CostElement_ID, ProductApproxCost, ProductCost
+                          FROM M_Transaction WHERE M_Transaction_ID IN (
+                            SELECT DISTINCT First_VALUE(t.M_Transaction_ID) OVER 
+                                 (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) 
+                                  ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS M_Transaction_ID 
+                            FROM M_Transaction t 
+                            INNER JOIN M_Locator l ON (t.M_Locator_ID = l.M_Locator_ID) 
+                            INNER JOIN M_Warehouse w ON (w.M_Warehouse_ID = l.M_Warehouse_ID)
+                            WHERE t.AD_Client_ID = {GetAD_Client_ID()} 
+                            AND t.M_Product_ID IN (SELECT M_Product_ID FROM M_RevaluationLine WHERE M_InventoryRevaluation_ID = {GetM_InventoryRevaluation_ID()})
+                            AND w.M_Warehouse_ID = {GetM_Warehouse_ID()}");
+
+            if (!(GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Client) ||
+                  GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Organization) ||
+                 GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Warehouse)))
+            {
+                sql.Append($@" AND NVL(M_AttributeSetInstance_ID, 0) IN (SELECT NVL(M_AttributeSetInstance_ID, 0) FROM M_RevaluationLine 
+                                WHERE M_InventoryRevaluation_ID = {GetM_InventoryRevaluation_ID()}) ");
+            }
+            sql.Append(")");
+            dsProdutTransaction = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+            return dsProdutTransaction;
         }
 
         /// <summary>
