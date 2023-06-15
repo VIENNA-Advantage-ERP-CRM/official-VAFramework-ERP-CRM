@@ -193,6 +193,8 @@ namespace VIS.Models
                 //Row 1
                 if (!IsSOTrx || IsInternalUse == "N" || window_ID == 191 || window_ID == 140)
                 {
+                    /// Below code commented by Mukesh Vishwakarma @20230615 has been depreciated as not required Lots number in Drop=down list due to performance.
+                    /**
                     obj.tableStucture += "<tr>";
                     //column 1
                     label = Msg.Translate(ctx, "M_Lot_ID");
@@ -213,7 +215,8 @@ namespace VIS.Models
                     //obj.tableStucture += "<td>";
                     obj.tableStucture += "<select id='cmbLot_" + windowNo + "'>";
                     obj.tableStucture += " <option selected value='" + 0 + "'></option>";
-                    for (int i = 1; i < data.Length; i++)
+                    if(false) // Added by Mukesh Vishwakarma
+                        for (int i = 1; i < data.Length; i++)
                     {
                         if (Convert.ToInt32(data[i].Key) == _masi.GetM_Lot_ID())
                         {
@@ -229,7 +232,20 @@ namespace VIS.Models
                     obj.tableStucture += "<label id=M_Lot_ID_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
                     obj.tableStucture += "</td>";
                     obj.tableStucture += "</tr>";
+                    */
 
+                    /// End of the code commented by Mukesh Vishwakarma @20230615
+
+                    /// For Search ctrl by Mukesh Vishwakarma @20230613
+                    obj.tableStucture += "<tr>";
+                    obj.tableStucture += "<td>";
+
+                    /// this code transfer to concern js file
+                    obj.tableStucture += "<div id= LotDivControl_" + windowNo + ">";
+                    obj.tableStucture += "</td>";
+                    obj.tableStucture += "</tr>";
+                   
+                    // End of the code by Mukesh 20230613
 
                     //Row 2
                     obj.tableStucture += "<tr>";
@@ -2031,6 +2047,44 @@ namespace VIS.Models
                 + "WHERE p.M_Product_ID=" + Product_ID + " AND w.M_Warehouse_ID=" + Warehouse_ID;
             string title = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
             return title;
+        }
+
+        /// 
+        /// <author> Added by Mukesh Vishwakarma on 06 June 2023 </author>
+        ///  <summary>
+        ///  This method use to get where clause query for Search control where filtered lot number will displayed
+        /// </summary>
+        /// <param name="mAttributeSetInstanceId"></param>
+        /// <param name="mProductId"></param>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+
+        public string GetAttributeWhereClause(int mAttributeSetInstanceId, int mProductId,Ctx ctx)
+        {
+            //	Get Model
+            string LotWhereClause = "";
+            MAttributeSetInstance masi = MAttributeSetInstance.Get(ctx, mAttributeSetInstanceId, mProductId);
+            if(masi!=null)
+                LotWhereClause = " EXISTS(SELECT M_Product_ID FROM M_Product p "
+                            + " WHERE p.M_AttributeSet_ID=" + masi.GetM_AttributeSet_ID()
+                            + " AND p.M_Product_ID=M_Lot.M_Product_ID) ";
+            else
+                LotWhereClause = " IsActive = 'Y'";
+            return LotWhereClause;
+        }
+
+        /// 
+        /// <author> Added by Mukesh Vishwakarma on 14 June 2023 </author>
+        /// <summary>
+        /// Get Name of the lot table. 
+        /// </summary>
+        /// <param name="M_Lot_ID"></param>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+
+        public string GetLotName(int M_Lot_ID, Ctx ctx)
+        {
+            return new MLot(ctx, M_Lot_ID, null).GetName();
         }
     }
 }
