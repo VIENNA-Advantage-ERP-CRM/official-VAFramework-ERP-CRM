@@ -94,20 +94,20 @@
             cancelbtn.css("margin-right", "0px");
             cancelbtn.css("float", "left");
         }
-        /// Lot Search code by Mukesh @20230612
+        /// Lot Search code by Mukesh V @20230612
         var whereClause = null;
-        try {
-            // get where clouse from model class 
-            whereClause = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetAttributeWhereClause", {
-                mAttributeSetInstanceId: mAttributeSetInstanceId,
-                mProductId: mProductId,
-            }, null);
+
+        if (mAttributeSetID > 0) {
+            whereClause = " EXISTS(SELECT M_Product_ID FROM M_Product p "
+                        + " WHERE p.M_AttributeSet_ID=" + mAttributeSetID
+                        + " AND p.M_Product_ID=M_Lot.M_Product_ID) ";
         }
-        catch (e) {
-            console.log(e);
+        else {
+            whereClause = " IsActive='Y'";
         }
+
         var lotName = VIS.Msg.translate(VIS.Env.getCtx(), "M_Lot_ID");
-        var lookups = new VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.Search, "M_Lot_ID", 0, false, whereClause != null && whereClause.length > 0 ? whereClause : "ISACTIVE='Y'");// "ISACTIVE='Y'");
+        var lookups = new VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.Search, "M_Lot_ID", 0, false, whereClause);// "ISACTIVE='Y'");
 
         var lblSearchLot = new VIS.Controls.VTextBoxButton("M_Lot_ID", true, false, true, VIS.DisplayType.Search, lookups);
 
@@ -123,11 +123,13 @@
 
         LotDivControl.append(searchLottd);
 
-        if (txtLotString != null && txtLotString.val().length>0) {
+        var lotText = txtLotString.val();
+        if (lotText != null && lotText.length>0)
+        {
             lblSearchLot.getBtn(0).prop('disabled', true);
             lblSearchLot.getControl().prop('disabled', true);
         }        
-        // End of code by Mukesh
+        // End of code by Mukesh @20230616
 
         //var dt = new Date(this.dtGuaranteeDate.attr("value"));
         //if (dt != null) {
@@ -786,10 +788,9 @@
             if (lblSearchLot != null) {
                 lblSearchLot.fireValueChanged = function () {
 
-                    var M_Lot_ID = lblSearchLot.getValue();
-                    if (M_Lot_ID != null) {
-                        var lotName = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetLotName", { M_Lot_ID: M_Lot_ID }, null);
-                        // VIS.ADialog.info("Load data " + M_Lot_ID + "  " + lotName);
+                    var Name = lblSearchLot.getDisplay();
+                    var lotName = Name.substring(Name.lastIndexOf("_") + 1, Name.length);
+                    if (lotName != null && lotName.length > 0) {
                         txtLotString.val(lotName);
                         txtLotString.attr("readOnly", true);
                         txtLotString.addClass("vis-gc-vpanel-table-readOnly");
@@ -904,6 +905,7 @@
                 modal: true,
                 title: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"),
                 width: 490,
+                height: 450, // Added by Mukesh V. to fixed height of popup window @20230616
                 close: function () {
                     $self.dispose();
                     $self = null;

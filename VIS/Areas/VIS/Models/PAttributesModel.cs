@@ -241,11 +241,11 @@ namespace VIS.Models
                     obj.tableStucture += "<td>";
 
                     /// this code transfer to concern js file
-                    obj.tableStucture += "<div id= LotDivControl_" + windowNo + ">";
+                    obj.tableStucture += "<div id= LotDivControl_" + windowNo + " style='width:102%'>";
                     obj.tableStucture += "</td>";
                     obj.tableStucture += "</tr>";
-                   
-                    // End of the code by Mukesh 20230613
+
+                    // End of the code by Mukesh Vishwakarma 20230613
 
                     //Row 2
                     obj.tableStucture += "<tr>";
@@ -2047,44 +2047,6 @@ namespace VIS.Models
                 + "WHERE p.M_Product_ID=" + Product_ID + " AND w.M_Warehouse_ID=" + Warehouse_ID;
             string title = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
             return title;
-        }
-
-        /// 
-        /// <author> Added by Mukesh Vishwakarma on 06 June 2023 </author>
-        ///  <summary>
-        ///  This method use to get where clause query for Search control where filtered lot number will displayed
-        /// </summary>
-        /// <param name="mAttributeSetInstanceId"></param>
-        /// <param name="mProductId"></param>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-
-        public string GetAttributeWhereClause(int mAttributeSetInstanceId, int mProductId,Ctx ctx)
-        {
-            //	Get Model
-            string LotWhereClause = "";
-            MAttributeSetInstance masi = MAttributeSetInstance.Get(ctx, mAttributeSetInstanceId, mProductId);
-            if(masi!=null)
-                LotWhereClause = " EXISTS(SELECT M_Product_ID FROM M_Product p "
-                            + " WHERE p.M_AttributeSet_ID=" + masi.GetM_AttributeSet_ID()
-                            + " AND p.M_Product_ID=M_Lot.M_Product_ID) ";
-            else
-                LotWhereClause = " IsActive = 'Y'";
-            return LotWhereClause;
-        }
-
-        /// 
-        /// <author> Added by Mukesh Vishwakarma on 14 June 2023 </author>
-        /// <summary>
-        /// Get Name of the lot table. 
-        /// </summary>
-        /// <param name="M_Lot_ID"></param>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-
-        public string GetLotName(int M_Lot_ID, Ctx ctx)
-        {
-            return new MLot(ctx, M_Lot_ID, null).GetName();
         }
     }
 }
