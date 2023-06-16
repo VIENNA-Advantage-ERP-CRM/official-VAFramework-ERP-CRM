@@ -142,35 +142,5 @@ namespace VIS.Controllers
             PAttributesModel model = new PAttributesModel();
             return Json(JsonConvert.SerializeObject(model.GetTitle(Warehouse_ID, Product_ID, ctx)), JsonRequestBehavior.AllowGet);
         }
-
-
-
-        /// <author>Mukesh Vishwakarma</author>
-        /// <summary>
-        ///  // Added by Mukesh Vishwakarma on 20230613 : Get where clause for M_Lot_ID according to set attribute set instances
-        /// </summary>
-        /// <param name="mAttributeSetInstanceId"></param>
-        /// <param name="mProductId"></param>
-        /// <returns></returns>
-
-        public JsonResult GetAttributeWhereClause(int mAttributeSetInstanceId, int mProductId)
-        {
-            Ctx ctx = Session["ctx"] as Ctx;
-            PAttributesModel model = new PAttributesModel();
-            return Json(JsonConvert.SerializeObject(model.GetAttributeWhereClause(mAttributeSetInstanceId, mProductId,ctx)), JsonRequestBehavior.AllowGet);
-        }
- 
-        /// <author>Mukesh Vishwakarma</author>
-        /// <summary>
-        /// Added by Mukesh Vishwakarma on 20230614 : Get lot name from M_Lot table
-        /// </summary>
-        /// <param name="M_Lot_ID"></param>
-        /// <returns></returns>
-        public JsonResult GetLotName(int M_Lot_ID)
-        {
-            Ctx ctx = Session["ctx"] as Ctx;
-            PAttributesModel model = new PAttributesModel();
-            return Json(JsonConvert.SerializeObject(model.GetLotName(M_Lot_ID, ctx)), JsonRequestBehavior.AllowGet);
-        }
     }
 }
