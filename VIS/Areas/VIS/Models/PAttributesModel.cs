@@ -193,6 +193,8 @@ namespace VIS.Models
                 //Row 1
                 if (!IsSOTrx || IsInternalUse == "N" || window_ID == 191 || window_ID == 140)
                 {
+                    /// Below code commented by Mukesh Vishwakarma @20230615 has been depreciated as not required Lots number in Drop=down list due to performance.
+                    /**
                     obj.tableStucture += "<tr>";
                     //column 1
                     label = Msg.Translate(ctx, "M_Lot_ID");
@@ -213,7 +215,8 @@ namespace VIS.Models
                     //obj.tableStucture += "<td>";
                     obj.tableStucture += "<select id='cmbLot_" + windowNo + "'>";
                     obj.tableStucture += " <option selected value='" + 0 + "'></option>";
-                    for (int i = 1; i < data.Length; i++)
+                    if(false) // Added by Mukesh Vishwakarma
+                        for (int i = 1; i < data.Length; i++)
                     {
                         if (Convert.ToInt32(data[i].Key) == _masi.GetM_Lot_ID())
                         {
@@ -229,7 +232,20 @@ namespace VIS.Models
                     obj.tableStucture += "<label id=M_Lot_ID_" + windowNo + "' class='VIS_Pref_Label_Font'>" + label + "</label></div></div>";
                     obj.tableStucture += "</td>";
                     obj.tableStucture += "</tr>";
+                    */
 
+                    /// End of the code commented by Mukesh Vishwakarma @20230615
+
+                    /// For Search ctrl by Mukesh Vishwakarma @20230613
+                    obj.tableStucture += "<tr>";
+                    obj.tableStucture += "<td>";
+
+                    /// this code transfer to concern js file
+                    obj.tableStucture += "<div id= LotDivControl_" + windowNo + " style='width:102%'>";
+                    obj.tableStucture += "</td>";
+                    obj.tableStucture += "</tr>";
+
+                    // End of the code by Mukesh Vishwakarma 20230613
 
                     //Row 2
                     obj.tableStucture += "<tr>";

@@ -64,6 +64,10 @@
         }
         this.hasAttribute = true;
         init();
+
+        /// Added by Mukesh @20230609
+        var LotDivControl = $root.find("#LotDivControl_" + windowNo); 
+
         //initialize control varibales after load from root
         var Okbtn = $root.find("#btnOk_" + windowNo);
         var cancelbtn = $root.find("#btnCancel_" + windowNo);
@@ -90,6 +94,42 @@
             cancelbtn.css("margin-right", "0px");
             cancelbtn.css("float", "left");
         }
+        /// Lot Search code by Mukesh V @20230612
+        var whereClause = null;
+
+        if (mAttributeSetID > 0) {
+            whereClause = " EXISTS(SELECT M_Product_ID FROM M_Product p "
+                        + " WHERE p.M_AttributeSet_ID=" + mAttributeSetID
+                        + " AND p.M_Product_ID=M_Lot.M_Product_ID) ";
+        }
+        else {
+            whereClause = " IsActive='Y'";
+        }
+
+        var lotName = VIS.Msg.translate(VIS.Env.getCtx(), "M_Lot_ID");
+        var lookups = new VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.Search, "M_Lot_ID", 0, false, whereClause);// "ISACTIVE='Y'");
+
+        var lblSearchLot = new VIS.Controls.VTextBoxButton("M_Lot_ID", true, false, true, VIS.DisplayType.Search, lookups);
+
+        var searchLottd = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
+        var divLotCtrlWrapVIS = $('<div class="vis-control-wrap">');
+        divLotCtrlWrapVIS.append(lblSearchLot.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ').attr("class", "from-control").attr("id", "M_Lot_ID").attr("Name", "M_Lot_ID").css("width", "100%")).append('<label> ' + lotName + ' <label/>');
+
+        var divLotBtnWrapInput = $('<div class="input-group-append">');
+        searchLottd.css("width", "100%");
+        searchLottd.append(divLotCtrlWrapVIS);
+        searchLottd.append(divLotBtnWrapInput);
+        divLotBtnWrapInput.append(lblSearchLot.getBtn(0));
+
+        LotDivControl.append(searchLottd);
+
+        var lotText = txtLotString.val();
+        if (lotText != null && lotText.length>0)
+        {
+            lblSearchLot.getBtn(0).prop('disabled', true);
+            lblSearchLot.getControl().prop('disabled', true);
+        }        
+        // End of code by Mukesh @20230616
 
         //var dt = new Date(this.dtGuaranteeDate.attr("value"));
         //if (dt != null) {
@@ -435,6 +475,16 @@
             var rw = chkNewEdit.prop("checked");
             chkEdit.attr("disabled", rw);
 
+            /// Below code added by Mukesh Vishwakarma @20230613
+            if (rw) {
+                lblSearchLot.getBtn(0).prop('disabled', false);
+                lblSearchLot.getControl().prop('disabled', false);
+            }
+            else{
+                lblSearchLot.getBtn(0).prop('disabled', true);
+                lblSearchLot.getControl().prop('disabled', true);
+            }
+            // End code code by Mukesh Vishwakarma
             if (txtLotString) {
                 txtLotString.attr("readOnly", !rw);
                 if (rw) {
@@ -514,6 +564,16 @@
             var rw = chkEdit.prop("checked");
             chkNewEdit.attr("disabled", rw);
 
+            /// Below code added by Mukesh Vishwakarma @20230613
+            if (rw) {
+                lblSearchLot.getBtn(0).prop('disabled', false);
+                lblSearchLot.getControl().prop('disabled', false);
+            }
+            else {
+                lblSearchLot.getBtn(0).prop('disabled', true);
+                lblSearchLot.getControl().prop('disabled', true);
+            }
+            // End code code by Mukesh Vishwakarma
             if (txtLotString) {
                 txtLotString.attr("readOnly", !rw);
                 if (rw) {
@@ -661,6 +721,10 @@
 
         function lotChange(returnValue) {
             cmbLot.append(new Option(returnValue.Name, returnValue.Key, true, true));
+            /// Here need to set key value in Search control... Added by Mukesh V. @20230614 
+            lblSearchLot.setValue(returnValue.Key);
+            txtLotString.val(returnValue.Name);
+            // End of the code by Mukesh V.
             cmbLot.change();
         }
 
@@ -719,6 +783,26 @@
                     }
                 });
             }
+
+            // Added by Mukesh Vishwakarma for search control event @20230614
+            if (lblSearchLot != null) {
+                lblSearchLot.fireValueChanged = function () {
+
+                    var Name = lblSearchLot.getDisplay();
+                    var lotName = Name.substring(Name.lastIndexOf("_") + 1, Name.length);
+                    if (lotName != null && lotName.length > 0) {
+                        txtLotString.val(lotName);
+                        txtLotString.attr("readOnly", true);
+                        txtLotString.addClass("vis-gc-vpanel-table-readOnly");
+                    }
+                    else {
+                        txtLotString.val("");
+                        txtLotString.attr("readOnly", false);
+                        txtLotString.removeClass("vis-gc-vpanel-table-readOnly");
+                    }
+                }
+            }
+            /// end of the code by Mukesh Vishwakarma @20230614
 
             if (chkNewEdit != null) {
                 chkNewEdit.change(function () {
@@ -821,6 +905,7 @@
                 modal: true,
                 title: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"),
                 width: 490,
+                height: 450, // Added by Mukesh V. to fixed height of popup window @20230616
                 close: function () {
                     $self.dispose();
                     $self = null;
