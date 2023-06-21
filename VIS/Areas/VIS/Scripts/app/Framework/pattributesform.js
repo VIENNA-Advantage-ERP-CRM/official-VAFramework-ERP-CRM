@@ -905,7 +905,7 @@
                 modal: true,
                 title: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"),
                 width: 490,
-                height: 450, // Added by Mukesh V. to fixed height of popup window @20230616
+                height: 400, // Added by Mukesh V. to fixed height of popup window @20230616
                 close: function () {
                     $self.dispose();
                     $self = null;
