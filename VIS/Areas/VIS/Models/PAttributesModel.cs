@@ -94,7 +94,8 @@ namespace VIS.Models
             obj.IsCanEdit = MRole.GetDefault(ctx).IsCanEditAttribute();
 
             //Row 0
-            obj.tableStucture = "<table class='vis-formouterwrpdiv' style='width: 100%;'><tr>";
+            //VIS383-Add div for apply scroll in table
+            obj.tableStucture = "<div class='vis-attribute-popup'><table class='vis-formouterwrpdiv' style='width: 100%;'><tr>";
             if (_productWindow)
             {
                 for (int i = 0; i < attributes.Length; i++)
@@ -388,14 +389,14 @@ namespace VIS.Models
             //Add Ok and Cancel button 
             //Last row
             obj.tableStucture += "<tr>";
-
-            obj.tableStucture += "<td style='text-align:right'>";
+            obj.tableStucture += "</table></div>";
+            //VIS383-Fixed the "ok" and "Cancel" button div on Set Attribute Instance popup
+            obj.tableStucture += "<div style='text-align:right;width:100%'>";
             obj.tableStucture += "<button style='margin-bottom:0px;margin-top:0px; float:right' type='button' class='VIS_Pref_btn-2' style='float: right;'  id='btnCancel_" + windowNo + "' role='button' aria-disabled='false'>" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "Cancel")) + "</button>";
             obj.tableStucture += "<button style='margin-bottom:0px;margin-top:0px; float:right; margin-right: 10px;' type='button' class='VIS_Pref_btn-2' style='float: right; margin-right: 10px;' id='btnOk_" + windowNo + "' role='button' aria-disabled='false'>" + VAdvantage.Utility.Util.CleanMnemonic(Msg.GetMsg(ctx, "OK")) + "</button>";
-            obj.tableStucture += "</td>";
-            obj.tableStucture += "</tr>";
+            obj.tableStucture += "</div>";
 
-            obj.tableStucture += "</table>";
+
             if (obj.ControlList != null)
             {
                 if (obj.ControlList.Length > 1)

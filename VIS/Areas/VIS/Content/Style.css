@@ -1141,8 +1141,13 @@ input[type="checkbox"].vis-tm-chkbox {
     padding-right: 5px;
 }
 
-
-
+.vis-attribute-popup {
+    height: 290px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding-right: 4px;
+}
 .vis-progress-gridbar {
     width: 100%;
     height: 1.2em;
