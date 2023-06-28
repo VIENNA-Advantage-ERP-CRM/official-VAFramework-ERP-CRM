@@ -772,6 +772,8 @@ namespace VAdvantage.Model
                         Qty = receivedQty;
                         AD_Org_ID = AD_Org_ID2;
                         acctSchema = MAcctSchema.Get(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]), trxName);
+                        //VIS-383: 28/06/23-Assign costing precision
+                        costingCheck.precision = acctSchema.GetCostingPrecision();
                         if (product != null)
                         {
                             #region Costing Level
@@ -7692,11 +7694,27 @@ namespace VAdvantage.Model
         {
             String sql = "";
             backwardCompatabilitySupport = false;
-            sql = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty, M_CostQueue.AD_Org_ID
+            //VIS-383: 28/06/23 - Modified query for increase performance on "Return to Vender"
+            if (windowName.Equals("Customer Return") ||
+                (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument))
+            {
+                sql = $@" WITH Returntrx AS 
+                        (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) AS M_InoutLine_ID FROM M_InoutLine 
+                         INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
+                         WHERE  M_InoutLine.M_InoutLine_ID = {cd.GetM_InOutLine_ID()}) ";
+            }
+            sql += @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty,
+                            M_CostQueue.AD_Org_ID, M_CostQueue.CurrentCostPrice * M_CostQueue.CurrentQty AS TotalCost, M_CostQueue.CurrentQty  
                             FROM M_CostQueue INNER JOIN M_CostQueueTransaction
                             ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
-                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
-                            WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
+                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID";
+
+            if (windowName.Equals("Customer Return") ||
+                (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument))
+            {
+                sql += @" INNER JOIN Returntrx rt ON (rt.M_InoutLine_ID = M_CostQueueTransaction.M_InoutLine_ID) ";
+            }
+            sql += " WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
                             AND M_CostQueue.C_ACCTSCHEMA_ID = " + cd.GetC_AcctSchema_ID();
 
             // VIS_0045: 24-June-2022 -> Include Attributeset instance (because we are calculating cost against Attribute / Material Policy Tab)
@@ -7706,9 +7724,9 @@ namespace VAdvantage.Model
                 (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument))
             {
                 // get reference of Orignal Document
-                sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
-                                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
-                        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+                //sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
+                //                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
+                //        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
             }
             else if (windowName.Equals("Return To Vendor") && (cd.GetC_OrderLine_ID() == 0 || IsReversedDocument))
             {
@@ -7749,22 +7767,22 @@ namespace VAdvantage.Model
             DataSet dsCostQueue = DB.ExecuteDataset(sql, null, cd.Get_Trx());
             if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
             {
-                // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
-                // Update Qty and Price on Cost detail 
-                //decimal MovementQty = Convert.ToDecimal(dsCostQueue.Tables[0].Compute("SUM(MovementQty)", string.Empty));
-                //if (Math.Abs(cd.GetQty()) > Math.Abs(MovementQty))
-                //{
-                //    cd.SetAmt(Decimal.Round(Decimal.Multiply(Decimal.Divide(cd.GetAmt(), cd.GetQty()), Math.Abs(MovementQty)), 12));
-                //    cd.SetQty(Math.Abs(MovementQty));
-                //    cd.Save();
-                //}
                 for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
                 {
                     // when qty on Queue Transaction is greaterthan or Equal to 
                     if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) >= Qty)
                     {
-                        DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty + " + Qty +
-                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        sql = "UPDATE M_CostQueue SET ";
+                        if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0)
+                        {
+                            // Currenct Cost price on Cost Queue will be affected when return against RMA
+                            sql += $@" CurrentCostPrice = {Decimal.Round((Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["TotalCost"]) +
+                                       Math.Abs(cd.GetAmt())) / (Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["CurrentQty"]) + Qty),
+                                        costingCheck.precision, MidpointRounding.AwayFromZero) } , ";
+                        }
+                        sql += " CurrentQty = CurrentQty + " + Qty +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]);
+                        int no = DB.ExecuteQuery(sql, null, cd.Get_Trx());
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
@@ -7778,9 +7796,21 @@ namespace VAdvantage.Model
                     // when qty on Queue Transaction is less than 
                     else if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) < Qty)
                     {
-                        DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty + " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
-                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        sql = "UPDATE M_CostQueue SET ";
+                        if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0)
+                        {
+                            // Currenct Cost price on Cost Queue will be affected when return against RMA
+                            sql += $@" CurrentCostPrice = {Decimal.Round((Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["TotalCost"]) +
+                                        ((cd.GetAmt() / cd.GetQty()) * Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]))))
+                                        / (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
+                                        Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["CurrentQty"])),
+                                        costingCheck.precision, MidpointRounding.AwayFromZero) } , ";
+                        }
+                        sql += " CurrentQty = CurrentQty + " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]);
+                        int no = DB.ExecuteQuery(sql, null, cd.Get_Trx());
                         Qty -= Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]));
+
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
@@ -7817,13 +7847,29 @@ namespace VAdvantage.Model
         {
             String sql = "";
             backwardCompatabilitySupport = false;
-            String selectStatement = @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty,
-                            M_CostQueue.CurrentQty, M_CostQueue.AD_Org_ID ";
+            String selectStatement = "";
+            string withClause = "";
+            //VIS-383: 28/06/23 - Modified query for increase performance on "Return to Vender"
+            if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument)
+            {
+                selectStatement = $@"WITH linkedReturnVendor AS (
+	                                SELECT NVL(C_OrderLine.Orig_InOutLine_ID,0) AS M_InoutLine_ID
+	                                FROM M_InoutLine
+	                                INNER JOIN C_OrderLine ON (M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID)
+	                                WHERE M_InoutLine.M_InoutLine_ID = {cd.GetM_InOutLine_ID() }) ";
+                withClause = selectStatement;
+            }
+            selectStatement += @"SELECT  M_CostQueueTransaction.M_CostQueueTransaction_ID, M_CostQueue.M_CostQueue_ID, M_CostQueueTransaction.MovementQty,
+                            M_CostQueue.CurrentQty, M_CostQueue.AD_Org_ID, M_CostQueue.CurrentCostPrice * M_CostQueue.CurrentQty AS TotalCost ";
 
             sql = @" FROM M_CostQueue INNER JOIN M_CostQueueTransaction 
                             ON M_CostQueue.M_CostQueue_ID = m_costQueuetransaction.M_CostQueue_ID
-                            INNER JOIN M_CostElement ON M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID
-                            WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
+                            INNER JOIN M_CostElement ON (M_CostQueue.M_CostElement_ID = M_CostElement.M_CostElement_ID)";
+            if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument)
+            {
+                sql += " INNER JOIN linkedReturnVendor lrv ON (lrv.M_InoutLine_ID = M_CostQueueTransaction.M_InoutLine_ID) ";
+            }
+            sql += @" WHERE  M_CostQueueTransaction.MovementQty <> 0 AND M_CostQueue.M_CostElement_ID = " + costElement.GetM_CostElement_ID() + @"
                             AND M_CostQueue.C_ACCTSCHEMA_ID = " + cd.GetC_AcctSchema_ID();
 
             // VIS_0045: 24-June-2022 -> Include Attributeset instance (because we are calculating cost against Attribute / Material Policy Tab)
@@ -7840,9 +7886,9 @@ namespace VAdvantage.Model
             else if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0 && !IsReversedDocument)
             {
                 // get reference of Orignal Document
-                sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
-                                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
-                        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
+                //sql += @" AND M_InoutLine_ID = (SELECT NVL(C_OrderLine.Orig_InOutLine_ID, 0) FROM M_InoutLine 
+                //                INNER JOIN C_OrderLine ON M_InoutLine.C_OrderLine_ID = C_OrderLine.C_OrderLine_ID 
+                //        WHERE  M_InoutLine.M_InoutLine_ID = " + cd.GetM_InOutLine_ID() + ")";
             }
             else if (windowName.Equals("Inventory Move"))
             {
@@ -7856,12 +7902,12 @@ namespace VAdvantage.Model
                           WHERE VAMFG_M_WrkOdrTrnsctionLine.VAMFG_M_WrkOdrTrnsctionLine_ID = " + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID() + ")";
             }
 
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql +
+            if (Util.GetValueOfInt(DB.ExecuteScalar(withClause + "SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql +
                 @" AND  M_CostQueue.CurrentQty < CASE WHEN " + Math.Abs(Qty) + " <  M_CostQueueTransaction.MovementQty THEN " + Math.Abs(Qty) +
                 " ELSE M_CostQueueTransaction.MovementQty END")) > 0)
             {
-                _log.Info("SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql + " AND  M_CostQueue.CurrentQty < CASE WHEN " + Math.Abs(Qty) + " <  M_CostQueueTransaction.MovementQty THEN " + Math.Abs(Qty) +
-                " ELSE M_CostQueueTransaction.MovementQty END");
+                _log.Info(withClause + "SELECT COUNT(M_CostQueue.M_CostQueue_ID) " + sql + " AND  M_CostQueue.CurrentQty < CASE WHEN " + Math.Abs(Qty) + " <  M_CostQueueTransaction.MovementQty THEN " + Math.Abs(Qty) +
+               " ELSE M_CostQueueTransaction.MovementQty END");
                 _log.Info("Costing Engine : Current Qty is less than Movement Qty on cost Queue Transaction. window Name  = " + windowName);
                 costingCheck.errorMessage += "ReturnStockReduceFromCostQueue: Current Qty is less than Movement Qty on cost Queue Transaction";
                 return false;
@@ -7873,23 +7919,23 @@ namespace VAdvantage.Model
             DataSet dsCostQueue = DB.ExecuteDataset(selectStatement + sql, null, cd.Get_Trx());
             if (dsCostQueue != null && dsCostQueue.Tables.Count > 0 && dsCostQueue.Tables[0].Rows.Count > 0)
             {
-                // Devops Task Id - 1821, 22-Nov-2022 (VIS_0045)
-                // Update Qty and Price on Cost detail 
-                //decimal MovementQty = Convert.ToDecimal(dsCostQueue.Tables[0].Compute("SUM(MovementQty)", string.Empty));
-                //if (Math.Abs(cd.GetQty()) > Math.Abs(MovementQty))
-                //{
-                //    decimal calculative = Decimal.Round(Decimal.Multiply(Decimal.Divide(cd.GetAmt(), cd.GetQty()), MovementQty), 12);
-                //    cd.SetAmt(cd.GetAmt() > 0 ? Math.Abs(calculative) : Decimal.Negate(Math.Abs(calculative)));
-                //    cd.SetQty(cd.GetQty() > 0 ? Math.Abs(MovementQty) : Decimal.Negate(Math.Abs(MovementQty)));
-                //    cd.Save();
-                //}
                 for (int i = 0; i < dsCostQueue.Tables[0].Rows.Count; i++)
                 {
                     // when qty on Queue Transaction is greaterthan or Equal to 
                     if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) >= Qty)
                     {
-                        int no = DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty - " + Qty +
-                             @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        sql = "UPDATE M_CostQueue SET ";
+                        if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0
+                            && Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["CurrentQty"]) - Qty != 0)
+                        {
+                            // Currenct Cost price on Cost Queue will be affected when return against RMA
+                            sql += $@" CurrentCostPrice = {Decimal.Round((Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["TotalCost"]) -
+                                       Math.Abs(cd.GetAmt())) / (Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["CurrentQty"]) - Qty),
+                                        costingCheck.precision, MidpointRounding.AwayFromZero) } , ";
+                        }
+                        sql += " CurrentQty = CurrentQty - " + Qty +
+                             @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]);
+                        int no = DB.ExecuteQuery(sql, null, cd.Get_Trx());
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
@@ -7904,9 +7950,21 @@ namespace VAdvantage.Model
                     // when qty on Queue Transaction is less than 
                     else if (Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) < Qty)
                     {
-                        int no = DB.ExecuteQuery("UPDATE M_CostQueue SET CurrentQty = CurrentQty - " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
-                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]), null, cd.Get_Trx());
+                        sql = "UPDATE M_CostQueue SET ";
+                        if (windowName.Equals("Return To Vendor") && cd.GetC_OrderLine_ID() > 0)
+                        {
+                            // Currenct Cost price on Cost Queue will be affected when return against RMA
+                            sql += $@" CurrentCostPrice = {Decimal.Round((Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["TotalCost"]) -
+                                        ((cd.GetAmt() / cd.GetQty()) * Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])))
+                                        / (Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["CurrentQty"]) -
+                                            Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])))),
+                                        costingCheck.precision, MidpointRounding.AwayFromZero) } , ";
+                        }
+                        sql += " CurrentQty = CurrentQty - " + Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"])) +
+                            @" WHERE M_CostQueue_ID = " + Util.GetValueOfInt(dsCostQueue.Tables[0].Rows[i]["M_CostQueue_ID"]);
+                        int no = DB.ExecuteQuery(sql, null, cd.Get_Trx());
                         Qty -= Math.Abs(Util.GetValueOfDecimal(dsCostQueue.Tables[0].Rows[i]["MovementQty"]));
+
 
                         // Create Cost Queue Transactional Record
                         if (!MCostQueueTransaction.CreateCostQueueTransaction(cd.GetCtx(), cd.GetAD_Client_ID(),
