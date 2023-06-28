@@ -56,6 +56,7 @@ namespace ModelLibrary.Classes
         public bool IsCostCalculationfromProcess = false;
         public decimal AdjustAmountAfterDiscount = 0;
         public decimal? currentQtyonQueue = null;
+        public int precision = 2;
 
         /// <summary>
         /// Constructor
