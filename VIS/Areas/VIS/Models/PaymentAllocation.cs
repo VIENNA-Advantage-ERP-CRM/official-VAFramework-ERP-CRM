@@ -4267,11 +4267,11 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                 AND jl.GL_JournalLine_ID NOT IN ( SELECT NVL(al.GL_JournalLine_ID,0) FROM C_AllocationHdr ah 
                                         INNER JOIN C_AllocationLine al ON (al.C_AllocationHdr_ID=ah.C_AllocationHdr_ID)
                                         WHERE ah.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))  
-                AND jl.GL_JournalLine_ID NOT IN ( 
+                /*AND jl.GL_JournalLine_ID NOT IN ( 
                 SELECT CASE WHEN C_Payment.C_Payment_ID != COALESCE(C_PaymentAllocate.C_Payment_ID,0) 
                 THEN COALESCE(C_Payment.GL_JournalLine_ID,0)  ELSE COALESCE(C_PaymentAllocate.GL_JournalLine_ID,0) END 
                 FROM C_Payment LEFT JOIN C_PaymentAllocate ON (C_PaymentAllocate.C_Payment_ID = C_Payment.C_Payment_ID) 
-                WHERE C_Payment.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))");
+                WHERE C_Payment.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))*/");
 
             //filter based on inter company parameter
             if (!isInterComp)

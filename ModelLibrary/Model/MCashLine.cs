@@ -1077,15 +1077,6 @@ namespace VAdvantage.Model
         /// <param name="ToStatus">Status which is to be changed on field</param>
         /// <param name="trx">Used for Transactions</param>
         /// <author>VIS_427</author>
-        /// <summary>
-        /// 23/11/2023 BugId:3069 This Function is used to update the Execution Status of Invoice/Order Pay Schedule
-        /// </summary>
-        /// <param name="ScheduleId">Invoice Schedule ID</param>
-        /// <param name="FromStatus">Status That is present on field</param>
-        /// <param name="ToStatus">Status which is to be changed on field</param>
-        /// <param name="TableName">Name of Table</param>
-        /// <param name="trx">Used for Transactions</param>
-        /// <author>VIS_427</author>
         public static void UpdateExecutionStatus(int ScheduleId, string FromStatus, string ToStatus, string TableName, Trx trx)
         {
             if (ScheduleId > 0)
