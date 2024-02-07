@@ -3649,6 +3649,7 @@ namespace VIS.Models
 
             //Changed DateInvoiced to DateAcct because we have to convert currency on Account Date Not on Invoiced Date 
             //Query Replaced with new optimized query
+            //VAI066 Updated query Invoice Pay Schedule Id not visible those reference exist in Document Allocation
             StringBuilder sqlInvoice = new StringBuilder(@" WITH Invoice AS ( SELECT 'false' as SELECTROW, 
             TO_CHAR(i.DateInvoiced, 'YYYY-MM-DD') as DATE1, i.DocumentNo AS DOCUMENTNO, 
             i.C_Invoice_ID AS CINVOICEID, c.ISO_Code AS ISO_CODE, i.C_CONVERSIONTYPE_ID, i.AD_Client_ID, 
@@ -4252,7 +4253,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             List<GLData> glData = new List<GLData>();
             StringBuilder sql = new StringBuilder();
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
-            //VAI066 Handled Query if document status of allocation document tab is in progress then Gl journalline schedule will not shown on grid
+            //VIS_427 Handled Query if document status of allocation document tab is in progress then Gl journalline schedule will not shown on grid
             sql.Append(@" SELECT EV.AccountType, JL.C_BPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),c.ISO_Code AS ISO_CODE,
                 JL.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name, EV.Name AS Account,
                 NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,Jl.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
@@ -4543,7 +4544,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             decimal amtToAllocate = 0, remainingAmt = 0, netAmt = 0;
             decimal balanceAmt = 0;
             string msg = string.Empty;
-            string status = string.Empty; //VAI066 Bug Id : 2178 variable defined to get document status
+            string status = string.Empty; //VIS_427 Bug Id : 2178 variable defined to get document status
             int C_InvoicePaySchedule_ID = 0;
             int Neg_C_InvoicePaySchedule_Id = 0;
 
@@ -5628,7 +5629,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                     if (alloc.Save())
                     {
                         msg = alloc.GetDocumentNo();
-                        //VAI066 Bug Id : 2178 get the doc status of allocation tab on allocation window
+                        //VIS_427 Bug Id : 2178 get the doc status of allocation tab on allocation window
                         status = alloc.GetDocStatus();
                     }
                     else
@@ -5712,7 +5713,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                         {
                             amtPayment = Util.GetValueOfDecimal(result);
                         }
-                        //VAI066 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
+                        //VIS_427 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
                         if (amtPayment == 0 && status.Equals(X_C_AllocationHdr.DOCSTATUS_Completed))
                         {
                             pay.SetIsAllocated(true);
@@ -5811,7 +5812,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                         //                    = jl.GL_JOURNAL_ID WHERE al.GL_JOURNALLINE_ID = " + _GL_JournalLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
                         //decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
 
-                        //VAI066 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
+                        //VIS_427 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
                         if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true && status.Equals(X_C_AllocationHdr.DOCSTATUS_Completed))
                         {
                             chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]), null, trx);
