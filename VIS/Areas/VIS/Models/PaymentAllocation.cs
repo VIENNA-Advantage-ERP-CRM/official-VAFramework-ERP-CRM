@@ -3649,6 +3649,7 @@ namespace VIS.Models
 
             //Changed DateInvoiced to DateAcct because we have to convert currency on Account Date Not on Invoiced Date 
             //Query Replaced with new optimized query
+            //VAI066 Updated query Invoice Pay Schedule Id not visible those reference exist in Document Allocation
             StringBuilder sqlInvoice = new StringBuilder(@" WITH Invoice AS ( SELECT 'false' as SELECTROW, 
             TO_CHAR(i.DateInvoiced, 'YYYY-MM-DD') as DATE1, i.DocumentNo AS DOCUMENTNO, 
             i.C_Invoice_ID AS CINVOICEID, c.ISO_Code AS ISO_CODE, i.C_CONVERSIONTYPE_ID, i.AD_Client_ID, 
@@ -3657,7 +3658,16 @@ namespace VIS.Models
             INNER JOIN AD_Org o ON (o.AD_Org_ID = i.AD_Org_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID = c.C_Currency_ID)
             INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID AND i.C_InvoicePaySchedule_ID=ips.C_InvoicePaySchedule_ID ) 
             INNER JOIN VA009_PaymentMethod pm ON (ips.VA009_PaymentMethod_ID = pm.VA009_PaymentMethod_ID) 
-            WHERE i.IsPaid='N' AND i.Processed = 'Y' AND ips.IsHoldPayment='N'");
+            WHERE i.IsPaid='N' AND i.Processed = 'Y' AND ips.IsHoldPayment='N' 
+                AND ips.C_InvoicePaySchedule_ID NOT IN ( SELECT NVL(al.C_InvoicePaySchedule_ID,0) FROM C_AllocationHdr ah 
+                                        INNER JOIN C_AllocationLine al ON (al.C_AllocationHdr_ID=ah.C_AllocationHdr_ID)
+                                        WHERE ah.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))  
+                AND ips.C_InvoicePaySchedule_ID NOT IN (
+                SELECT CASE WHEN C_Payment.C_Payment_ID != COALESCE(C_PaymentAllocate.C_Payment_ID,0) 
+                THEN COALESCE(C_Payment.C_InvoicePaySchedule_ID,0)  ELSE COALESCE(C_PaymentAllocate.C_InvoicePaySchedule_ID,0) END 
+                FROM C_Payment LEFT JOIN C_PaymentAllocate ON (C_PaymentAllocate.C_Payment_ID = C_Payment.C_Payment_ID) 
+                WHERE C_Payment.DocStatus NOT IN ('CO', 'CL' ,'RE','VO')) 
+            AND ips.VA009_ExecutionStatus NOT IN ('Y','J')");
 
             //to get invoice schedules against related business partner
             if (!string.IsNullOrEmpty(relatedBpids))
@@ -4243,6 +4253,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             List<GLData> glData = new List<GLData>();
             StringBuilder sql = new StringBuilder();
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
+            //VIS_427 Handled Query if document status of allocation document tab is in progress then Gl journalline schedule will not shown on grid
             sql.Append(@" SELECT EV.AccountType, JL.C_BPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),c.ISO_Code AS ISO_CODE,
                 JL.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name, EV.Name AS Account,
                 NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,Jl.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
@@ -4252,7 +4263,15 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                 INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
                 INNER JOIN C_Currency c ON c.C_Currency_ID = jl.C_Currency_ID 
                 INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= jl.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
-                ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')");
+                ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')
+                AND jl.GL_JournalLine_ID NOT IN ( SELECT NVL(al.GL_JournalLine_ID,0) FROM C_AllocationHdr ah 
+                                        INNER JOIN C_AllocationLine al ON (al.C_AllocationHdr_ID=ah.C_AllocationHdr_ID)
+                                        WHERE ah.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))  
+                /*AND jl.GL_JournalLine_ID NOT IN ( 
+                SELECT CASE WHEN C_Payment.C_Payment_ID != COALESCE(C_PaymentAllocate.C_Payment_ID,0) 
+                THEN COALESCE(C_Payment.GL_JournalLine_ID,0)  ELSE COALESCE(C_PaymentAllocate.GL_JournalLine_ID,0) END 
+                FROM C_Payment LEFT JOIN C_PaymentAllocate ON (C_PaymentAllocate.C_Payment_ID = C_Payment.C_Payment_ID) 
+                WHERE C_Payment.DocStatus NOT IN ('CO', 'CL' ,'RE','VO'))*/");
 
             //filter based on inter company parameter
             if (!isInterComp)
@@ -4525,6 +4544,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             decimal amtToAllocate = 0, remainingAmt = 0, netAmt = 0;
             decimal balanceAmt = 0;
             string msg = string.Empty;
+            string status = string.Empty; //VIS_427 Bug Id : 2178 variable defined to get document status
             int C_InvoicePaySchedule_ID = 0;
             int Neg_C_InvoicePaySchedule_Id = 0;
 
@@ -5242,7 +5262,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                                 {
                                     for (int k = 0; k < negList.Count; k++)
                                     {
-                                        if (Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]) == Util.GetValueOfInt(negList[k]["cinvoiceid"]))
+                                        /* VIS_427 DevOpsId 3333 07/12/2023 Handled issue When user allocate the multiple Invoice schedules of same invoice with GL Journal line ,
+                                           then system will pick the paid amount and set the same amount on the reference of that invoice schedule */
+                                        if (Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]) == Util.GetValueOfInt(negList[k]["c_invoicepayschedule_id"]))
                                         {
                                             paid = Util.GetValueOfDecimal(negList[k]["paidAmt"]) + netAmt;
                                             negList[k]["paidAmt"] = paid.ToString();
@@ -5607,6 +5629,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                     if (alloc.Save())
                     {
                         msg = alloc.GetDocumentNo();
+                        //VIS_427 Bug Id : 2178 get the doc status of allocation tab on allocation window
+                        status = alloc.GetDocStatus();
                     }
                     else
                     {
@@ -5689,8 +5713,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                         {
                             amtPayment = Util.GetValueOfDecimal(result);
                         }
-
-                        if (amtPayment == 0)
+                        //VIS_427 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
+                        if (amtPayment == 0 && status.Equals(X_C_AllocationHdr.DOCSTATUS_Completed))
                         {
                             pay.SetIsAllocated(true);
                         }
@@ -5787,7 +5811,9 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                         //                    INNER JOIN GL_JOURNALLINE jl ON jl.GL_JOURNALLINE_ID = al.GL_JOURNALLINE_ID INNER JOIN GL_JOURNAL j ON j.GL_JOURNAL_ID 
                         //                    = jl.GL_JOURNAL_ID WHERE al.GL_JOURNALLINE_ID = " + _GL_JournalLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
                         //decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
-                        if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true)
+
+                        //VIS_427 Bug Id : 2178 Handled Condition to Set Allocated checkbox true if doc status is completed
+                        if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true && status.Equals(X_C_AllocationHdr.DOCSTATUS_Completed))
                         {
                             chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]), null, trx);
                             if (chk < 0)
